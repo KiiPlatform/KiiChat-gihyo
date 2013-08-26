@@ -5,10 +5,12 @@ import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.ui.SignupDialogFragment.OnSignupListener;
+import com.kii.sample.chat.ui.util.GCMUtils;
 import com.kii.sample.chat.ui.util.Logger;
 import com.kii.sample.chat.ui.util.ProgressDialogFragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -72,7 +74,28 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 							Logger.i(user.getAccessToken());
 							PreferencesManager.setStoredAccessToken(user.getAccessToken());
 						}
-						moveToChatMain();
+						// GCMÇÃê›íË
+						new AsyncTask<Void, Void, Boolean>() {
+							@Override
+							protected Boolean doInBackground(Void... params) {
+								try {
+									String registrationId = GCMUtils.register();
+									KiiUser.pushInstallation().install(registrationId);
+									return true;
+								} catch (Exception ex) {
+									Logger.e("Unable to setup the GCM.", ex);
+									return false;
+								}
+							}
+							@Override
+							protected void onPostExecute(Boolean result) {
+								if (result) {
+									moveToChatMain();
+								} else {
+									Toast.makeText(SigninActivity.this, "Unable to setup the GCM", Toast.LENGTH_SHORT).show();
+								}
+							}
+						}.execute();
 					}
 				}, email, password);
 			}

@@ -1,9 +1,7 @@
 package com.kii.sample.chat.ui;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.kii.cloud.storage.KiiACL;
 import com.kii.cloud.storage.KiiACL.TopicAction;
 import com.kii.cloud.storage.KiiACLEntry;
@@ -12,9 +10,9 @@ import com.kii.cloud.storage.KiiPushSubscription;
 import com.kii.cloud.storage.KiiTopic;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.ApplicationConst;
-import com.kii.sample.chat.KiiChatApplication;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatUser;
+import com.kii.sample.chat.ui.util.GCMUtils;
 import com.kii.sample.chat.ui.util.Logger;
 import com.kii.sample.chat.ui.util.ProgressDialogFragment;
 import com.kii.sample.chat.ui.util.ToastUtils;
@@ -133,22 +131,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 				ChatUser user = new ChatUser(kiiUser.toUri().toString(), username, email);
 				user.getKiiObject().save();
 				// GCMの設定
-				String registrationId = null;
-				int retry = 0;
-				while (retry < 3) {
-					try {
-						GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(KiiChatApplication.getContext());
-						registrationId = gcm.register(ApplicationConst.SENDER_ID);
-						break;
-					} catch (IOException ignore) {
-						// java.io.IOException: SERVICE_NOT_AVAILABLEがたまに発生するのでリトライする
-						Thread.sleep(1000);
-						retry++;
-					}
-				}
-				if (retry >= 3) {
-					throw new IOException("failed to register GCM");
-				}
+				String registrationId = GCMUtils.register();
 				KiiUser.pushInstallation().install(registrationId);
 				// サーバからプッシュ通知を受信する為に、自分専用のトピックを作成します。
 				// このトピックは他の全てのユーザに書き込み権限を与え

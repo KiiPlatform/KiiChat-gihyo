@@ -44,11 +44,6 @@ public class GCMPushReceiver extends BroadcastReceiver {
 					try {
 						// 参加中のChatに新規メッセージが投稿された場合
 						Logger.i("received PUSH_TO_USER");
-//						KiiUser sender = message.getSender();
-//						if (TextUtils.equals(KiiUser.getCurrentUser().toUri().toString(),sender.toUri().toString())) {
-//							// 自分起因のプッシュ通知は無視する
-//							return;
-//						}
 						ChatMessage chatMessage = new ChatMessage(((PushToAppMessage)message).getKiiObject());
 						this.sendBroadcast(context, ApplicationConst.ACTION_MESSAGE_RECEIVED, chatMessage.getKiiObject().toJSON().toString());
 					} catch (Exception e) {
