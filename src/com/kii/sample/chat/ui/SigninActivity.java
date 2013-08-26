@@ -9,6 +9,7 @@ import com.kii.sample.chat.ui.util.GCMUtils;
 import com.kii.sample.chat.ui.util.Logger;
 import com.kii.sample.chat.ui.util.ProgressDialogFragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -52,6 +54,10 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if((event != null && event.getAction() == KeyEvent.ACTION_UP) || event == null) {
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					if (getCurrentFocus() != null) {
+						mgr.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+					}
 					btnSignin.performClick();
 					return true;
 				}
@@ -75,11 +81,11 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 				KiiUser.logIn(new KiiUserCallBack() {
 					@Override
 					public void onLoginCompleted(int token, KiiUser user, Exception e) {
-						ProgressDialogFragment.hide(getSupportFragmentManager());
 						if (e != null) {
 							// サインイン失敗時はToastを表示してサインイン画面に留まる
 							Logger.e("Unable to login.", e);
 							Toast.makeText(SigninActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+							ProgressDialogFragment.hide(getSupportFragmentManager());
 							return;
 						}
 						if (checkRemember.isChecked()) {
@@ -102,6 +108,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 							}
 							@Override
 							protected void onPostExecute(Boolean result) {
+								ProgressDialogFragment.hide(getSupportFragmentManager());
 								if (result) {
 									moveToChatMain();
 								} else {
