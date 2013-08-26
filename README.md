@@ -1,6 +1,7 @@
 #KiiChat
 
-[KiiCloud](https://developer.kii.com/?locale=jp)を使ったチャットのサンプルアプリです。
+[【gihyo.jp】MBaaS徹底入門 -- Kii Cloudでスマホアプリ開発](http://gihyo.jp/dev/serial/01/mbaas)の連載で作成したチャットアプリのソースコードです。  
+実際に動作させる為には[KiiCloud](https://developer.kii.com/?locale=jp)への登録(無料)が必要になります。
 
 
 Android Support Library v7が必要です。  
