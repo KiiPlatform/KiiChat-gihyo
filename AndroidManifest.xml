@@ -32,10 +32,26 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="com.kii.sample.chat.ui.SigninActivity" android:label="@string/app_name" android:launchMode="singleTask"/>
-		<activity android:name="com.kii.sample.chat.ui.ChatMainActivity" android:label="@string/app_name" android:launchMode="singleTask"/>
-		<activity android:name="com.kii.sample.chat.ui.AddFriendActivity" android:label="@string/app_name" android:launchMode="singleTask"/>
-		<activity android:name="com.kii.sample.chat.ui.ChatActivity" android:label="@string/app_name" android:launchMode="singleTask"/>
+		<activity
+			android:name="com.kii.sample.chat.ui.SigninActivity"
+			android:label="@string/app_name"
+			android:launchMode="singleTask"
+			android:configChanges="orientation|screenSize|keyboardHidden"/>
+		<activity
+			android:name="com.kii.sample.chat.ui.ChatMainActivity"
+			android:label="@string/app_name"
+			android:launchMode="singleTask"
+			android:configChanges="orientation|screenSize|keyboardHidden"/>
+		<activity
+			android:name="com.kii.sample.chat.ui.AddFriendActivity"
+			android:label="@string/app_name"
+			android:launchMode="singleTask"
+			android:configChanges="orientation|screenSize|keyboardHidden"/>
+		<activity
+			android:name="com.kii.sample.chat.ui.ChatActivity"
+			android:label="@string/app_name"
+			android:launchMode="singleTask"
+			android:configChanges="orientation|screenSize|keyboardHidden"/>
 		<receiver
 			android:name="com.kii.sample.chat.GCMPushReceiver"
 			android:permission="com.google.android.c2dm.permission.SEND" >
