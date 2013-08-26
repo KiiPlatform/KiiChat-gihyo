@@ -9,6 +9,7 @@ import com.kii.sample.chat.model.ChatFriend;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
 import com.kii.sample.chat.ui.loader.FriendListLoader;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -29,6 +30,8 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author noriyoshi.fukuzaki@kii.com
  */
 public class FriendListFragment extends ListFragment implements LoaderCallbacks<List<ChatFriend>>, OnItemClickListener {
+	
+	private static final int REQUEST_CODE_ADD_FRIEND = 1;
 	
 	public static FriendListFragment newInstance() {
 		return new FriendListFragment();
@@ -61,7 +64,7 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 		switch (item.getItemId()) {
 			case R.id.menu_add_friend:
 				intent = new Intent(getActivity(), AddFriendActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, REQUEST_CODE_ADD_FRIEND);
 				return true;
 			case R.id.menu_reload:
 				this.getLoaderManager().restartLoader(0, null, this);
@@ -76,6 +79,17 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
+		}
+	}
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case REQUEST_CODE_ADD_FRIEND:
+				if (resultCode == Activity.RESULT_OK) {
+					this.getLoaderManager().restartLoader(0, null, this);
+				}
+				break;
 		}
 	}
 	@Override

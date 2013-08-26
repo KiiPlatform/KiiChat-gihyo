@@ -134,9 +134,13 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 		}
 		protected void onPostExecute(Boolean result) {
 			ProgressDialogFragment.hide(getSupportFragmentManager());
-			if (!result) {
+			if (result) {
+				setResult(RESULT_OK);
+			} else {
 				ToastUtils.showShort(AddFriendActivity.this, "Unable to add friend");
+				setResult(RESULT_CANCELED);
 			}
+			finish();
 		}
 	}
 }
