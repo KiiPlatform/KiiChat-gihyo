@@ -15,12 +15,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 /**
@@ -46,6 +48,17 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 		this.editPassword = (EditText)findViewById(R.id.edit_password);
 		// android:hintで指定した文字列のフォントを制御する為にxmlでtextPasswordの指定をしないでコードから設定する
 		this.editPassword.setTransformationMethod(new PasswordTransformationMethod());
+		this.editPassword.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if((event != null && event.getAction() == KeyEvent.ACTION_UP) || event == null) {
+					btnSignin.performClick();
+					return true;
+				}
+				return false;
+			}
+		});
+		
 		this.checkRemember = (CheckBox)findViewById(R.id.check_remember);
 		this.btnSignin = (Button)findViewById(R.id.button_signin);
 		
