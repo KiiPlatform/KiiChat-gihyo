@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.kii.cloud.storage.Kii;
 import com.kii.cloud.storage.KiiBucket;
@@ -32,12 +33,17 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 		return Kii.bucket(BUCKET_NAME);
 	}
 	public static List<ChatUser> searchByKeyword(String keyword) throws Exception {
-		KiiQuery query = new KiiQuery(
-			KiiClause.or(
-				KiiClause.startsWith(FIELD_USERNAME, keyword),
-				KiiClause.startsWith(FIELD_EMAIL, keyword)
-			)
-		);
+		KiiQuery query = null;
+		if (TextUtils.equals("*", keyword)) {
+			query = new KiiQuery();
+		} else {
+			query = new KiiQuery(
+				KiiClause.or(
+					KiiClause.startsWith(FIELD_USERNAME, keyword),
+					KiiClause.startsWith(FIELD_EMAIL, keyword)
+				)
+			);
+		}
 		List<ChatUser> users = new ArrayList<ChatUser>();
 		List<KiiObject> objects = getBucket().query(query).getResult();
 		for (KiiObject object : objects) {
