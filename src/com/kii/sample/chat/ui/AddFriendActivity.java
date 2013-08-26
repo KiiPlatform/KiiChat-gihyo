@@ -67,10 +67,12 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
+				listView.setVisibility(View.GONE);
+				textEmpty.setVisibility(View.GONE);
 				progressBar.setVisibility(View.VISIBLE);
 				Bundle bundle = new Bundle();
 				bundle.putString(ARGS_KEYWORD, query);
-				getSupportLoaderManager().initLoader(0, bundle, AddFriendActivity.this);
+				getSupportLoaderManager().restartLoader(0, bundle, AddFriendActivity.this);
 				return false;
 			}
 			@Override
@@ -91,6 +93,8 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 			this.listView.setVisibility(View.GONE);
 			this.textEmpty.setVisibility(View.VISIBLE);
 		} else {
+			this.listView.setVisibility(View.VISIBLE);
+			this.textEmpty.setVisibility(View.GONE);
 			this.adapter.setData(data);
 			this.listView.setAdapter(this.adapter);
 		}
