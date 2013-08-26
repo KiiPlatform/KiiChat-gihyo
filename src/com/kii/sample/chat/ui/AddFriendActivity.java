@@ -6,7 +6,7 @@ import com.kii.sample.chat.KiiChatApplication;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatFriend;
 import com.kii.sample.chat.model.ChatUser;
-import com.kii.sample.chat.ui.ConfirmFriendDialogFragment.OnAddFriendListener;
+import com.kii.sample.chat.ui.ConfirmAddFriendDialogFragment.OnAddFriendListener;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
 import com.kii.sample.chat.ui.loader.UserListLoader;
 import com.kii.sample.chat.ui.util.ProgressDialogFragment;
@@ -105,7 +105,7 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		ChatUser user = (ChatUser)parent.getItemAtPosition(position);
-		ConfirmFriendDialogFragment dialog = ConfirmFriendDialogFragment.newInstance(this, user.getKiiObject().toJSON(), position);
+		ConfirmAddFriendDialogFragment dialog = ConfirmAddFriendDialogFragment.newInstance(this, user.getKiiObject().toJSON(), position);
 		dialog.show(getSupportFragmentManager(), "confirmFriendDialog");
 	}
 	@Override

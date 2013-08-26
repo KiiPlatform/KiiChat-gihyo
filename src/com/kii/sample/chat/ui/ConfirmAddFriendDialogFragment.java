@@ -24,7 +24,7 @@ import android.widget.TextView;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class ConfirmFriendDialogFragment extends DialogFragment {
+public class ConfirmAddFriendDialogFragment extends DialogFragment {
 	
 	public interface OnAddFriendListener {
 		public void onFriendAdded(int position);
@@ -33,11 +33,11 @@ public class ConfirmFriendDialogFragment extends DialogFragment {
 	private static final String ARGS_POSITION = "position";
 	private static final String ARGS_USER_JSON = "user_json";
 	
-	public static ConfirmFriendDialogFragment newInstance(OnAddFriendListener onAddFriendListener, JSONObject user, int position) {
+	public static ConfirmAddFriendDialogFragment newInstance(OnAddFriendListener onAddFriendListener, JSONObject user, int position) {
 		Bundle args = new Bundle();
 		args.putString(ARGS_USER_JSON, user.toString());
 		args.putInt(ARGS_POSITION, position);
-		ConfirmFriendDialogFragment dialog = new ConfirmFriendDialogFragment(onAddFriendListener);
+		ConfirmAddFriendDialogFragment dialog = new ConfirmAddFriendDialogFragment(onAddFriendListener);
 		dialog.setArguments(args);
 		return dialog;
 	}
@@ -48,8 +48,8 @@ public class ConfirmFriendDialogFragment extends DialogFragment {
 	private TextView textUsername;
 	private TextView textEmail;
 	
-	private ConfirmFriendDialogFragment(OnAddFriendListener onAddFriendListener) {
-		this.onAddFriendListener = new WeakReference<ConfirmFriendDialogFragment.OnAddFriendListener>(onAddFriendListener);
+	private ConfirmAddFriendDialogFragment(OnAddFriendListener onAddFriendListener) {
+		this.onAddFriendListener = new WeakReference<ConfirmAddFriendDialogFragment.OnAddFriendListener>(onAddFriendListener);
 	}
 	
 	@Override
@@ -73,6 +73,7 @@ public class ConfirmFriendDialogFragment extends DialogFragment {
 		this.textUsername.setText(ChatUser.getUsername(this.user));
 		this.textEmail = (TextView)view.findViewById(R.id.text_email);
 		this.textEmail.setText(ChatUser.getEmail(this.user));
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Add new friend");
 		builder.setPositiveButton(R.string.button_add, new OnClickListener() {

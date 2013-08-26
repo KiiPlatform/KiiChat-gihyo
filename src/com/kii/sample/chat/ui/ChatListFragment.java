@@ -6,7 +6,6 @@ import com.kii.cloud.storage.Kii;
 import com.kii.cloud.storage.KiiBucket;
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiPushMessage;
-import com.kii.cloud.storage.KiiPushSubscription;
 import com.kii.cloud.storage.KiiTopic;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.KiiPushMessage.Data;
@@ -163,14 +162,6 @@ public class ChatListFragment extends ListFragment implements LoaderCallbacks<Li
 				KiiPushMessage message = KiiPushMessage.buildWith(data).build();
 				topic.sendMessage(message);
 				Logger.i("sent notification to " + target.toUri().toString());
-				
-				KiiPushSubscription ps = KiiUser.getCurrentUser().pushSubscription();
-				if (ps.isSubscribed(chatBucket)) {
-					Logger.i("¡¡¡¡ OK ¡¡¡¡");
-				} else {
-					Logger.e("¡¡¡¡ NG ¡¡¡¡");
-				}
-				
 				return kiiGroup;
 			} catch (Exception e) {
 				Logger.e("failed to start chat", e);
