@@ -5,9 +5,9 @@ import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.KiiUser;
 
 /**
- * Chat友達を表します。
- * ユーザスコープのデータとしてKiiCloudに保存され、他のユーザが他人の友達リストを参照することはできません。
- * このデータは友達追加時に作成されます。
+ * チャット友達を表します。
+ * ユーザスコープのデータとして友達追加時にKiiCloudに保存され、他のユーザが他人の友達リストを参照することはできません。
+ * 本アプリケーションではチャットを開始する前にユーザを友達に追加する必要があります。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

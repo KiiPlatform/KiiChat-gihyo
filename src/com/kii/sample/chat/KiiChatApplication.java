@@ -8,6 +8,8 @@ import android.app.Application;
 import android.content.Context;
 
 /**
+ * Applicationのカスタム実装です。
+ * ApplicationContextに関する共通処理を行います。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

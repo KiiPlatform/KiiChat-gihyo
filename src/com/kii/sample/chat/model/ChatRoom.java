@@ -16,9 +16,10 @@ import com.kii.sample.chat.ui.util.Logger;
 
 /**
  * チャットルームを表します。
- * ユーザがチャットを開始すると、チャットのメンバーでKiiGroupが作成されます。
- * そのグループスコープのバケツとしてchat_roomが作成されます。
- * ユーザはこのchat_roomバケツにメッセージを保存します。
+ * チャットルームはKiiObjectとして保存されるのではなく、KiiGroupとchat_roomという名前で作成されるバケツで表現されます。
+ * ユーザがチャットを開始すると、自分とチャット友達が属するKiiGroupが作成されます。
+ * さらにそのグループスコープのバケツとしてchat_roomが作成され、そこにメッセージを保存します。
+ * チャットメンバーはこのchat_roomバケツを監視しているため、誰かがchat_roomバケツにメッセージを保存すると、チャットメンバーに通知されます。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -30,6 +31,15 @@ public class ChatRoom {
 	public static KiiBucket getBucket(KiiGroup kiiGroup) {
 		return kiiGroup.bucket(BUCKET_NAME);
 	}
+	/**
+	 * チャットルームの名前を取得します。
+	 * 名前はチャットメンバーの名前をカンマ区切りで連結した文字列です。
+	 * 
+	 * @param user
+	 * @param chatFriend
+	 * @return
+	 * @throws Exception
+	 */
 	public static String getChatRoomName(KiiUser user, ChatFriend chatFriend) throws Exception {
 		ChatUser me = ChatUser.findByUri(user.toUri());
 		List<String> members = new ArrayList<String>();
@@ -38,7 +48,14 @@ public class ChatRoom {
 		Collections.sort(members);
 		return TextUtils.join(",", members);
 	}
-	
+	/**
+	 * チャットルームを一意に識別するキーを生成します。
+	 * キーはチャットメンバー全員のURIを"_"で連結した文字列です。
+	 * このキーを比較することで、既に存在するチャットかどうかを判定できます。
+	 * 
+	 * @param kiiGroup
+	 * @return
+	 */
 	public static String getUniqueKey(KiiGroup kiiGroup) {
 		try {
 			kiiGroup.refresh();

@@ -7,6 +7,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author noriyoshi.fukuzaki@kii.com
+ */
 public abstract class AbstractArrayAdapter<T> extends ArrayAdapter<T> {
 	static class ViewHolder {
 		int position;

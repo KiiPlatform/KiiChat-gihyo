@@ -11,6 +11,10 @@ import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 
+/**
+ * 
+ * @author noriyoshi.fukuzaki@kii.com
+ */
 public class MessageListAdapter extends AbstractArrayAdapter<ChatMessage> {
 	
 	private static final int ROW_SELF = 0;

@@ -17,8 +17,8 @@ import com.kii.cloud.storage.query.KiiQuery;
 
 /**
  * KiiChatを利用するユーザを表します。
- * アプリケーションスコープのデータとしてKiiCloudに保存され、他のユーザから検索することが可能です。
- * このデータはサインアップ時に作成されます。
+ * アプリケーションスコープのデータとしてサインアップ時にKiiCloudに保存され、他のユーザから検索することが可能です。
+ * 実世界のチャットアプリケーションでは全てのユーザを制限なく検索できるとプライバシー的に問題になるので、何かしらの制限を加える必要があります。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -32,6 +32,16 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 	public static KiiBucket getBucket() {
 		return Kii.bucket(BUCKET_NAME);
 	}
+	/**
+	 * 指定したキーワードでチャットユーザを検索します。
+	 * キーワードは前方一致で、ユーザ名とメールアドレスに対して検索を行います。
+	 * キーワードが'*'の場合、全てのユーザを返します。
+	 * 検索結果が存在しない場合は空のListを返します。
+	 * 
+	 * @param keyword
+	 * @return
+	 * @throws Exception
+	 */
 	public static List<ChatUser> searchByKeyword(String keyword) throws Exception {
 		KiiQuery query = null;
 		if (TextUtils.equals("*", keyword)) {
@@ -51,6 +61,14 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 		}
 		return users;
 	}
+	/**
+	 * 指定したURIでチャットユーザを検索します。
+	 * チャットユーザが存在しない場合、nullを返します。
+	 * 
+	 * @param uri
+	 * @return
+	 * @throws Exception
+	 */
 	public static ChatUser findByUri(Uri uri) throws Exception {
 		KiiQuery query = new KiiQuery(KiiClause.equals(FIELD_URI, uri.toString()));
 		List<KiiObject> objects = getBucket().query(query).getResult();
@@ -62,6 +80,12 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 			throw new RuntimeException("too many rows ChatUser uri=" + uri.toString());
 		}
 	}
+	/**
+	 * 与えられたJSONObjectからユーザ名を取得します。
+	 * 
+	 * @param json
+	 * @return
+	 */
 	public static String getUsername(JSONObject json) {
 		try {
 			return json.getString(FIELD_USERNAME);
@@ -69,6 +93,12 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 			return "";
 		}
 	}
+	/**
+	 * 与えられたJSONObjectからメールアドレスを取得します。
+	 * 
+	 * @param json
+	 * @return
+	 */
 	public static String getEmail(JSONObject json) {
 		try {
 			return json.getString(FIELD_EMAIL);
@@ -76,6 +106,12 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 			return "";
 		}
 	}
+	/**
+	 * 与えられたJSONObjectからURIを取得します。
+	 * 
+	 * @param json
+	 * @return
+	 */
 	public static String getUri(JSONObject json) {
 		try {
 			return json.getString(FIELD_URI);

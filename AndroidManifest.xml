@@ -6,15 +6,17 @@
 	<uses-sdk android:targetSdkVersion="18" android:minSdkVersion="8" />
 	
 	<uses-permission android:name="android.permission.VIBRATE"/>
+	
 	<!-- 以下のパーミッションはKiiSDKを利用するのに必要です。 -->
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	
 	<!-- 以下のパーミッションはプッシュ機能を利用するのに必要です。 -->
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="com.kii.sample.chat.permission.C2D_MESSAGE" />
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+	<uses-permission android:name="com.kii.sample.chat.permission.C2D_MESSAGE" />
 	<permission android:name="com.kii.sample.chat.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	
 	<!-- テーマは http://jgilfelt.github.io/android-actionbarstylegenerator/ て生成したものを使用しています。 -->

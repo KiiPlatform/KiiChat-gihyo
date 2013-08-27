@@ -13,9 +13,27 @@ public final class ApplicationConst {
 	// TODO:SENDER_IDはGCMの設定を有効にした際に発行された値に書き換えてください。
 	public static final String SENDER_ID = "1012419078893";
 
+	/**
+	 * 全てのチャットユーザが自分用に保持しているTOPICの名前です。
+	 * このトピックはユーザが個別に持つメールボックスに似ています。
+	 * 他のユーザがこのトピックにメッセージを送信すると、ユーザにプッシュ通知が送信されます。
+	 * 具体的には、チャットを開始した時に、チャットが開始されたことを相手に伝える為に使用します。
+	 * この通知を受けた相手は、チャット用に作成されたグループスコープのchat_roomバケツを購読して監視するようにします。
+	 * 
+	 * @see http://documentation.kii.com/ja/guides/android/managing-push-notification/push-to-user/
+	 */
 	public static final String TOPIC_INVITE_NOTIFICATION = "InviteNotification";
+	/**
+	 * チャットが開始されたことを表すアクションです。
+	 */
 	public static final String ACTION_CHAT_STARTED = "com.kii.sample.chat.ACTION_CHAT_STARTED";
+	/**
+	 * メッセージを受信したことを表す悪書のです。
+	 */
 	public static final String ACTION_MESSAGE_RECEIVED = "com.kii.sample.chat.ACTION_MESSAGE_RECEIVED";
+	/**
+	 * BroadcastReceiverが受信したPush通知をActivityに送る時に使用するキーです。
+	 */
 	public static final String EXTRA_MESSAGE = "com.kii.sample.chat.EXTRA_MESSAGE";
 	
 	private ApplicationConst() {

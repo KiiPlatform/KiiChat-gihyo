@@ -10,6 +10,10 @@ import android.widget.TextView;
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.sample.chat.R;
 
+/**
+ * 
+ * @author noriyoshi.fukuzaki@kii.com
+ */
 public class GroupListAdapter extends AbstractArrayAdapter<KiiGroup> {
 	
 	private final LayoutInflater inflater;

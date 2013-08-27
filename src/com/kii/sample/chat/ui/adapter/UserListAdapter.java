@@ -10,6 +10,10 @@ import android.widget.TextView;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.IUser;
 
+/**
+ * 
+ * @author noriyoshi.fukuzaki@kii.com
+ */
 public class UserListAdapter extends AbstractArrayAdapter<IUser> {
 	
 	private final LayoutInflater inflater;
