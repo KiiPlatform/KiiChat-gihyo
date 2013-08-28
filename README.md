@@ -4,10 +4,11 @@
 実際に動作させる為には[KiiCloud](https://developer.kii.com/?locale=jp)への登録(無料)が必要になります。
 
 
-Eclipseにプロジェクトをインポートしてビルドする場合、Android Support Library v7が必要です。  
+Eclipseにプロジェクトをインポートしてビルドする場合、Android Support Library v7とGoogle Play Serviceが必要です。  
 以下のプロジェクトをEclipseのワークスペースにインポートしてください。
 
-    {SDK-DIR}/android-sdk-macosx/extras/android/support/v7/appcompat
+    {SDK-DIR}/extras/android/support/v7/appcompat
+    {SDK-DIR}/extras/google/google_play_services/libproject/google-play-services_lib
 
 
 #TODO
