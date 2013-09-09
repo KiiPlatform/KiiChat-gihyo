@@ -22,7 +22,7 @@ public final class ApplicationConst {
 	 * 
 	 * @see http://documentation.kii.com/ja/guides/android/managing-push-notification/push-to-user/
 	 */
-	public static final String TOPIC_INVITE_NOTIFICATION = "InviteNotification";
+	public static final String TOPIC_INVITE_NOTIFICATION = "invite_notify";
 	/**
 	 * チャットが開始されたことを表すアクションです。
 	 */
