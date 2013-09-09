@@ -7,7 +7,7 @@ import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.KiiChatApplication;
 
 /**
- * 
+ * Google Cloud Messagingの処理を行うユーティリティクラスです。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

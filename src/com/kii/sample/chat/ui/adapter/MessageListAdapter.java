@@ -12,6 +12,7 @@ import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 
 /**
+ * {@link ChatMessage}をリストビューに表示するためのアダプターです。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

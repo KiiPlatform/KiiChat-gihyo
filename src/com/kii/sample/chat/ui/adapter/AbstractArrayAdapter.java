@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
+ * ArrayAdapter‚ÌœŠiÀ‘•‚Å‚·B
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

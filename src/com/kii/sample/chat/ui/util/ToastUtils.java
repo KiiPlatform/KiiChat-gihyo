@@ -5,6 +5,11 @@ import com.kii.sample.chat.KiiChatApplication;
 import android.content.Context;
 import android.widget.Toast;
 
+/**
+ * Toastの表示処理を行うユーティリティクラスです。
+ * 
+ * @author noriyoshi.fukuzaki@kii.com
+ */
 public class ToastUtils {
 	public static final void showShort(Context context, String msg) {
 		show(context, msg, Toast.LENGTH_SHORT);
