@@ -11,7 +11,12 @@ import com.kii.cloud.storage.exception.IllegalKiiBaseObjectFormatException;
  */
 public abstract class KiiObjectWrapper {
 	
+	// 以下のフィールドはKiiCloudが自動的にKiiObjectに追加する予約フィールドです。
+	// これらのフィールドはクエリやソートの条件に使用できます。
+	public static final String FIELD_ID = "_id";
 	public static final String FIELD_CREATED = "_created";
+	public static final String FIELD_MODIFIED = "_modified";
+	
 	protected final KiiObject kiiObject;
 	
 	public KiiObjectWrapper(KiiObject object) {

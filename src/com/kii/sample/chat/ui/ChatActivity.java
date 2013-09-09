@@ -146,9 +146,11 @@ public class ChatActivity extends FragmentActivity {
 				if (lastGotTime == null) {
 					messages = chatRoom.getMessageList();
 				} else {
+					// 前にメッセージを取得済みの場合は、最後に取得したメッセージより新しいメッセージのみを取得する
 					messages = chatRoom.getMessageList(lastGotTime);
 				}
 				if (messages.size() > 0) {
+					// messagesは_createdで昇順にソート済みなので、リストの最後の要素が最新のメッセージとなる
 					lastGotTime = messages.get(messages.size() - 1).getKiiObject().getCreatedTime();
 				}
 				return messages;

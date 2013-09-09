@@ -78,6 +78,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 					return;
 				}
 				ProgressDialogFragment.show(getSupportFragmentManager(), "Login", "Processing...");
+				// ノンブロッキングAPIでサインイン処理を実行する
 				KiiUser.logIn(new KiiUserCallBack() {
 					@Override
 					public void onLoginCompleted(int token, KiiUser user, Exception e) {

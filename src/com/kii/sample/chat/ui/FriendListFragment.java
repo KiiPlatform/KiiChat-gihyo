@@ -102,6 +102,7 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 		switch (requestCode) {
 			case REQUEST_CODE_ADD_FRIEND:
 				if (resultCode == Activity.RESULT_OK) {
+					// 友達リストを再読み込み
 					this.getLoaderManager().restartLoader(0, null, this);
 				}
 				break;
@@ -134,9 +135,6 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 		ConfirmStartChatDialogFragment dialog = ConfirmStartChatDialogFragment.newInstance(this, friend, position);
 		dialog.show(getFragmentManager(), "confirmChatDialog");
 	}
-	/**
-	 * TODO:com.kii.sample.chat.ui.ChatListFragment.NewChatTaskとほぼ重複
-	 */
 	private class NewChatTask extends AsyncTask<Void, Void, KiiGroup> {
 		private final ChatFriend chatFriend;
 		private NewChatTask(ChatFriend chatFriend) {

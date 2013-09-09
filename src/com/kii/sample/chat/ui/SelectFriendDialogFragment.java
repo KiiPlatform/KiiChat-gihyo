@@ -67,7 +67,6 @@ public class SelectFriendDialogFragment extends DialogFragment implements Loader
 		builder.setNegativeButton(R.string.button_cancel, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				onSelectFriendListener.clear();
 				dismiss();
 			}
 		});

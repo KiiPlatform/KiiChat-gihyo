@@ -20,6 +20,7 @@ import com.kii.sample.chat.ui.util.ToastUtils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -27,8 +28,6 @@ import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -75,32 +74,37 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Create new account");
-		builder.setPositiveButton(R.string.button_signup, null);
-		builder.setNegativeButton(R.string.button_cancel, null);
+		builder.setPositiveButton(R.string.button_signup, this);
+		builder.setNegativeButton(R.string.button_cancel, this);
 		builder.setView(view);
-		AlertDialog dialog = builder.show();
-		Button buttonOK = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-		buttonOK.setOnClickListener(this);
-		return dialog;
+		return builder.show();
 	}
 	@Override
-	public void onClick(View v) {
-		final String username = editName.getText().toString();
-		final String email = editEmail.getText().toString();
-		final String password = editPassword.getText().toString();
-		if (TextUtils.isEmpty(username)) {
-			ToastUtils.showShort(getActivity(), "Please input username");
-			return;
+	public void onClick(DialogInterface dialog, int which) {
+		switch (which) {
+			case DialogInterface.BUTTON_POSITIVE:
+				// 「サインアップ」ボタンが押された場合の処理
+				final String username = editName.getText().toString();
+				final String email = editEmail.getText().toString();
+				final String password = editPassword.getText().toString();
+				if (TextUtils.isEmpty(username)) {
+					ToastUtils.showShort(getActivity(), "Please input username");
+					return;
+				}
+				if (TextUtils.isEmpty(email)) {
+					ToastUtils.showShort(getActivity(), "Please input email");
+					return;
+				}
+				if (TextUtils.isEmpty(password)) {
+					ToastUtils.showShort(getActivity(), "Please input password");
+					return;
+				}
+				new SignupTask(username, email, password).execute();
+				break;
+			case DialogInterface.BUTTON_NEGATIVE:
+				dismiss();
+				break;
 		}
-		if (TextUtils.isEmpty(email)) {
-			ToastUtils.showShort(getActivity(), "Please input email");
-			return;
-		}
-		if (TextUtils.isEmpty(password)) {
-			ToastUtils.showShort(getActivity(), "Please input password");
-			return;
-		}
-		new SignupTask(username, email, password).execute();
 	}
 	/**
 	 * バックグラウンドでSignupの処理を実行します。
@@ -123,19 +127,25 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
+				// TODO:サインアップ処理は以下の5つの処理からなるが、途中で失敗した場合、リトライやロールバックの処理が必要
+				// 1.KiiUerのregister処理
+				// 2.Pushのinstall
+				// 3.User Topicの作成
+				// 4.User TopicへのACLの設定
+				// 5.Topicの購読
 				KiiUser.Builder builder = KiiUser.builderWithEmail(email);
 				KiiUser kiiUser = builder.build();
 				kiiUser.register(password);
 				Logger.i("registered user uri=" + kiiUser.toUri().toString());
-				// 登録したKiiUserをChatUserとしてAppスコープのバケツに保存しておく。（検索用）
+				// 登録したKiiUserをChatUserとしてAppスコープのバケツに保存しておく（検索用）
 				ChatUser user = new ChatUser(kiiUser.toUri().toString(), username, email);
 				user.getKiiObject().save();
 				// GCMの設定
 				String registrationId = GCMUtils.register();
 				KiiUser.pushInstallation().install(registrationId);
-				// サーバからプッシュ通知を受信する為に、自分専用のトピックを作成します。
+				// サーバからプッシュ通知を受信する為に、自分専用のトピックを作成する
 				// このトピックは他の全てのユーザに書き込み権限を与え
-				// 他のユーザが自分をチャットメンバー追加したことを通知する為に使用します。
+				// 他のユーザが自分をチャットメンバー追加したことを通知する為に使用する
 				KiiTopic topic = KiiUser.topic(ApplicationConst.TOPIC_INVITE_NOTIFICATION);
 				topic.save();
 				KiiACL acl = topic.acl();
@@ -153,6 +163,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		protected void onPostExecute(Boolean result) {
 			ProgressDialogFragment.hide(getFragmentManager());
 			if (result) {
+				// サインアップ処理が正常に行われた場合は、コールバックメソッドで呼び出し元に通知する
 				OnSignupListener listener = onSignupListener.get();
 				if (listener != null) {
 					listener.onSignupCompleted();
