@@ -16,9 +16,9 @@ import com.kii.cloud.storage.query.KiiClause;
 import com.kii.cloud.storage.query.KiiQuery;
 
 /**
- * KiiChat�𗘗p���郆�[�U��\���܂��B
- * �A�v���P�[�V�����X�R�[�v�̃f�[�^�Ƃ��ăT�C���A�b�v����KiiCloud�ɕۑ�����A���̃��[�U���猟�����邱�Ƃ��\�ł��B
- * �����E�̃`���b�g�A�v���P�[�V�����ł͑S�Ẵ��[�U�𐧌��Ȃ������ł���ƃv���C�o�V�[�I�ɖ��ɂȂ�̂ŁA��������̐�����������K�v������܂��B
+ * KiiChatを利用するユーザを表します。
+ * アプリケーションスコープのデータとしてサインアップ時にKiiCloudに保存され、他のユーザから検索することが可能です。
+ * 実世界のチャットアプリケーションでは全てのユーザを制限なく検索できるとプライバシー的に問題になるので、何かしらの制限を加える必要があります。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -27,16 +27,16 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 	private static final String BUCKET_NAME = "chat_users";
 	private static final String FIELD_USERNAME = "username";
 	private static final String FIELD_EMAIL = "email";
-	private static final String FIELD_URI = "uri";  // KiiUser.toUri()���Ԃ����l
+	private static final String FIELD_URI = "uri";  // KiiUser.toUri()が返した値
 	
 	public static KiiBucket getBucket() {
 		return Kii.bucket(BUCKET_NAME);
 	}
 	/**
-	 * �w�肵���L�[���[�h�Ń`���b�g���[�U���������܂��B
-	 * �L�[���[�h�͑O����v�ŁA���[�U���ƃ��[���A�h���X�ɑ΂��Č������s���܂��B
-	 * �L�[���[�h��'*'�̏ꍇ�A�S�Ẵ��[�U��Ԃ��܂��B
-	 * �������ʂ����݂��Ȃ��ꍇ�͋��List��Ԃ��܂��B
+	 * 指定したキーワードでチャットユーザを検索します。
+	 * キーワードは前方一致で、ユーザ名とメールアドレスに対して検索を行います。
+	 * キーワードが'*'の場合、全てのユーザを返します。
+	 * 検索結果が存在しない場合は空のListを返します。
 	 * 
 	 * @param keyword
 	 * @return
@@ -62,8 +62,8 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 		return users;
 	}
 	/**
-	 * �w�肵��URI�Ń`���b�g���[�U���������܂��B
-	 * �`���b�g���[�U�����݂��Ȃ��ꍇ�Anull��Ԃ��܂��B
+	 * 指定したURIでチャットユーザを検索します。
+	 * チャットユーザが存在しない場合、nullを返します。
 	 * 
 	 * @param uri
 	 * @return
@@ -81,7 +81,7 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 		}
 	}
 	/**
-	 * �^����ꂽJSONObject���烆�[�U�����擾���܂��B
+	 * 与えられたJSONObjectからユーザ名を取得します。
 	 * 
 	 * @param json
 	 * @return
@@ -94,7 +94,7 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 		}
 	}
 	/**
-	 * �^����ꂽJSONObject���烁�[���A�h���X���擾���܂��B
+	 * 与えられたJSONObjectからメールアドレスを取得します。
 	 * 
 	 * @param json
 	 * @return
@@ -107,7 +107,7 @@ public class ChatUser extends KiiObjectWrapper implements IUser {
 		}
 	}
 	/**
-	 * �^����ꂽJSONObject����URI���擾���܂��B
+	 * 与えられたJSONObjectからURIを取得します。
 	 * 
 	 * @param json
 	 * @return

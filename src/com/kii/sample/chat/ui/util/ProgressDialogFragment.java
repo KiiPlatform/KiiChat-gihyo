@@ -9,7 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 	
 /**
- * 読み込み中のダイアログを表示するためのフラグメントです。
+ * 隱ｭ縺ｿ霎ｼ縺ｿ荳ｭ縺ｮ繝繧､繧｢繝ｭ繧ｰ繧定｡ｨ遉ｺ縺吶ｋ縺溘ａ縺ｮ繝輔Λ繧ｰ繝｡繝ｳ繝医〒縺吶�
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

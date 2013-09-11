@@ -25,8 +25,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
 /**
- * ƒ`ƒƒƒbƒgƒAƒvƒŠ‚ÌƒƒCƒ“‰æ–Ê‚Å‚·B
- * ƒ†[ƒUŒŸõAƒ`ƒƒƒbƒgˆê——‚Ì‚Q‰æ–Ê‚Å\¬‚³‚ê‚Ü‚·B
+ * ãƒãƒ£ãƒƒãƒˆã‚¢ãƒ—ãƒªã®ãƒ¡ã‚¤ãƒ³ç”»é¢ã§ã™ã€‚
+ * ãƒ¦ãƒ¼ã‚¶æ¤œç´¢ã€ãƒãƒ£ãƒƒãƒˆä¸€è¦§ã®ï¼’ç”»é¢ã§æ§‹æˆã•ã‚Œã¾ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -65,7 +65,7 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 	}
 	@Override
 	public void onBackPressed() {
-		// –ß‚éƒ{ƒ^ƒ“‚ÅƒTƒCƒ“ƒCƒ“‰æ–Ê‚É–ß‚ç‚È‚¢‚ÅƒAƒvƒŠ‚ğI—¹‚·‚é
+		// æˆ»ã‚‹ãƒœã‚¿ãƒ³ã§ã‚µã‚¤ãƒ³ã‚¤ãƒ³ç”»é¢ã«æˆ»ã‚‰ãªã„ã§ã‚¢ãƒ—ãƒªã‚’çµ‚äº†ã™ã‚‹
 		moveTaskToBack(true);
 	}
 	private void setupTabs() {
@@ -83,7 +83,7 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 		}
 		this.tabHost.getTabWidget().setStripEnabled(true);
 		this.tabHost.setOnTabChangedListener(this);
-		// ‰Šú•\¦
+		// åˆæœŸè¡¨ç¤º
 		TabInfo newTab = this.tabInfoMap.get(Tab.USER.name());
 		this.currentTabInfo = newTab;
 		newTab.fragment = FriendListFragment.newInstance();

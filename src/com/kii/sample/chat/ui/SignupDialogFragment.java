@@ -31,7 +31,7 @@ import android.view.View;
 import android.widget.EditText;
 
 /**
- * ƒTƒCƒ“ƒAƒbƒv‰æ–Ê‚Ìƒtƒ‰ƒOƒƒ“ƒg‚Å‚·B
+ * ã‚µã‚¤ãƒ³ã‚¢ãƒƒãƒ—ç”»é¢ã®ãƒ•ãƒ©ã‚°ãƒ¡ãƒ³ãƒˆã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -69,7 +69,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		this.editName = (EditText)view.findViewById(R.id.edit_name);
 		this.editEmail = (EditText)view.findViewById(R.id.edit_email);
 		this.editPassword = (EditText)view.findViewById(R.id.edit_password);
-		// android:hint‚Åw’è‚µ‚½•¶š—ñ‚ÌƒtƒHƒ“ƒg‚ğ§Œä‚·‚éˆ×‚Éxml‚ÅtextPassword‚Ìw’è‚ğ‚µ‚È‚¢‚ÅƒR[ƒh‚©‚çİ’è‚·‚é
+		// android:hintã§æŒ‡å®šã—ãŸæ–‡å­—åˆ—ã®ãƒ•ã‚©ãƒ³ãƒˆã‚’åˆ¶å¾¡ã™ã‚‹ç‚ºã«xmlã§textPasswordã®æŒ‡å®šã‚’ã—ãªã„ã§ã‚³ãƒ¼ãƒ‰ã‹ã‚‰è¨­å®šã™ã‚‹
 		this.editPassword.setTransformationMethod(new PasswordTransformationMethod());
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -83,7 +83,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
-				// uƒTƒCƒ“ƒAƒbƒvvƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡‚Ìˆ—
+				// ã€Œã‚µã‚¤ãƒ³ã‚¢ãƒƒãƒ—ã€ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆã®å‡¦ç†
 				final String username = editName.getText().toString();
 				final String email = editEmail.getText().toString();
 				final String password = editPassword.getText().toString();
@@ -107,7 +107,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		}
 	}
 	/**
-	 * ƒoƒbƒNƒOƒ‰ƒEƒ“ƒh‚ÅSignup‚Ìˆ—‚ğÀs‚µ‚Ü‚·B
+	 * ãƒãƒƒã‚¯ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ã§Signupã®å‡¦ç†ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
 	 */
 	private class SignupTask extends AsyncTask<Void, Void, Boolean> {
 		
@@ -127,25 +127,25 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
-				// TODO:ƒTƒCƒ“ƒAƒbƒvˆ—‚ÍˆÈ‰º‚Ì5‚Â‚Ìˆ—‚©‚ç‚È‚é‚ªA“r’†‚Å¸”s‚µ‚½ê‡AƒŠƒgƒ‰ƒC‚âƒ[ƒ‹ƒoƒbƒN‚Ìˆ—‚ª•K—v
-				// 1.KiiUer‚Ìregisterˆ—
-				// 2.Push‚Ìinstall
-				// 3.User Topic‚Ìì¬
-				// 4.User Topic‚Ö‚ÌACL‚Ìİ’è
-				// 5.Topic‚Ìw“Ç
+				// TODO:ã‚µã‚¤ãƒ³ã‚¢ãƒƒãƒ—å‡¦ç†ã¯ä»¥ä¸‹ã®5ã¤ã®å‡¦ç†ã‹ã‚‰ãªã‚‹ãŒã€é€”ä¸­ã§å¤±æ•—ã—ãŸå ´åˆã€ãƒªãƒˆãƒ©ã‚¤ã‚„ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯ã®å‡¦ç†ãŒå¿…è¦
+				// 1.KiiUerã®registerå‡¦ç†
+				// 2.Pushã®install
+				// 3.User Topicã®ä½œæˆ
+				// 4.User Topicã¸ã®ACLã®è¨­å®š
+				// 5.Topicã®è³¼èª­
 				KiiUser.Builder builder = KiiUser.builderWithEmail(email);
 				KiiUser kiiUser = builder.build();
 				kiiUser.register(password);
 				Logger.i("registered user uri=" + kiiUser.toUri().toString());
-				// “o˜^‚µ‚½KiiUser‚ğChatUser‚Æ‚µ‚ÄAppƒXƒR[ƒv‚ÌƒoƒPƒc‚É•Û‘¶‚µ‚Ä‚¨‚­iŒŸõ—pj
+				// ç™»éŒ²ã—ãŸKiiUserã‚’ChatUserã¨ã—ã¦Appã‚¹ã‚³ãƒ¼ãƒ—ã®ãƒã‚±ãƒ„ã«ä¿å­˜ã—ã¦ãŠãï¼ˆæ¤œç´¢ç”¨ï¼‰
 				ChatUser user = new ChatUser(kiiUser.toUri().toString(), username, email);
 				user.getKiiObject().save();
-				// GCM‚Ìİ’è
+				// GCMã®è¨­å®š
 				String registrationId = GCMUtils.register();
 				KiiUser.pushInstallation().install(registrationId);
-				// ƒT[ƒo‚©‚çƒvƒbƒVƒ…’Ê’m‚ğóM‚·‚éˆ×‚ÉA©•ªê—p‚ÌƒgƒsƒbƒN‚ğì¬‚·‚é
-				// ‚±‚ÌƒgƒsƒbƒN‚Í‘¼‚Ì‘S‚Ä‚Ìƒ†[ƒU‚É‘‚«‚İŒ ŒÀ‚ğ—^‚¦
-				// ‘¼‚Ìƒ†[ƒU‚ª©•ª‚ğƒ`ƒƒƒbƒgƒƒ“ƒo[’Ç‰Á‚µ‚½‚±‚Æ‚ğ’Ê’m‚·‚éˆ×‚Ég—p‚·‚é
+				// ã‚µãƒ¼ãƒã‹ã‚‰ãƒ—ãƒƒã‚·ãƒ¥é€šçŸ¥ã‚’å—ä¿¡ã™ã‚‹ç‚ºã«ã€è‡ªåˆ†å°‚ç”¨ã®ãƒˆãƒ”ãƒƒã‚¯ã‚’ä½œæˆã™ã‚‹
+				// ã“ã®ãƒˆãƒ”ãƒƒã‚¯ã¯ä»–ã®å…¨ã¦ã®ãƒ¦ãƒ¼ã‚¶ã«æ›¸ãè¾¼ã¿æ¨©é™ã‚’ä¸ãˆ
+				// ä»–ã®ãƒ¦ãƒ¼ã‚¶ãŒè‡ªåˆ†ã‚’ãƒãƒ£ãƒƒãƒˆãƒ¡ãƒ³ãƒãƒ¼è¿½åŠ ã—ãŸã“ã¨ã‚’é€šçŸ¥ã™ã‚‹ç‚ºã«ä½¿ç”¨ã™ã‚‹
 				KiiTopic topic = KiiUser.topic(ApplicationConst.TOPIC_INVITE_NOTIFICATION);
 				topic.save();
 				KiiACL acl = topic.acl();
@@ -163,7 +163,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		protected void onPostExecute(Boolean result) {
 			ProgressDialogFragment.hide(getFragmentManager());
 			if (result) {
-				// ƒTƒCƒ“ƒAƒbƒvˆ—‚ª³í‚És‚í‚ê‚½ê‡‚ÍAƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ÅŒÄ‚Ño‚µŒ³‚É’Ê’m‚·‚é
+				// ã‚µã‚¤ãƒ³ã‚¢ãƒƒãƒ—å‡¦ç†ãŒæ­£å¸¸ã«è¡Œã‚ã‚ŒãŸå ´åˆã¯ã€ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ¡ã‚½ãƒƒãƒ‰ã§å‘¼ã³å‡ºã—å…ƒã«é€šçŸ¥ã™ã‚‹
 				OnSignupListener listener = onSignupListener.get();
 				if (listener != null) {
 					listener.onSignupCompleted();

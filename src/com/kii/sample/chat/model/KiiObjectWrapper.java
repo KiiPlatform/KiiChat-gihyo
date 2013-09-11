@@ -4,15 +4,15 @@ import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.exception.IllegalKiiBaseObjectFormatException;
 
 /**
- * Key-Value�Œl���Ǘ�����KiiObject�����b�v���āA�h���C���N���X���쐬���邽�߂̊�{�N���X�ł��B
- * ���̃N���X���p�����ăh���C���N���X���쐬���܂��B
+ * Key-Valueで値を管理するKiiObjectをラップして、ドメインクラスを作成するための基本クラスです。
+ * このクラスを継承してドメインクラスを作成します。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
 public abstract class KiiObjectWrapper {
 	
-	// �ȉ��̃t�B�[���h��KiiCloud�������I��KiiObject�ɒǉ�����\��t�B�[���h�ł��B
-	// �����̃t�B�[���h�̓N�G����\�[�g�̏����Ɏg�p�ł��܂��B
+	// 以下のフィールドはKiiCloudが自動的にKiiObjectに追加する予約フィールドです。
+	// これらのフィールドはクエリやソートの条件に使用できます。
 	public static final String FIELD_ID = "_id";
 	public static final String FIELD_CREATED = "_created";
 	public static final String FIELD_MODIFIED = "_modified";

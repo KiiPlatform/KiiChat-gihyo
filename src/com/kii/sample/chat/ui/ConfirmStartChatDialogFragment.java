@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * チャット開始時に表示する確認用のダイアログフラグメントです。
+ * 繝√Ε繝�繝磯幕蟋区凾縺ｫ陦ｨ遉ｺ縺吶ｋ遒ｺ隱咲畑縺ｮ繝繧､繧｢繝ｭ繧ｰ繝輔Λ繧ｰ繝｡繝ｳ繝医〒縺吶�
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

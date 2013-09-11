@@ -20,7 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 /**
- * GCM‚©‚ç‚ÌƒvƒbƒVƒ…’Ê’m‚ğóM‚·‚éƒŒƒV[ƒo[‚Å‚·B
+ * GCMã‹ã‚‰ã®ãƒ—ãƒƒã‚·ãƒ¥é€šçŸ¥ã‚’å—ä¿¡ã™ã‚‹ãƒ¬ã‚·ãƒ¼ãƒãƒ¼ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -42,7 +42,7 @@ public class GCMPushReceiver extends BroadcastReceiver {
 					Logger.i("received PUSH_TO_APP");
 					ToastUtils.showShort(context, "received message");
 					try {
-						// Q‰Á’†‚ÌChat‚ÉV‹KƒƒbƒZ[ƒW‚ª“Še‚³‚ê‚½ê‡
+						// å‚åŠ ä¸­ã®Chatã«æ–°è¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒæŠ•ç¨¿ã•ã‚ŒãŸå ´åˆ
 						Logger.i("received PUSH_TO_USER");
 						ChatMessage chatMessage = new ChatMessage(((PushToAppMessage)message).getKiiObject());
 						this.sendBroadcast(context, ApplicationConst.ACTION_MESSAGE_RECEIVED, chatMessage.getKiiObject().toJSON().toString());
@@ -53,8 +53,8 @@ public class GCMPushReceiver extends BroadcastReceiver {
 				case PUSH_TO_USER:
 					Logger.i("received PUSH_TO_USER");
 					ToastUtils.showShort(context, "received new chat");
-					// ‘¼‚Ìƒ†[ƒU‚ª©•ª‚ÆChat‚ğŠJn‚µ‚½ê‡
-					// ‘ÎÛ‚ÌChat—pƒoƒPƒc‚ğw“Ç‚µ‚ÄƒƒbƒZ[ƒW‚ğƒvƒbƒVƒ…’Ê’m‚µ‚Ä‚à‚ç‚¤ó‘Ô‚É‚·‚é
+					// ä»–ã®ãƒ¦ãƒ¼ã‚¶ãŒè‡ªåˆ†ã¨Chatã‚’é–‹å§‹ã—ãŸå ´åˆ
+					// å¯¾è±¡ã®Chatç”¨ãƒã‚±ãƒ„ã‚’è³¼èª­ã—ã¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ—ãƒƒã‚·ãƒ¥é€šçŸ¥ã—ã¦ã‚‚ã‚‰ã†çŠ¶æ…‹ã«ã™ã‚‹
 					new Thread(new Runnable() {
 						@Override
 						public void run() {

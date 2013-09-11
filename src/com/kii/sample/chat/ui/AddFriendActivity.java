@@ -31,8 +31,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
- * —F’B’Ç‰Á‰æ–Ê‚ÌƒAƒNƒeƒBƒrƒeƒB‚Å‚·B
- * Support library v7‚ÉŠÜ‚Ü‚ê‚éSearchView‚ğg‚Á‚Äƒ†[ƒU‚ÌŒŸõ‚ğÀ‘•‚µ‚Ä‚¢‚Ü‚·B
+ * å‹é”è¿½åŠ ç”»é¢ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã§ã™ã€‚
+ * Support library v7ã«å«ã¾ã‚Œã‚‹SearchViewã‚’ä½¿ã£ã¦ãƒ¦ãƒ¼ã‚¶ã®æ¤œç´¢ã‚’å®Ÿè£…ã—ã¦ã„ã¾ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -129,7 +129,7 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 		protected Boolean doInBackground(Void... params) {
 			try {
 				ChatFriend friend = new ChatFriend(this.chatUser);
-				// —F’B‚ğ•Û‘¶
+				// å‹é”ã‚’ä¿å­˜
 				friend.getKiiObject().save();
 				return true;
 			} catch (Exception e) {

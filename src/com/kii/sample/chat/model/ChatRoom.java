@@ -15,11 +15,11 @@ import com.kii.cloud.storage.query.KiiQuery;
 import com.kii.sample.chat.ui.util.Logger;
 
 /**
- * �`���b�g���[����\���܂��B
- * �`���b�g���[����KiiObject�Ƃ��ĕۑ������̂ł͂Ȃ��AKiiGroup��chat_room�Ƃ������O�ō쐬�����o�P�c�ŕ\������܂��B
- * ���[�U���`���b�g���J�n����ƁA�����ƃ`���b�g�F�B��������KiiGroup���쐬����܂��B
- * ����ɂ��̃O���[�v�X�R�[�v�̃o�P�c�Ƃ���chat_room���쐬����A�����Ƀ��b�Z�[�W��ۑ����܂��B
- * �`���b�g�����o�[�͂���chat_room�o�P�c���Ď����Ă��邽�߁A�N����chat_room�o�P�c�Ƀ��b�Z�[�W��ۑ�����ƁA�`���b�g�����o�[�ɒʒm����܂��B
+ * チャットルームを表します。
+ * チャットルームはKiiObjectとして保存されるのではなく、KiiGroupとchat_roomという名前で作成されるバケツで表現されます。
+ * ユーザがチャットを開始すると、自分とチャット友達が属するKiiGroupが作成されます。
+ * さらにそのグループスコープのバケツとしてchat_roomが作成され、そこにメッセージを保存します。
+ * チャットメンバーはこのchat_roomバケツを監視しているため、誰かがchat_roomバケツにメッセージを保存すると、チャットメンバーに通知されます。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -32,8 +32,8 @@ public class ChatRoom {
 		return kiiGroup.bucket(BUCKET_NAME);
 	}
 	/**
-	 * �`���b�g���[���̖��O���擾���܂��B
-	 * ���O�̓`���b�g�����o�[�̖��O���J���}��؂�ŘA������������ł��B
+	 * チャットルームの名前を取得します。
+	 * 名前はチャットメンバーの名前をカンマ区切りで連結した文字列です。
 	 * 
 	 * @param user
 	 * @param chatFriend
@@ -49,9 +49,9 @@ public class ChatRoom {
 		return TextUtils.join(",", members);
 	}
 	/**
-	 * �`���b�g���[������ӂɎ��ʂ���L�[�𐶐����܂��B
-	 * �L�[�̓`���b�g�����o�[�S����URI��"_"�ŘA������������ł��B
-	 * ���̃L�[���r���邱�ƂŁA���ɑ��݂���`���b�g���ǂ����𔻒�ł��܂��B
+	 * チャットルームを一意に識別するキーを生成します。
+	 * キーはチャットメンバー全員のURIを"_"で連結した文字列です。
+	 * このキーを比較することで、既に存在するチャットかどうかを判定できます。
 	 * 
 	 * @param kiiGroup
 	 * @return
@@ -87,18 +87,18 @@ public class ChatRoom {
 	}
 	
 	/**
-	 * �`���b�g���[�����̑S�Ẵ��b�Z�[�W���擾���܂��B
+	 * チャットルーム内の全てのメッセージを取得します。
 	 * 
-	 * @return�@�����Ƀ\�[�g���ꂽ���b�Z�[�W���X�g
+	 * @return　昇順にソートされたメッセージリスト
 	 */
 	public List<ChatMessage> getMessageList() {
 		return this.queryMessageList(ChatMessage.createQuery());
 	}
 	/**
-	 * �w�肵�������ȍ~�ɍ쐬���ꂽ�`���b�g���[�����̃��b�Z�[�W���擾���܂��B
+	 * 指定した日時以降に作成されたチャットルーム内のメッセージを取得します。
 	 * 
 	 * @param modifiedSinceTime
-	 * @return �����Ƀ\�[�g���ꂽ���b�Z�[�W���X�g
+	 * @return 昇順にソートされたメッセージリスト
 	 */
 	public List<ChatMessage> getMessageList(long modifiedSinceTime) {
 		return this.queryMessageList(ChatMessage.createQuery(modifiedSinceTime));

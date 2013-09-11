@@ -28,7 +28,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 /**
- * ƒTƒCƒ“ƒCƒ“‰æ–Ê‚ÌƒAƒNƒeƒBƒrƒeƒB‚Å‚·B
+ * ã‚µã‚¤ãƒ³ã‚¤ãƒ³ç”»é¢ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -48,7 +48,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 		this.textNewAccount = (TextView)findViewById(R.id.text_new_account);
 		this.editEmail = (EditText)findViewById(R.id.edit_email);
 		this.editPassword = (EditText)findViewById(R.id.edit_password);
-		// android:hint‚Åw’è‚µ‚½•¶š—ñ‚ÌƒtƒHƒ“ƒg‚ğ§Œä‚·‚éˆ×‚Éxml‚ÅtextPassword‚Ìw’è‚ğ‚µ‚È‚¢‚ÅƒR[ƒh‚©‚çİ’è‚·‚é
+		// android:hintã§æŒ‡å®šã—ãŸæ–‡å­—åˆ—ã®ãƒ•ã‚©ãƒ³ãƒˆã‚’åˆ¶å¾¡ã™ã‚‹ç‚ºã«xmlã§textPasswordã®æŒ‡å®šã‚’ã—ãªã„ã§ã‚³ãƒ¼ãƒ‰ã‹ã‚‰è¨­å®šã™ã‚‹
 		this.editPassword.setTransformationMethod(new PasswordTransformationMethod());
 		this.editPassword.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
@@ -78,23 +78,23 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 					return;
 				}
 				ProgressDialogFragment.show(getSupportFragmentManager(), "Login", "Processing...");
-				// ƒmƒ“ƒuƒƒbƒLƒ“ƒOAPI‚ÅƒTƒCƒ“ƒCƒ“ˆ—‚ğÀs‚·‚é
+				// ãƒãƒ³ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°APIã§ã‚µã‚¤ãƒ³ã‚¤ãƒ³å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹
 				KiiUser.logIn(new KiiUserCallBack() {
 					@Override
 					public void onLoginCompleted(int token, KiiUser user, Exception e) {
 						if (e != null) {
-							// ƒTƒCƒ“ƒCƒ“¸”s‚ÍToast‚ğ•\¦‚µ‚ÄƒTƒCƒ“ƒCƒ“‰æ–Ê‚É—¯‚Ü‚é
+							// ã‚µã‚¤ãƒ³ã‚¤ãƒ³å¤±æ•—æ™‚ã¯Toastã‚’è¡¨ç¤ºã—ã¦ã‚µã‚¤ãƒ³ã‚¤ãƒ³ç”»é¢ã«ç•™ã¾ã‚‹
 							Logger.e("Unable to login.", e);
 							Toast.makeText(SigninActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
 							ProgressDialogFragment.hide(getSupportFragmentManager());
 							return;
 						}
 						if (checkRemember.isChecked()) {
-							// ƒƒOƒCƒ“ó‘Ô‚ğ•Û‚·‚éê‡‚ÍASharedPreferences‚ÉAccessToken‚ğ•Û‘¶‚·‚é
+							// ãƒ­ã‚°ã‚¤ãƒ³çŠ¶æ…‹ã‚’ä¿æŒã™ã‚‹å ´åˆã¯ã€SharedPreferencesã«AccessTokenã‚’ä¿å­˜ã™ã‚‹
 							Logger.i(user.getAccessToken());
 							PreferencesManager.setStoredAccessToken(user.getAccessToken());
 						}
-						// GCM‚Ìİ’è
+						// GCMã®è¨­å®š
 						new AsyncTask<Void, Void, Boolean>() {
 							@Override
 							protected Boolean doInBackground(Void... params) {
@@ -124,7 +124,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 		this.textNewAccount.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// ƒTƒCƒ“ƒAƒbƒv‰æ–Ê‚ğ•\¦‚·‚é
+				// ã‚µã‚¤ãƒ³ã‚¢ãƒƒãƒ—ç”»é¢ã‚’è¡¨ç¤ºã™ã‚‹
 				SignupDialogFragment signupFragment = SignupDialogFragment.newInstance(SigninActivity.this);
 				signupFragment.show(getSupportFragmentManager(), "signup");
 			}

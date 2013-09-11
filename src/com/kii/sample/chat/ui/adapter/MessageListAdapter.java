@@ -12,7 +12,7 @@ import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 
 /**
- * {@link ChatMessage}‚ğƒŠƒXƒgƒrƒ…[‚É•\¦‚·‚é‚½‚ß‚ÌƒAƒ_ƒvƒ^[‚Å‚·B
+ * {@link ChatMessage}ã‚’ãƒªã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã«è¡¨ç¤ºã™ã‚‹ãŸã‚ã®ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -57,12 +57,12 @@ public class MessageListAdapter extends AbstractArrayAdapter<ChatMessage> {
 	}
 	@Override
 	public int getViewTypeCount() {
-		// ListView‚É•\¦‚·‚és‚Ìí—Ş‚Íu©•ª‚ÌƒƒbƒZ[ƒWvu—F’B‚ÌƒƒbƒZ[ƒWv‚Ì‚Qí—Ş‚ ‚é‚Ì‚Å2‚ğ•Ô‚·B
+		// ListViewã«è¡¨ç¤ºã™ã‚‹è¡Œã®ç¨®é¡ã¯ã€Œè‡ªåˆ†ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€ã€Œå‹é”ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€ã®ï¼’ç¨®é¡ã‚ã‚‹ã®ã§2ã‚’è¿”ã™ã€‚
 		return 2;
 	}
 	@Override
 	public int getItemViewType(int position) {
-		// —^‚¦‚ç‚ê‚½ˆÊ’u‚Ìs‚ªAu©•ª‚ÌƒƒbƒZ[ƒWv‚©u—F’B‚ÌƒƒbƒZ[ƒWv‚©‚ğ”»’è‚·‚é
+		// ä¸ãˆã‚‰ã‚ŒãŸä½ç½®ã®è¡ŒãŒã€ã€Œè‡ªåˆ†ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€ã‹ã€Œå‹é”ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€ã‹ã‚’åˆ¤å®šã™ã‚‹
 		return getRowType(getItem(position));
 	}
 	private int getRowType(ChatMessage chatMessage) {

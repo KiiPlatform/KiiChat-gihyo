@@ -31,7 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 /**
- * ƒƒbƒZ[ƒW‚Ì‘—óM‚ğs‚¤ƒ`ƒƒƒbƒg‰æ–Ê‚Å‚·B
+ * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€å—ä¿¡ã‚’è¡Œã†ãƒãƒ£ãƒƒãƒˆç”»é¢ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -146,11 +146,11 @@ public class ChatActivity extends FragmentActivity {
 				if (lastGotTime == null) {
 					messages = chatRoom.getMessageList();
 				} else {
-					// ‘O‚ÉƒƒbƒZ[ƒW‚ğæ“¾Ï‚İ‚Ìê‡‚ÍAÅŒã‚Éæ“¾‚µ‚½ƒƒbƒZ[ƒW‚æ‚èV‚µ‚¢ƒƒbƒZ[ƒW‚Ì‚İ‚ğæ“¾‚·‚é
+					// å‰ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å–å¾—æ¸ˆã¿ã®å ´åˆã¯ã€æœ€å¾Œã«å–å¾—ã—ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚ˆã‚Šæ–°ã—ã„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ã¿ã‚’å–å¾—ã™ã‚‹
 					messages = chatRoom.getMessageList(lastGotTime);
 				}
 				if (messages.size() > 0) {
-					// messages‚Í_created‚Å¸‡‚Éƒ\[ƒgÏ‚İ‚È‚Ì‚ÅAƒŠƒXƒg‚ÌÅŒã‚Ì—v‘f‚ªÅV‚ÌƒƒbƒZ[ƒW‚Æ‚È‚é
+					// messagesã¯_createdã§æ˜‡é †ã«ã‚½ãƒ¼ãƒˆæ¸ˆã¿ãªã®ã§ã€ãƒªã‚¹ãƒˆã®æœ€å¾Œã®è¦ç´ ãŒæœ€æ–°ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¨ãªã‚‹
 					lastGotTime = messages.get(messages.size() - 1).getKiiObject().getCreatedTime();
 				}
 				return messages;

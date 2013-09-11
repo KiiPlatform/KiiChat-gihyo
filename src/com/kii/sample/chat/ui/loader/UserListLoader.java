@@ -11,7 +11,7 @@ import com.kii.sample.chat.model.ChatUser;
 import com.kii.sample.chat.ui.util.Logger;
 
 /**
- * {@link ChatUser}‚ğchat_usersƒoƒPƒc‚©‚çæ“¾‚·‚éƒ[ƒ_[‚Å‚·B
+ * {@link ChatUser}ã‚’chat_usersãƒã‚±ãƒ„ã‹ã‚‰å–å¾—ã™ã‚‹ãƒ­ãƒ¼ãƒ€ãƒ¼ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -29,7 +29,7 @@ public class UserListLoader extends AbstractAsyncTaskLoader<List<ChatUser>> {
 		try {
 			List<ChatUser> results = ChatUser.searchByKeyword(keyword);
 			for (ChatUser user : results) {
-				// ƒTƒCƒ“ƒCƒ“’†‚Ìƒ†[ƒU‚ÍŒŸõŒ‹‰Ê‚©‚çœŠO‚·‚é
+				// ã‚µã‚¤ãƒ³ã‚¤ãƒ³ä¸­ã®ãƒ¦ãƒ¼ã‚¶ã¯æ¤œç´¢çµæœã‹ã‚‰é™¤å¤–ã™ã‚‹
 				if (!TextUtils.equals(user.getUri(), KiiUser.getCurrentUser().toUri().toString())) {
 					users.add(user);
 				}

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 /**
- * Toast‚Ì•\Ž¦ˆ—‚ðs‚¤ƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX‚Å‚·B
+ * Toastã®è¡¨ç¤ºå‡¦ç†ã‚’è¡Œã†ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

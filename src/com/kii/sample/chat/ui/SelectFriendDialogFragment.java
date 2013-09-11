@@ -24,8 +24,8 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
- * �F�B��I�����邽�߂̃_�C�A���O�t���O�����g�ł��B
- * �`���b�g���J�n����ۂɁA�����I������ׂɎg�p����܂��B
+ * 友達を選択するためのダイアログフラグメントです。
+ * チャットを開始する際に、相手を選択する為に使用されます。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

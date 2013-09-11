@@ -5,7 +5,7 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 /**
- * SharedPreferences‚ðˆµ‚¤‚½‚ß‚Ìƒwƒ‹ƒp[ƒNƒ‰ƒX‚Å‚·B
+ * SharedPreferencesã‚’æ‰±ã†ãŸã‚ã®ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

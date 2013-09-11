@@ -1,38 +1,38 @@
 package com.kii.sample.chat;
 
 /**
- * KiiChat�A�v���P�[�V�������ʂŎg�p����萔���Ǘ����܂��B
+ * KiiChatアプリケーション共通で使用する定数を管理します。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
 public final class ApplicationConst {
 	
-	// TODO:APP_ID��APP_KEY��KiiCloud�ŃA�v���P�[�V�������쐬�����ۂɔ��s���ꂽ�l�ɏ��������Ă��������B
+	// TODO:APP_IDとAPP_KEYがKiiCloudでアプリケーションを作成した際に発行された値に書き換えてください。
 	public static final String APP_ID = "5db741d4";
 	public static final String APP_KEY = "7b9a135db251fc849b21237d3ccc3ab9";
-	// TODO:SENDER_ID��GCM�̐ݒ��L���ɂ����ۂɔ��s���ꂽ�l�ɏ��������Ă��������B
+	// TODO:SENDER_IDはGCMの設定を有効にした際に発行された値に書き換えてください。
 	public static final String SENDER_ID = "1012419078893";
 
 	/**
-	 * �S�Ẵ`���b�g���[�U�������p�ɕێ����Ă���TOPIC�̖��O�ł��B
-	 * ���̃g�s�b�N�̓��[�U���ʂɎ����[���{�b�N�X�Ɏ��Ă��܂��B
-	 * ���̃��[�U�����̃g�s�b�N�Ƀ��b�Z�[�W�𑗐M����ƁA���[�U�Ƀv�b�V���ʒm�����M����܂��B
-	 * ��̓I�ɂ́A�`���b�g���J�n�������ɁA�`���b�g���J�n���ꂽ���Ƃ𑊎�ɓ`����ׂɎg�p���܂��B
-	 * ���̒ʒm���󂯂�����́A�`���b�g�p�ɍ쐬���ꂽ�O���[�v�X�R�[�v��chat_room�o�P�c���w�ǂ��ĊĎ�����悤�ɂ��܂��B
+	 * 全てのチャットユーザが自分用に保持しているTOPICの名前です。
+	 * このトピックはユーザが個別に持つメールボックスに似ています。
+	 * 他のユーザがこのトピックにメッセージを送信すると、ユーザにプッシュ通知が送信されます。
+	 * 具体的には、チャットを開始した時に、チャットが開始されたことを相手に伝える為に使用します。
+	 * この通知を受けた相手は、チャット用に作成されたグループスコープのchat_roomバケツを購読して監視するようにします。
 	 * 
 	 * @see http://documentation.kii.com/ja/guides/android/managing-push-notification/push-to-user/
 	 */
 	public static final String TOPIC_INVITE_NOTIFICATION = "invite_notify";
 	/**
-	 * �`���b�g���J�n���ꂽ���Ƃ�\���A�N�V�����ł��B
+	 * チャットが開始されたことを表すアクションです。
 	 */
 	public static final String ACTION_CHAT_STARTED = "com.kii.sample.chat.ACTION_CHAT_STARTED";
 	/**
-	 * ���b�Z�[�W����M�������Ƃ�\�������̂ł��B
+	 * メッセージを受信したことを表す悪書のです。
 	 */
 	public static final String ACTION_MESSAGE_RECEIVED = "com.kii.sample.chat.ACTION_MESSAGE_RECEIVED";
 	/**
-	 * BroadcastReceiver����M����Push�ʒm��Activity�ɑ��鎞�Ɏg�p����L�[�ł��B
+	 * BroadcastReceiverが受信したPush通知をActivityに送る時に使用するキーです。
 	 */
 	public static final String EXTRA_MESSAGE = "com.kii.sample.chat.EXTRA_MESSAGE";
 	

@@ -39,8 +39,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
- * —F’Bˆê——‚ğ•\¦‚·‚é‰æ–Ê‚Ìƒtƒ‰ƒOƒƒ“ƒg‚Å‚·B
- * ‚±‚Ì‰æ–Ê‚Íƒ^ƒu‚É•\¦‚³‚ê‚Ü‚·B
+ * å‹é”ä¸€è¦§ã‚’è¡¨ç¤ºã™ã‚‹ç”»é¢ã®ãƒ•ãƒ©ã‚°ãƒ¡ãƒ³ãƒˆã§ã™ã€‚
+ * ã“ã®ç”»é¢ã¯ã‚¿ãƒ–ã«è¡¨ç¤ºã•ã‚Œã¾ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -85,7 +85,7 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 				this.getLoaderManager().restartLoader(0, null, this);
 				return true;
 			case R.id.menu_signout:
-				// TODO:ƒƒOƒAƒEƒgˆ—‚ğ‹¤’Ê‰»
+				// TODO:ãƒ­ã‚°ã‚¢ã‚¦ãƒˆå‡¦ç†ã‚’å…±é€šåŒ–
 				PreferencesManager.setStoredAccessToken("");
 				KiiUser.logOut();
 				intent = new Intent(getActivity(), MainActivity.class);
@@ -102,7 +102,7 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 		switch (requestCode) {
 			case REQUEST_CODE_ADD_FRIEND:
 				if (resultCode == Activity.RESULT_OK) {
-					// —F’BƒŠƒXƒg‚ğÄ“Ç‚İ‚İ
+					// å‹é”ãƒªã‚¹ãƒˆã‚’å†èª­ã¿è¾¼ã¿
 					this.getLoaderManager().restartLoader(0, null, this);
 				}
 				break;
@@ -150,25 +150,25 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 				String chatRoomName = ChatRoom.getChatRoomName(KiiUser.getCurrentUser(), this.chatFriend);
 				String uniqueKey = ChatRoom.getUniqueKey(KiiUser.getCurrentUser(), this.chatFriend);
 				List<KiiGroup> existingGroup = KiiUser.getCurrentUser().memberOfGroups();
-				// Šù‚É“¯‚¶ƒƒ“ƒo[‚ÌƒOƒ‹[ƒv‚ª‘¶İ‚·‚é‚©ƒ`ƒFƒbƒN‚·‚é
+				// æ—¢ã«åŒã˜ãƒ¡ãƒ³ãƒãƒ¼ã®ã‚°ãƒ«ãƒ¼ãƒ—ãŒå­˜åœ¨ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 				for (KiiGroup kiiGroup : existingGroup) {
 					if (TextUtils.equals(uniqueKey, ChatRoom.getUniqueKey(kiiGroup))) {
 						return kiiGroup;
 					}
 				}
-				// Chat—p‚ÌƒOƒ‹[ƒv‚ğì¬
+				// Chatç”¨ã®ã‚°ãƒ«ãƒ¼ãƒ—ã‚’ä½œæˆ
 				KiiGroup kiiGroup = Kii.group(chatRoomName);
 				KiiUser target = KiiUser.createByUri(Uri.parse(this.chatFriend.getUri()));
 				target.refresh();
 				kiiGroup.addUser(target);
 				kiiGroup.save();
-				// Chat‚ÌƒƒbƒZ[ƒW‚ğ•Û‘¶‚·‚éƒoƒPƒc‚ğì¬
+				// Chatã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä¿å­˜ã™ã‚‹ãƒã‚±ãƒ„ã‚’ä½œæˆ
 				ChatMessage chatMessage = new ChatMessage(kiiGroup);
 				chatMessage.getKiiObject().save();
-				// Chat—pƒoƒPƒc‚ğw“Ç‚µ‚ÄƒƒbƒZ[ƒW‚ğƒvƒbƒVƒ…’Ê’m‚µ‚Ä‚à‚ç‚¤ó‘Ô‚É‚·‚é
+				// Chatç”¨ãƒã‚±ãƒ„ã‚’è³¼èª­ã—ã¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ—ãƒƒã‚·ãƒ¥é€šçŸ¥ã—ã¦ã‚‚ã‚‰ã†çŠ¶æ…‹ã«ã™ã‚‹
 				KiiBucket chatBucket = ChatRoom.getBucket(kiiGroup);
 				KiiUser.getCurrentUser().pushSubscription().subscribeBucket(chatBucket);
-				// Chat‘Šè‚ÉPush’Ê’m‚ğ”ò‚Î‚·
+				// Chatç›¸æ‰‹ã«Pushé€šçŸ¥ã‚’é£›ã°ã™
 				KiiTopic topic = target.topicOfThisUser(ApplicationConst.TOPIC_INVITE_NOTIFICATION);
 				Data data = new Data();
 				data.put(ChatRoom.CAHT_GROUP_URI, kiiGroup.toUri().toString());

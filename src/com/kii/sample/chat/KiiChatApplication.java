@@ -8,8 +8,8 @@ import android.app.Application;
 import android.content.Context;
 
 /**
- * Application‚ÌƒJƒXƒ^ƒ€ŽÀ‘•‚Å‚·B
- * ApplicationContext‚ÉŠÖ‚·‚é‹¤’Êˆ—‚ðs‚¢‚Ü‚·B
+ * Applicationã®ã‚«ã‚¹ã‚¿ãƒ å®Ÿè£…ã§ã™ã€‚
+ * ApplicationContextã«é–¢ã™ã‚‹å…±é€šå‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -21,9 +21,9 @@ public class KiiChatApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		context = this;
-		// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‹N“®Žž‚ÉKiiSDK‚ð‰Šú‰»‚µ‚Ü‚·B
-		// TODO:Activity.onCreate‚Å–ˆ‰ñŒÄ‚Ô‚æ‚¤‚É‚µ‚½‚Ù‚¤‚ª‚¢‚¢‚©‚àB
-		Logger.i("¡¡¡ initialize KII SDK ¡¡¡");
+		// ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³èµ·å‹•æ™‚ã«KiiSDKã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
+		// TODO:Activity.onCreateã§æ¯Žå›žå‘¼ã¶ã‚ˆã†ã«ã—ãŸã»ã†ãŒã„ã„ã‹ã‚‚ã€‚
+		Logger.i("â– â– â–  initialize KII SDK â– â– â– ");
 		Kii.initialize(ApplicationConst.APP_ID, ApplicationConst.APP_KEY, Site.JP);
 	}
 	public static Context getContext(){

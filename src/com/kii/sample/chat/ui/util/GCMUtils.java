@@ -7,7 +7,7 @@ import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.KiiChatApplication;
 
 /**
- * Google Cloud Messaging‚Ìˆ—‚ðs‚¤ƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX‚Å‚·B
+ * Google Cloud Messagingã®å‡¦ç†ã‚’è¡Œã†ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -23,7 +23,7 @@ public class GCMUtils {
 				registrationId = gcm.register(ApplicationConst.SENDER_ID);
 				break;
 			} catch (IOException ignore) {
-				// java.io.IOException: SERVICE_NOT_AVAILABLE‚ª‚½‚Ü‚É”­¶‚·‚é‚Ì‚ÅƒŠƒgƒ‰ƒC‚·‚é
+				// java.io.IOException: SERVICE_NOT_AVAILABLEãŒãŸã¾ã«ç™ºç”Ÿã™ã‚‹ã®ã§ãƒªãƒˆãƒ©ã‚¤ã™ã‚‹
 				Thread.sleep(1000);
 				retry++;
 				Logger.w("failed to register GCM. retry " + retry + " times  reason=" + ignore.getMessage());

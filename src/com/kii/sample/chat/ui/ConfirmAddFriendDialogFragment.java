@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * ユーザを友達に追加する際に表示される確認用のダイアログフラグメントです。
+ * 繝ｦ繝ｼ繧ｶ繧貞暑驕斐↓霑ｽ蜉縺吶ｋ髫帙↓陦ｨ遉ｺ縺輔ｌ繧狗｢ｺ隱咲畑縺ｮ繝繧､繧｢繝ｭ繧ｰ繝輔Λ繧ｰ繝｡繝ｳ繝医〒縺吶�
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

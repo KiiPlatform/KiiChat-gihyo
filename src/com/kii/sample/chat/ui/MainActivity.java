@@ -11,8 +11,8 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 /**
- * ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‹N“®‚ÉŒÄ‚Î‚ê‚éƒAƒNƒeƒBƒrƒeƒB‚Å‚·B
- * •K—v‚É‰‚¶‚Ä©“®“I‚ÉƒTƒCƒ“ƒCƒ“ˆ—‚ğs‚¢‚Ü‚·B
+ * ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³èµ·å‹•æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã§ã™ã€‚
+ * å¿…è¦ã«å¿œã˜ã¦è‡ªå‹•çš„ã«ã‚µã‚¤ãƒ³ã‚¤ãƒ³å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -20,21 +20,21 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// SharedPreferences‚ÉAccessToken‚ª•Û‘¶‚³‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN‚·‚é
+		// SharedPreferencesã«AccessTokenãŒä¿å­˜ã•ã‚Œã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 		String token = PreferencesManager.getStoredAccessToken();
 		if (!TextUtils.isEmpty(token)) {
-			// •Û‘¶‚µ‚½Token‚ÅƒƒOƒCƒ“‚ğÀs‚·‚é
+			// ä¿å­˜ã—ãŸTokenã§ãƒ­ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹
 			ProgressDialogFragment.show(getSupportFragmentManager(), "Login", "Processing...");
 			KiiUser.loginWithToken(new KiiUserCallBack() {
 				@Override
 				public void onLoginCompleted(int token, KiiUser user, Exception e) {
 					if (e == null) {
-						// ƒTƒCƒ“ƒCƒ“¬Œ÷‚Íƒ`ƒƒƒbƒg‰æ–Ê‚É‘JˆÚ
+						// ã‚µã‚¤ãƒ³ã‚¤ãƒ³æˆåŠŸæ™‚ã¯ãƒãƒ£ãƒƒãƒˆç”»é¢ã«é·ç§»
 						Intent intent = new Intent(MainActivity.this, ChatMainActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
 					} else {
-						// ƒTƒCƒ“ƒCƒ“¸”s‚ÍƒTƒCƒ“ƒCƒ“‰æ–Ê‚É‘JˆÚ
+						// ã‚µã‚¤ãƒ³ã‚¤ãƒ³å¤±æ•—æ™‚ã¯ã‚µã‚¤ãƒ³ã‚¤ãƒ³ç”»é¢ã«é·ç§»
 						PreferencesManager.setStoredAccessToken("");
 						Intent intent = new Intent(MainActivity.this, SigninActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -44,7 +44,7 @@ public class MainActivity extends FragmentActivity {
 				}
 			},token);
 		} else {
-			// Token‚ª•Û‘¶‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒTƒCƒ“ƒCƒ“‰æ–Ê‚É‘JˆÚ
+			// TokenãŒä¿å­˜ã•ã‚Œã¦ã„ãªã„å ´åˆã¯ã‚µã‚¤ãƒ³ã‚¤ãƒ³ç”»é¢ã«é·ç§»
 			Intent intent = new Intent(MainActivity.this, SigninActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);

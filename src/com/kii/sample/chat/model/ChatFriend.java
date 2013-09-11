@@ -5,9 +5,9 @@ import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.KiiUser;
 
 /**
- * ƒ`ƒƒƒbƒg—F’B‚ğ•\‚µ‚Ü‚·B
- * ƒ†[ƒUƒXƒR[ƒv‚Ìƒf[ƒ^‚Æ‚µ‚Ä—F’B’Ç‰Á‚ÉKiiCloud‚É•Û‘¶‚³‚êA‘¼‚Ìƒ†[ƒU‚ª‘¼l‚Ì—F’BƒŠƒXƒg‚ğQÆ‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB
- * –{ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å‚Íƒ`ƒƒƒbƒg‚ğŠJn‚·‚é‘O‚Éƒ†[ƒU‚ğ—F’B‚É’Ç‰Á‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
+ * ãƒãƒ£ãƒƒãƒˆå‹é”ã‚’è¡¨ã—ã¾ã™ã€‚
+ * ãƒ¦ãƒ¼ã‚¶ã‚¹ã‚³ãƒ¼ãƒ—ã®ãƒ‡ãƒ¼ã‚¿ã¨ã—ã¦å‹é”è¿½åŠ æ™‚ã«KiiCloudã«ä¿å­˜ã•ã‚Œã€ä»–ã®ãƒ¦ãƒ¼ã‚¶ãŒä»–äººã®å‹é”ãƒªã‚¹ãƒˆã‚’å‚ç…§ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚
+ * æœ¬ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§ã¯ãƒãƒ£ãƒƒãƒˆã‚’é–‹å§‹ã™ã‚‹å‰ã«ãƒ¦ãƒ¼ã‚¶ã‚’å‹é”ã«è¿½åŠ ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -16,7 +16,7 @@ public class ChatFriend extends KiiObjectWrapper implements IUser {
 	private static final String BUCKET_NAME = "chat_friends";
 	private static final String FIELD_NAME = "username";
 	private static final String FIELD_EMAIL = "email";
-	private static final String FIELD_URI = "uri";  // KiiUser.toUri()‚ª•Ô‚µ‚½’l
+	private static final String FIELD_URI = "uri";  // KiiUser.toUri()ãŒè¿”ã—ãŸå€¤
 	
 	public static KiiBucket getBucket() {
 		return KiiUser.getCurrentUser().bucket(BUCKET_NAME);

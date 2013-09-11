@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 /**
- * AsyncTaskLoader‚ÌœŠiÀ‘•‚Å‚·B
+ * AsyncTaskLoaderã®éª¨æ ¼å®Ÿè£…ã§ã™ã€‚
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

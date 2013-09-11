@@ -12,7 +12,7 @@ import com.kii.sample.chat.model.ChatFriend;
 import com.kii.sample.chat.ui.util.Logger;
 
 /**
- * {@link ChatFriend}をchat_friendsバケツから取得するローダーです。
+ * {@link ChatFriend}繧団hat_friends繝舌こ繝�縺九ｉ蜿門ｾ励☆繧九Ο繝ｼ繝繝ｼ縺ｧ縺吶�
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

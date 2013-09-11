@@ -1,7 +1,7 @@
 package com.kii.sample.chat.model;
 
 /**
- * ChatUser��ChatFriend�����ʂ�Adapter�ŏ�������ׂ́A�C���^�[�t�F�[�X�ł��B
+ * ChatUserとChatFriendを共通のAdapterで処理する為の、インターフェースです。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
