@@ -20,7 +20,6 @@ import com.kii.sample.chat.ui.util.ToastUtils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -28,6 +27,8 @@ import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -74,37 +75,33 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Create new account");
-		builder.setPositiveButton(R.string.button_signup, this);
-		builder.setNegativeButton(R.string.button_cancel, this);
+		builder.setPositiveButton(R.string.button_signup, null);
+		builder.setNegativeButton(R.string.button_cancel, null);
 		builder.setView(view);
-		return builder.show();
+		AlertDialog dialog = builder.show();
+		Button buttonOK = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		buttonOK.setOnClickListener(this);
+		return dialog;
 	}
+	
 	@Override
-	public void onClick(DialogInterface dialog, int which) {
-		switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				// 「サインアップ」ボタンが押された場合の処理
-				final String username = editName.getText().toString();
-				final String email = editEmail.getText().toString();
-				final String password = editPassword.getText().toString();
-				if (TextUtils.isEmpty(username)) {
-					ToastUtils.showShort(getActivity(), "Please input username");
-					return;
-				}
-				if (TextUtils.isEmpty(email)) {
-					ToastUtils.showShort(getActivity(), "Please input email");
-					return;
-				}
-				if (TextUtils.isEmpty(password)) {
-					ToastUtils.showShort(getActivity(), "Please input password");
-					return;
-				}
-				new SignupTask(username, email, password).execute();
-				break;
-			case DialogInterface.BUTTON_NEGATIVE:
-				dismiss();
-				break;
+	public void onClick(View v) {
+		final String username = editName.getText().toString();
+		final String email = editEmail.getText().toString();
+		final String password = editPassword.getText().toString();
+		if (TextUtils.isEmpty(username)) {
+			ToastUtils.showShort(getActivity(), "Please input username");
+			return;
 		}
+		if (TextUtils.isEmpty(email)) {
+			ToastUtils.showShort(getActivity(), "Please input email");
+			return;
+		}
+		if (TextUtils.isEmpty(password)) {
+			ToastUtils.showShort(getActivity(), "Please input password");
+			return;
+		}
+		new SignupTask(username, email, password).execute();
 	}
 	/**
 	 * バックグラウンドでSignupの処理を実行します。
