@@ -149,9 +149,6 @@ public class ChatListFragment extends ListFragment implements LoaderCallbacks<Li
 				target.refresh();
 				kiiGroup.addUser(target);
 				kiiGroup.save();
-				// Chatのメッセージを保存するバケツを作成
-				ChatMessage chatMessage = new ChatMessage(kiiGroup);
-				chatMessage.getKiiObject().save();
 				// Chat用バケツを購読してメッセージをプッシュ通知してもらう状態にする
 				KiiBucket chatBucket = ChatRoom.getBucket(kiiGroup);
 				KiiUser.getCurrentUser().pushSubscription().subscribeBucket(chatBucket);

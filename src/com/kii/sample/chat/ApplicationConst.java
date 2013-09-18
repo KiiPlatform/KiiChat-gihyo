@@ -8,8 +8,8 @@ package com.kii.sample.chat;
 public final class ApplicationConst {
 	
 	// TODO:APP_IDとAPP_KEYがKiiCloudでアプリケーションを作成した際に発行された値に書き換えてください。
-	public static final String APP_ID = "5db741d4";
-	public static final String APP_KEY = "7b9a135db251fc849b21237d3ccc3ab9";
+	public static final String APP_ID = "f39c2d34";
+	public static final String APP_KEY = "2e98ef0bb78a58da92f9ac0709dc99ed";
 	// TODO:SENDER_IDはGCMの設定を有効にした際に発行された値に書き換えてください。
 	public static final String SENDER_ID = "1012419078893";
 
