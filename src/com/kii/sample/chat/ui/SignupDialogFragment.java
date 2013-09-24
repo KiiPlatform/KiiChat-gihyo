@@ -132,6 +132,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 				// 5.Topicの購読
 				KiiUser.Builder builder = KiiUser.builderWithEmail(email);
 				KiiUser kiiUser = builder.build();
+				kiiUser.setDisplayname(username);
 				kiiUser.register(password);
 				Logger.i("registered user uri=" + kiiUser.toUri().toString());
 				// 登録したKiiUserをChatUserとしてAppスコープのバケツに保存しておく（検索用）
