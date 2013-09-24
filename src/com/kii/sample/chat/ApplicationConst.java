@@ -28,7 +28,7 @@ public final class ApplicationConst {
 	 */
 	public static final String ACTION_CHAT_STARTED = "com.kii.sample.chat.ACTION_CHAT_STARTED";
 	/**
-	 * メッセージを受信したことを表す悪書のです。
+	 * メッセージを受信したことを表すアクションです。
 	 */
 	public static final String ACTION_MESSAGE_RECEIVED = "com.kii.sample.chat.ACTION_MESSAGE_RECEIVED";
 	/**
