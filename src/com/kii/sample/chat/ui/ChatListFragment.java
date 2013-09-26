@@ -13,7 +13,6 @@ import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatFriend;
-import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.SelectFriendDialogFragment.OnSelectFriendListener;
 import com.kii.sample.chat.ui.adapter.GroupListAdapter;
