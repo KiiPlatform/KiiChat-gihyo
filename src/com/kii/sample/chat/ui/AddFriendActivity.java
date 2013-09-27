@@ -118,9 +118,11 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 	 */
 	private class AddingFriendTask extends AsyncTask<Void, Void, Boolean> {
 		private final ChatUser chatUser;
+		
 		private AddingFriendTask(ChatUser chatUser) {
 			this.chatUser = chatUser;
 		}
+		
 		@Override
 		protected void onPreExecute() {
 			ProgressDialogFragment.show(getSupportFragmentManager(), "Adding Friend", "Processing...");
@@ -136,6 +138,7 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 				return false;
 			}
 		}
+		@Override
 		protected void onPostExecute(Boolean result) {
 			ProgressDialogFragment.hide(getSupportFragmentManager());
 			if (result) {
