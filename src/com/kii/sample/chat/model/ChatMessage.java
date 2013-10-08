@@ -15,11 +15,13 @@ import com.kii.cloud.storage.query.KiiQuery;
  */
 public class ChatMessage extends KiiObjectWrapper {
 	
+	private static final String FIELD_GROUP_URI = "group_uri";
 	private static final String FIELD_MESSAGE = "message";
 	private static final String FIELD_SENDER_URI = "sender_uri";
 	
 	public ChatMessage(KiiGroup kiiGroup) {
 		super(ChatRoom.getBucket(kiiGroup).object());
+		this.setGroupUri(kiiGroup.toUri().toString());
 	}
 	public ChatMessage(KiiObject message) {
 		super(message);
@@ -45,12 +47,27 @@ public class ChatMessage extends KiiObjectWrapper {
 		return query;
 	}
 	
+	/**
+	 * このチャットルームのグループのURIを取得します。
+	 */
+	public String getGroupUri() {
+		return getString(FIELD_GROUP_URI);
+	}
+	public void setGroupUri(String uri) {
+		set(FIELD_GROUP_URI, uri);
+	}
+	/**
+	 * メッセージの本文を取得します。
+	 */
 	public String getMessage() {
 		return getString(FIELD_MESSAGE);
 	}
 	public void setMessage(String message) {
 		set(FIELD_MESSAGE, message);
 	}
+	/**
+	 * メッセージの送信者のURIを取得します。
+	 */
 	public String getSenderUri() {
 		return getString(FIELD_SENDER_URI);
 	}
