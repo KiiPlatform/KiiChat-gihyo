@@ -13,7 +13,6 @@ import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatFriend;
-import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.ConfirmStartChatDialogFragment.OnStartChatListener;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
@@ -162,9 +161,6 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 				target.refresh();
 				kiiGroup.addUser(target);
 				kiiGroup.save();
-				// Chatのメッセージを保存するバケツを作成
-				ChatMessage chatMessage = new ChatMessage(kiiGroup);
-				chatMessage.getKiiObject().save();
 				// Chat用バケツを購読してメッセージをプッシュ通知してもらう状態にする
 				KiiBucket chatBucket = ChatRoom.getBucket(kiiGroup);
 				KiiUser.getCurrentUser().pushSubscription().subscribeBucket(chatBucket);
