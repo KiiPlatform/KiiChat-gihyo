@@ -32,16 +32,9 @@ public class ChatMessage extends KiiObjectWrapper {
 	public static KiiQuery createQuery(Long modifiedSinceTime) {
 		KiiQuery query = null;
 		if (modifiedSinceTime != null) {
-			query = new KiiQuery(
-				KiiClause.and(
-					// チャット開始時にバケツを作成する為に空のKiiObjectが作成されてしまうので、それを除外する
-					KiiClause.notEquals(FIELD_MESSAGE, ""),
-					KiiClause.greaterThan(FIELD_CREATED, modifiedSinceTime)
-				)
-			);
+			query = new KiiQuery(KiiClause.greaterThan(FIELD_CREATED, modifiedSinceTime));
 		} else {
-			// チャット開始時にバケツを作成する為に空のKiiObjectが作成されてしまうので、それを除外する
-			query = new KiiQuery(KiiClause.notEquals(FIELD_MESSAGE, ""));
+			query = new KiiQuery();
 		}
 		query.sortByAsc(FIELD_CREATED);
 		return query;
