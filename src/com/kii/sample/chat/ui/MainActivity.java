@@ -3,6 +3,7 @@ package com.kii.sample.chat.ui;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.callback.KiiUserCallBack;
 import com.kii.sample.chat.PreferencesManager;
+import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.util.ProgressDialogFragment;
 
 import android.content.Intent;
@@ -30,6 +31,7 @@ public class MainActivity extends FragmentActivity {
 				public void onLoginCompleted(int token, KiiUser user, Exception e) {
 					if (e == null) {
 						// サインイン成功時はチャット画面に遷移
+						ChatRoom.ensureSubscribedBucket(user);
 						Intent intent = new Intent(MainActivity.this, ChatMainActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);

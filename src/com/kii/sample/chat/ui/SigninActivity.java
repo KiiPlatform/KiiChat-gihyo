@@ -4,6 +4,7 @@ import com.kii.cloud.storage.callback.KiiUserCallBack;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.R;
+import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.SignupDialogFragment.OnSignupListener;
 import com.kii.sample.chat.ui.util.GCMUtils;
 import com.kii.sample.chat.ui.util.Logger;
@@ -135,6 +136,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 		moveToChatMain();
 	}
 	private void moveToChatMain() {
+		ChatRoom.ensureSubscribedBucket(KiiUser.getCurrentUser());
 		Intent intent = new Intent(SigninActivity.this, ChatMainActivity.class);
 		startActivity(intent);
 	}

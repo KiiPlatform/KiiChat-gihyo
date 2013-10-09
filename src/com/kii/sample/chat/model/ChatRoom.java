@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import com.kii.cloud.storage.KiiBucket;
@@ -30,6 +31,45 @@ public class ChatRoom {
 	
 	public static KiiBucket getBucket(KiiGroup kiiGroup) {
 		return kiiGroup.bucket(BUCKET_NAME);
+	}
+	/**
+	 * ログイン中のユーザが所属するグループのchat_roomバケツを全て購読していることを確認します。
+	 * 購読していないバケツがある場合は、購読します。
+	 * chat_roomバケツの購読処理は通常、他のユーザがチャットを開始したタイミングでPush通知を介して行われますが
+	 * Push通知を受けた時点でユーザがログインしていないと、購読処理が行われないため、ログイン時にこのメソッドを呼ぶ必要があります。
+	 * 毎回、購読状況をサーバに確認するのは非効率なので、実際は購読状況をローカルにキャッシュするのが望ましいです。
+	 * 
+	 * @param kiiUser
+	 */
+	public static void ensureSubscribedBucket(final KiiUser kiiUser) {
+		new AsyncTask<Void, Void, Boolean>() {
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				try {
+					// ユーザが所属しているグループの一覧を取得
+					List<KiiGroup> groups = kiiUser.memberOfGroups();
+					for (KiiGroup group : groups) {
+						// 全てのグループでchat_roomバケツを購読済みであることを確認
+						KiiBucket chatBucket = ChatRoom.getBucket(group);
+						boolean isSubscribed = kiiUser.pushSubscription().isSubscribed(chatBucket);
+						if (!isSubscribed) {
+							// 購読されていない場合は、購読する
+							Logger.i("---------------- 取りこぼし対応 ----------------");
+							kiiUser.pushSubscription().subscribeBucket(chatBucket);
+						}
+					}
+					return true;
+				} catch (Exception e) {
+					return false;
+				}
+			}
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if (!result) {
+					Logger.e("Unable to subscribe group bucket");
+				}
+			}
+		}.execute();
 	}
 	/**
 	 * チャットルームの名前を取得します。

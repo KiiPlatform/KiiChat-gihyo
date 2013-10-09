@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.kii.cloud.storage.KiiBucket;
 import com.kii.cloud.storage.KiiGroup;
+import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.PushMessageBundleHelper;
 import com.kii.cloud.storage.PushMessageBundleHelper.MessageType;
@@ -39,7 +40,7 @@ public class GCMPushReceiver extends BroadcastReceiver {
 		String messageType = gcm.getMessageType(intent);
 		if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 			final Bundle extras = intent.getExtras();
-			ReceivedMessage message = PushMessageBundleHelper.parse(extras);
+			final ReceivedMessage message = PushMessageBundleHelper.parse(extras);
 			MessageType type = message.pushMessageType();
 			switch (type) {
 				case DIRECT_PUSH:
@@ -51,12 +52,25 @@ public class GCMPushReceiver extends BroadcastReceiver {
 					try {
 						// 参加中のChatに新規メッセージが投稿された場合
 						Logger.i("received PUSH_TO_USER");
-						ChatMessage chatMessage = new ChatMessage(((PushToAppMessage)message).getKiiObject());
-						KiiGroup kiiGroup = KiiGroup.createByUri(Uri.parse(chatMessage.getGroupUri()));
-						// 自分がメンバーでないChatRoomは無視する
-						if (this.isMember(kiiGroup)) {
-							this.sendBroadcast(context, ApplicationConst.ACTION_MESSAGE_RECEIVED, chatMessage.getKiiObject().toJSON().toString());
-						}
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									KiiObject obj = ((PushToAppMessage)message).getKiiObject();
+									obj.refresh();
+									ChatMessage chatMessage = new ChatMessage(obj);
+									KiiGroup kiiGroup = KiiGroup.createByUri(Uri.parse(chatMessage.getGroupUri()));
+									// 自分がメンバーでないChatRoomは無視する
+									if (isMember(kiiGroup)) {
+										sendBroadcast(context, ApplicationConst.ACTION_MESSAGE_RECEIVED, chatMessage.getKiiObject().toJSON().toString());
+									} else {
+										Logger.i("---------------------- メッセージを無視 ----------------------");
+									}
+								} catch (Exception e) {
+									Logger.e("Unable to subscribe group bucket", e);
+								}
+							}
+						}).start();
 					} catch (Exception e) {
 						Logger.e("Unable to get the KiiObject", e);
 					}
@@ -77,6 +91,8 @@ public class GCMPushReceiver extends BroadcastReceiver {
 									KiiBucket chatBucket = ChatRoom.getBucket(kiiGroup);
 									KiiUser.getCurrentUser().pushSubscription().subscribeBucket(chatBucket);
 									sendBroadcast(context, ApplicationConst.ACTION_CHAT_STARTED, groupUri);
+								} else {
+									Logger.i("---------------------- 招待を無視 ----------------------");
 								}
 							} catch (Exception e) {
 								Logger.e("Unable to subscribe group bucket", e);
