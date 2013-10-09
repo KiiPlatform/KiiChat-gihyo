@@ -54,7 +54,6 @@ public class ChatRoom {
 						boolean isSubscribed = kiiUser.pushSubscription().isSubscribed(chatBucket);
 						if (!isSubscribed) {
 							// 購読されていない場合は、購読する
-							Logger.i("---------------- 取りこぼし対応 ----------------");
 							kiiUser.pushSubscription().subscribeBucket(chatBucket);
 						}
 					}

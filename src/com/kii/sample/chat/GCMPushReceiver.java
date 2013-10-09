@@ -63,8 +63,6 @@ public class GCMPushReceiver extends BroadcastReceiver {
 									// 自分がメンバーでないChatRoomは無視する
 									if (isMember(kiiGroup)) {
 										sendBroadcast(context, ApplicationConst.ACTION_MESSAGE_RECEIVED, chatMessage.getKiiObject().toJSON().toString());
-									} else {
-										Logger.i("---------------------- メッセージを無視 ----------------------");
 									}
 								} catch (Exception e) {
 									Logger.e("Unable to subscribe group bucket", e);
@@ -91,8 +89,6 @@ public class GCMPushReceiver extends BroadcastReceiver {
 									KiiBucket chatBucket = ChatRoom.getBucket(kiiGroup);
 									KiiUser.getCurrentUser().pushSubscription().subscribeBucket(chatBucket);
 									sendBroadcast(context, ApplicationConst.ACTION_CHAT_STARTED, groupUri);
-								} else {
-									Logger.i("---------------------- 招待を無視 ----------------------");
 								}
 							} catch (Exception e) {
 								Logger.e("Unable to subscribe group bucket", e);
