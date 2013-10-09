@@ -11,7 +11,6 @@ import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.adapter.MessageListAdapter;
 import com.kii.sample.chat.ui.util.Logger;
 import com.kii.sample.chat.ui.util.ProgressDialogFragment;
-import com.kii.sample.chat.ui.util.ToastUtils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -50,8 +49,6 @@ public class ChatActivity extends FragmentActivity {
 	private final BroadcastReceiver handleMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String m = intent.getStringExtra(ApplicationConst.EXTRA_MESSAGE);
-			ToastUtils.showLong(context, m);
 			updateMessage(false);
 		}
 	};

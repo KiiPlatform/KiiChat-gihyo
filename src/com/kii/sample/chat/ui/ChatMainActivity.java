@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.R;
-import com.kii.sample.chat.ui.util.ToastUtils;
 
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
@@ -42,8 +41,6 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 	private final BroadcastReceiver handleNewChatReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String m = intent.getStringExtra(ApplicationConst.EXTRA_MESSAGE);
-			ToastUtils.showLong(context, m);
 		}
 	};
 	
