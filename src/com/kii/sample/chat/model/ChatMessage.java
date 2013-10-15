@@ -67,4 +67,7 @@ public class ChatMessage extends KiiObjectWrapper {
 	public void setSenderUri(String uri) {
 		set(FIELD_SENDER_URI, uri);
 	}
+	public boolean isStamp() {
+		return false;
+	}
 }

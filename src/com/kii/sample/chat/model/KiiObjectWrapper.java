@@ -50,5 +50,4 @@ public abstract class KiiObjectWrapper {
 	public String toString() {
 		return this.kiiObject.toString();
 	}
-	
 }
