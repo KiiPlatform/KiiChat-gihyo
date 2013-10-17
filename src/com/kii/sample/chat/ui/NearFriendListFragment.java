@@ -4,15 +4,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.kii.cloud.storage.GeoPoint;
 import com.kii.cloud.storage.Kii;
 import com.kii.cloud.storage.KiiObject;
+import com.kii.cloud.storage.callback.KiiObjectCallBack;
 import com.kii.cloud.storage.exception.app.AppException;
 import com.kii.cloud.storage.query.KiiClause;
 import com.kii.cloud.storage.query.KiiQuery;
 import com.kii.cloud.storage.query.KiiQueryResult;
 import com.kii.sample.chat.ApplicationConst;
+import com.kii.sample.chat.model.ChatFriend;
+import com.kii.sample.chat.model.ChatUser;
 import com.kii.sample.chat.model.IUser;
+import com.kii.sample.chat.ui.ConfirmAddFriendDialogFragment.OnAddFriendListener;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
 import com.kii.sample.chat.ui.loader.AbstractAsyncTaskLoader;
 
@@ -28,10 +35,11 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class NearFriendListFragment extends ListFragment implements
-		LoaderCallbacks<List<UserStub>>, OnItemClickListener {
+		LoaderCallbacks<List<UserStub>>, OnItemClickListener, OnAddFriendListener {
 
 	private Handler handler;
 	@Override
@@ -53,8 +61,43 @@ public class NearFriendListFragment extends ListFragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		JSONObject userJSON = new JSONObject();
+		UserStub stub = (UserStub) getListAdapter().getItem(position);
+		try {
+			userJSON.put("username", stub.getUsername());
+			userJSON.put("email", stub.getEmail());
+		} catch (JSONException e) {
+			// Wont' happens.
+			return;
+		}
+		ConfirmAddFriendDialogFragment cadf = ConfirmAddFriendDialogFragment
+				.newInstance(this, userJSON, position);
+		cadf.show(getFragmentManager(), "ConfirmAddFriendDialogFragment");
+	}
+
+	@Override
+	public void onFriendAdded(int position) {
+		UserStub stub = (UserStub) getListAdapter().getItem(position);
+		// Save object in chat friend.
+		ChatFriend cf = new ChatFriend(new ChatUser(stub.getUri(),
+				stub.getUsername(), stub.getEmail()));
+		ProgressDialogFragment pdf = ProgressDialogFragment.newInstance();
+		pdf.show(getFragmentManager(), ProgressDialogFragment.TAG);
+		cf.getKiiObject().save(new KiiObjectCallBack() {
+			@Override
+			public void onSaveCompleted(int token, KiiObject object,
+					Exception exception) {
+				DialogFragment prgDialog = (DialogFragment) getFragmentManager()
+						.findFragmentByTag(ProgressDialogFragment.TAG);
+				prgDialog.dismiss();
+				if (exception != null) {
+					Toast.makeText(getActivity(), "Failed to add friend: "
+							+ exception.getMessage(), Toast.LENGTH_LONG).show();
+				}
+			}
+		});
 	}
 
 	@Override
