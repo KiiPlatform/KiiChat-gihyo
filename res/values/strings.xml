@@ -27,6 +27,6 @@
 	<string name="menu_search_user">Search User</string>
 	<string name="menu_reload">Reload</string>
 	<string name="find_by_name">Find friend by name/email</string>
-	<string name="find_by_location">Find friend near me</string>
+	<string name="find_by_location">Find friend near to me</string>
 	<string name="update">Update</string>
 </resources>
