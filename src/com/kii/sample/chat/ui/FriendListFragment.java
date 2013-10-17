@@ -15,6 +15,7 @@ import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatFriend;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.ConfirmStartChatDialogFragment.OnStartChatListener;
+import com.kii.sample.chat.ui.ListDialogFragment.ListDialogFragmentCallback;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
 import com.kii.sample.chat.ui.loader.FriendListLoader;
 import com.kii.sample.chat.ui.util.Logger;
@@ -43,7 +44,7 @@ import android.widget.AdapterView.OnItemClickListener;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class FriendListFragment extends ListFragment implements LoaderCallbacks<List<ChatFriend>>, OnItemClickListener, OnStartChatListener {
+public class FriendListFragment extends ListFragment implements LoaderCallbacks<List<ChatFriend>>, OnItemClickListener, OnStartChatListener, ListDialogFragmentCallback {
 	
 	private static final int REQUEST_CODE_ADD_FRIEND = 1;
 	
@@ -77,8 +78,7 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 		Intent intent = null;
 		switch (item.getItemId()) {
 			case R.id.menu_add_friend:
-				intent = new Intent(getActivity(), AddFriendActivity.class);
-				startActivityForResult(intent, REQUEST_CODE_ADD_FRIEND);
+				showFindFriendOptionsDialog();
 				return true;
 			case R.id.menu_reload:
 				this.getLoaderManager().restartLoader(0, null, this);
@@ -95,6 +95,21 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 				return super.onOptionsItemSelected(item);
 		}
 	}
+
+	private void showFindFriendOptionsDialog() {
+		ListDialogFragment ldf = ListDialogFragment.newInstance(
+				R.layout.find_friend_options_dailog, R.string.menu_add_friend,
+				R.drawable.menu_add_friend, 0);
+		ldf.setTargetFragment(this, 0);
+		ldf.show(getFragmentManager(), ListDialogFragment.TAG);
+	}
+
+	private void closeFindFriendOptionsDialog() {
+		ListDialogFragment ldf = (ListDialogFragment) getFragmentManager()
+				.findFragmentByTag(ListDialogFragment.TAG);
+		ldf.dismiss();
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -188,4 +203,22 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 			startActivity(intent);
 		}
 	}
+
+	@Override
+	public void onListDialogItemClicked(AdapterView<?> parent, View view,
+			int pos, long id, int requestId) {
+		if (requestId == 0) {
+			closeFindFriendOptionsDialog();
+			if (pos == 0) {
+				Intent intent = new Intent(getActivity(),
+						AddFriendActivity.class);
+				startActivityForResult(intent, REQUEST_CODE_ADD_FRIEND);
+			} else if (pos == 1) {
+				Intent i = new Intent(getActivity(),
+						NearFriendListActivity.class);
+				startActivity(i);
+			}
+		}
+	}
+
 }

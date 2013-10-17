@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="find_friend_options">
+        <item>@string/find_by_name</item>
+        <item>@string/find_by_location</item>
+    </string-array>
+
+</resources>

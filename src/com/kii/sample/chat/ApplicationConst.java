@@ -13,6 +13,9 @@ public final class ApplicationConst {
 	// TODO:SENDER_IDはGCMの設定を有効にした際に発行された値に書き換えてください。
 	public static final String SENDER_ID = "1012419078893";
 
+	
+	public static final String LOCATIONBUCKET = "locations";
+
 	/**
 	 * 全てのチャットユーザが自分用に保持しているTOPICの名前です。
 	 * このトピックはユーザが個別に持つメールボックスに似ています。
