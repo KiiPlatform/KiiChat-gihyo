@@ -116,12 +116,17 @@ public class NearFriendListFragment extends ListFragment implements
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				((UserListAdapter) NearFriendListFragment.this.getListAdapter())
-						.setData(data);
 				DialogFragment pdf = (DialogFragment) ((FragmentActivity) getActivity())
 						.getSupportFragmentManager().findFragmentByTag(
 								SimpleProgressDialogFragment.TAG);
-				pdf.dismissAllowingStateLoss();
+				pdf.dismiss();
+				if (data == null) {
+					Toast.makeText(getActivity(), "Failed to update list.",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				((UserListAdapter) NearFriendListFragment.this.getListAdapter())
+						.setData(data);
 			}
 		});
 
@@ -196,13 +201,9 @@ class SimpleUserLoader extends AbstractAsyncTaskLoader<List<SimpleUser>> {
 			}
 			return ret;
 		} catch (AppException e) {
-			// TODO: Show error.
-			e.printStackTrace();
-			return ret;
+			return null;
 		} catch (IOException e) {
-			// TODO: Show error.
-			e.printStackTrace();
-			return ret;
+			return null;
 		}
 	}
 
