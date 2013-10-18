@@ -22,7 +22,6 @@ public class KiiChatApplication extends Application {
 		super.onCreate();
 		context = this;
 		// アプリケーション起動時にKiiSDKを初期化します。
-		// TODO:Activity.onCreateで毎回呼ぶようにしたほうがいいかも。
 		Logger.i("■■■ initialize KII SDK ■■■");
 		Kii.initialize(ApplicationConst.APP_ID, ApplicationConst.APP_KEY, Site.JP);
 	}

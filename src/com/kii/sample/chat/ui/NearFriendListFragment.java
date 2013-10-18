@@ -86,6 +86,10 @@ public class NearFriendListFragment extends ListFragment implements
 				stub.getUsername(), stub.getEmail()));
 		SimpleProgressDialogFragment pdf = SimpleProgressDialogFragment.newInstance();
 		pdf.show(getFragmentManager(), SimpleProgressDialogFragment.TAG);
+
+		// TODO: LiveCoding: 選択ユーザを友達リストに保存する処理の実装。
+		// 1. 選択された近隣ユーザの情報をオブジェクトに格納して、chat_friendバケットに保存する。
+		// 2. 完了したらプログレスダイアログを消去する。エラー発生時はToastを表示する。
 		cf.getKiiObject().save(new KiiObjectCallBack() {
 			@Override
 			public void onSaveCompleted(int token, KiiObject object,
@@ -181,6 +185,10 @@ class SimpleUserLoader extends AbstractAsyncTaskLoader<List<SimpleUser>> {
 	@Override
 	public List<SimpleUser> loadInBackground() {
 		ArrayList<SimpleUser> ret = new ArrayList<SimpleUser>();
+		// TODO: LiveCoding: GeoQueryの実装。
+		// 1. currentLocationフィールドに対するGeoDistanceクエリを作成する。(半径1Km)
+		// 2. _calculated.distance で昇順にソート
+		// 3. 自分の情報を除いて検索結果をretに詰める。 取得エラーの場合はnullを返す。
 		KiiClause geoQuery = KiiClause.geoDistance("currentLocation",
 				this.center, 1000, "distance");
 		KiiQuery query = new KiiQuery(geoQuery);

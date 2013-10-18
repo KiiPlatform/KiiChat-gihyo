@@ -124,7 +124,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
-				// TODO:サインアップ処理は以下の5つの処理からなるが、途中で失敗した場合、リトライやロールバックの処理が必要
+				// todo:サインアップ処理は以下の5つの処理からなるが、途中で失敗した場合、リトライやロールバックの処理が必要
 				// 1.KiiUerのregister処理
 				// 2.Pushのinstall
 				// 3.User Topicの作成

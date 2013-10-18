@@ -61,6 +61,10 @@ public class NearFriendListActivity extends FragmentActivity {
 	public void updateList() {
 		SimpleProgressDialogFragment pdf = SimpleProgressDialogFragment.newInstance();
 		pdf.show(getSupportFragmentManager(), SimpleProgressDialogFragment.TAG);
+		// TODO: LiveCoding: 位置情報アップロードの実装。
+		// 1. 現在位置が未取得であれば現在位置を取得するして、キャッシュする。
+		// 2. 位置情報、ユーザ情報オブジェクトをアップロードする。作成済みであれば更新する。 エラー発生時はToastを表示。
+		// 3. ListFragmentでGeoDistanceでの近隣ユーザの検索を実行させる。
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -77,10 +81,8 @@ public class NearFriendListActivity extends FragmentActivity {
 							.findFragmentById(R.id.nearFriendListFragment);
 
 					KiiUser user = Kii.user();
-					Bundle b = new Bundle();
-					b.putString("exclEmail", user.getEmail());
-					b.putDouble("latitude", cachedLoc.getLatitude());
-					b.putDouble("longitude", cachedLoc.getLongitude());
+					Bundle b = getBundleArgument(user, cachedLoc);
+
 					target.getLoaderManager().initLoader(0, b, target);
 				} catch (AppException e) {
 					showToastInMainThread("Failed to update location.",
@@ -91,6 +93,15 @@ public class NearFriendListActivity extends FragmentActivity {
 				}
 			}
 		}).start();
+	}
+
+	private Bundle getBundleArgument(final KiiUser user,
+			final Location currentLoc) {
+		Bundle b = new Bundle();
+		b.putString("exclEmail", user.getEmail());
+		b.putDouble("latitude", cachedLoc.getLatitude());
+		b.putDouble("longitude", cachedLoc.getLongitude());
+		return b;
 	}
 
 	private void showToastInMainThread(final String text, final int duration) {
@@ -121,6 +132,9 @@ public class NearFriendListActivity extends FragmentActivity {
 			throws BadRequestException, ConflictException, ForbiddenException,
 			NotFoundException, UnauthorizedException, UndefinedException,
 			IOException {
+ 		// TODO: LiveCoding: 位置情報アップデートの実装
+		// 1. SharedPreferenceに保存されているUriからオブジェクトにインスタンスを生成
+		// 2. オブジェクトに現在位置を設定してlocationバケットに保存する。
 		GeoPoint gp = new GeoPoint(loc.getLatitude(), loc.getLongitude());
 		KiiObject target = KiiObject
 				.createByUri(Uri.parse(getSavedLocObjUri()));
@@ -132,9 +146,19 @@ public class NearFriendListActivity extends FragmentActivity {
  	private KiiObject uploadLocationObj(Location loc) throws BadRequestException,
 			ConflictException, ForbiddenException, NotFoundException,
 			UnauthorizedException, UndefinedException, IOException {
+ 		KiiObject obj = null;
+ 		// TODO: LiveCoding: 位置情報アップロードの実装
+ 		// 1. ユーザ情報、位置情報 をオブジェクトに格納してlocationバケットにアップロードする。
+		// オブジェクト構造:
+		// {
+		// "email": {email of this user},
+		// "username" : {username of this user},
+		// "userUri" : {userUri of this user},
+		// "currentLocation" : {currentLocation of this user}
+		// }
 		GeoPoint gp = new GeoPoint(loc.getLatitude(), loc.getLongitude());
 		KiiUser user = KiiUser.getCurrentUser();
-		KiiObject obj = Kii.bucket(ApplicationConst.LOCATIONBUCKET).object();
+		obj = Kii.bucket(ApplicationConst.LOCATIONBUCKET).object();
 		obj.set("email", user.getEmail());
 		obj.set("username", user.getDisplayname());
 		obj.set("userUri", user.toUri());
@@ -161,7 +185,6 @@ public class NearFriendListActivity extends FragmentActivity {
 
 			@Override
 			public void onProviderEnabled(String provider) {
-				// TODO: confirm whether this is right.
 				latch.countDown();
 			}
 

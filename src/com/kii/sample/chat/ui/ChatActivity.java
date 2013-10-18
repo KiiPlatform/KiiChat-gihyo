@@ -164,7 +164,7 @@ public class ChatActivity extends FragmentActivity {
 				adapter.addAll(messages);
 				adapter.notifyDataSetChanged();
 			} else {
-				// TODO:ERROR
+				// todo:ERROR
 			}
 			if (this.showProgress) {
 				ProgressDialogFragment.hide(getSupportFragmentManager());

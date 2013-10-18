@@ -82,7 +82,7 @@ public class ChatListFragment extends ListFragment implements LoaderCallbacks<Li
 				this.getLoaderManager().restartLoader(0, null, this);
 				return true;
 			case R.id.menu_signout:
-				// TODO:ログアウト処理を共通化
+				// todo:ログアウト処理を共通化
 				PreferencesManager.setStoredAccessToken("");
 				KiiUser.logOut();
 				intent = new Intent(getActivity(), MainActivity.class);
