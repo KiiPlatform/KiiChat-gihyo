@@ -15,6 +15,7 @@ public final class ApplicationConst {
 
 	
 	public static final String LOCATIONBUCKET = "locations";
+	public static final String CHATFRIENDBUCKET = "chat_friends";
 
 	/**
 	 * 全てのチャットユーザが自分用に保持しているTOPICの名前です。

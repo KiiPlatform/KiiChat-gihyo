@@ -1,28 +1,10 @@
 package com.kii.sample.chat.ui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.kii.cloud.storage.GeoPoint;
-import com.kii.cloud.storage.Kii;
-import com.kii.cloud.storage.KiiObject;
-import com.kii.cloud.storage.callback.KiiObjectCallBack;
-import com.kii.cloud.storage.exception.app.AppException;
-import com.kii.cloud.storage.query.KiiClause;
-import com.kii.cloud.storage.query.KiiQuery;
-import com.kii.cloud.storage.query.KiiQueryResult;
-import com.kii.sample.chat.ApplicationConst;
-import com.kii.sample.chat.model.ChatFriend;
-import com.kii.sample.chat.model.ChatUser;
-import com.kii.sample.chat.model.IUser;
-import com.kii.sample.chat.ui.ConfirmAddFriendDialogFragment.OnAddFriendListener;
-import com.kii.sample.chat.ui.adapter.UserListAdapter;
-import com.kii.sample.chat.ui.loader.AbstractAsyncTaskLoader;
-import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -36,8 +18,15 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
+
+import com.kii.cloud.storage.GeoPoint;
+import com.kii.sample.chat.model.IUser;
+import com.kii.sample.chat.ui.ConfirmAddFriendDialogFragment.OnAddFriendListener;
+import com.kii.sample.chat.ui.adapter.UserListAdapter;
+import com.kii.sample.chat.ui.loader.AbstractAsyncTaskLoader;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 
 public class NearFriendListFragment extends ListFragment implements
 		LoaderCallbacks<List<SimpleUser>>, OnItemClickListener, OnAddFriendListener {
@@ -85,7 +74,12 @@ public class NearFriendListFragment extends ListFragment implements
 		pdf.show(getFragmentManager(), SimpleProgressDialogFragment.TAG);
 
 		// TODO: LiveCoding: 選択ユーザを友達リストに保存する処理の実装。
-		// 1. 選択された近隣ユーザの情報をオブジェクトに格納して、chat_friendバケットに保存する。
+		// 1. 選択された近隣ユーザの情報をオブジェクトに格納して、chat_friendsバケットに保存する。
+		// {
+		// "username": {username of selected user},
+		// "email": {email of selected user},
+		// "uri": {uri of selected user}
+		// }
 		// 2. 完了したらプログレスダイアログを消去する。エラー発生時はToastを表示する。
 
 	}
