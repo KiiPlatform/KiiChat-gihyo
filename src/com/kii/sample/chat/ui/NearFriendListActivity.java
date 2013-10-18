@@ -27,21 +27,26 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class NearFriendListActivity extends FragmentActivity {
 
 	private static final String TAG = "NearFriendListActivity";
 	private static final String PREFKEY_LOCOBJ = "PREFKEY_LOCOBJ";
 	private Location cachedLoc = null;
+	private Handler mainHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
+		mainHandler = new Handler(Looper.getMainLooper());
 		setContentView(R.layout.activity_near_friend);
 		updateList();
 		Button btnUpdate = (Button) findViewById(R.id.btnUpdate);
@@ -78,15 +83,23 @@ public class NearFriendListActivity extends FragmentActivity {
 					b.putDouble("longitude", cachedLoc.getLongitude());
 					target.getLoaderManager().initLoader(0, b, target);
 				} catch (AppException e) {
-					// TODO: handle error.
-					e.printStackTrace();
+					showToastInMainThread("Failed to update location.",
+							Toast.LENGTH_LONG);
 				} catch (IOException e) {
-					// TODO: handle error.
-					e.printStackTrace();
+					showToastInMainThread("Failed to update location.",
+							Toast.LENGTH_LONG);
 				}
 			}
 		}).start();
+	}
 
+	private void showToastInMainThread(final String text, final int duration) {
+		mainHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(getApplicationContext(), text, duration).show();
+			}
+		});
 	}
 
 	private String getSavedLocObjUri() {
