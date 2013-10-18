@@ -22,6 +22,7 @@ import com.kii.sample.chat.model.IUser;
 import com.kii.sample.chat.ui.ConfirmAddFriendDialogFragment.OnAddFriendListener;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
 import com.kii.sample.chat.ui.loader.AbstractAsyncTaskLoader;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -83,14 +84,14 @@ public class NearFriendListFragment extends ListFragment implements
 		// Save object in chat friend.
 		ChatFriend cf = new ChatFriend(new ChatUser(stub.getUri(),
 				stub.getUsername(), stub.getEmail()));
-		ProgressDialogFragment pdf = ProgressDialogFragment.newInstance();
-		pdf.show(getFragmentManager(), ProgressDialogFragment.TAG);
+		SimpleProgressDialogFragment pdf = SimpleProgressDialogFragment.newInstance();
+		pdf.show(getFragmentManager(), SimpleProgressDialogFragment.TAG);
 		cf.getKiiObject().save(new KiiObjectCallBack() {
 			@Override
 			public void onSaveCompleted(int token, KiiObject object,
 					Exception exception) {
 				DialogFragment prgDialog = (DialogFragment) getFragmentManager()
-						.findFragmentByTag(ProgressDialogFragment.TAG);
+						.findFragmentByTag(SimpleProgressDialogFragment.TAG);
 				prgDialog.dismiss();
 				if (exception != null) {
 					Toast.makeText(getActivity(), "Failed to add friend: "
@@ -119,7 +120,7 @@ public class NearFriendListFragment extends ListFragment implements
 						.setData(data);
 				DialogFragment pdf = (DialogFragment) ((FragmentActivity) getActivity())
 						.getSupportFragmentManager().findFragmentByTag(
-								ProgressDialogFragment.TAG);
+								SimpleProgressDialogFragment.TAG);
 				pdf.dismissAllowingStateLoss();
 			}
 		});

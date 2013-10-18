@@ -1,4 +1,4 @@
-package com.kii.sample.chat.ui;
+package com.kii.sample.chat.ui.util;
 
 
 import android.app.Dialog;
@@ -6,11 +6,11 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-public class ProgressDialogFragment extends DialogFragment {
+public class SimpleProgressDialogFragment extends DialogFragment {
 
     public static final String TAG = "ProgressDialogFragment";
-    public static ProgressDialogFragment newInstance() {
-        return new ProgressDialogFragment();
+    public static SimpleProgressDialogFragment newInstance() {
+        return new SimpleProgressDialogFragment();
     }
 
     @Override

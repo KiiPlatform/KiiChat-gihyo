@@ -17,6 +17,7 @@ import com.kii.cloud.storage.exception.app.UnauthorizedException;
 import com.kii.cloud.storage.exception.app.UndefinedException;
 import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.R;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -53,8 +54,8 @@ public class NearFriendListActivity extends FragmentActivity {
 	}
 
 	public void updateList() {
-		ProgressDialogFragment pdf = ProgressDialogFragment.newInstance();
-		pdf.show(getSupportFragmentManager(), ProgressDialogFragment.TAG);
+		SimpleProgressDialogFragment pdf = SimpleProgressDialogFragment.newInstance();
+		pdf.show(getSupportFragmentManager(), SimpleProgressDialogFragment.TAG);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
