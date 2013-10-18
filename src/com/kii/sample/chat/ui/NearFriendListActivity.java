@@ -61,7 +61,7 @@ public class NearFriendListActivity extends FragmentActivity {
 	public void updateList() {
 		SimpleProgressDialogFragment pdf = SimpleProgressDialogFragment.newInstance();
 		pdf.show(getSupportFragmentManager(), SimpleProgressDialogFragment.TAG);
-		// TODO: LiveCoding: 位置情報アップロードの実装。
+		// TODO: LiveCoding: 位置情報アップロード制御の実装。
 		// 1. 現在位置が未取得であれば現在位置を取得するして、キャッシュする。
 		// 2. 位置情報、ユーザ情報オブジェクトをアップロードする。作成済みであれば更新する。 エラー発生時はToastを表示。
 		// 3. ListFragmentでGeoDistanceでの近隣ユーザの検索を実行させる。
@@ -136,11 +136,7 @@ public class NearFriendListActivity extends FragmentActivity {
 		// 1. SharedPreferenceに保存されているUriからオブジェクトにインスタンスを生成
 		// 2. オブジェクトに現在位置を設定してlocationバケットに保存する。
 		GeoPoint gp = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-		KiiObject target = KiiObject
-				.createByUri(Uri.parse(getSavedLocObjUri()));
-		target.set("currentLocation", gp);
-		target.save();
-		return target;
+		return null;
 	}
 
  	private KiiObject uploadLocationObj(Location loc) throws BadRequestException,
@@ -156,14 +152,6 @@ public class NearFriendListActivity extends FragmentActivity {
 		// "userUri" : {userUri of this user},
 		// "currentLocation" : {currentLocation of this user}
 		// }
-		GeoPoint gp = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-		KiiUser user = KiiUser.getCurrentUser();
-		obj = Kii.bucket(ApplicationConst.LOCATIONBUCKET).object();
-		obj.set("email", user.getEmail());
-		obj.set("username", user.getDisplayname());
-		obj.set("userUri", user.toUri());
-		obj.set("currentLocation", gp);
-		obj.save();
 		saveLocObjUri(obj.toUri());
 		return obj;
 	}

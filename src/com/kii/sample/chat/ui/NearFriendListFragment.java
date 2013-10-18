@@ -80,29 +80,14 @@ public class NearFriendListFragment extends ListFragment implements
 
 	@Override
 	public void onFriendAdded(int position) {
-		SimpleUser stub = (SimpleUser) getListAdapter().getItem(position);
-		// Save object in chat friend.
-		ChatFriend cf = new ChatFriend(new ChatUser(stub.getUri(),
-				stub.getUsername(), stub.getEmail()));
+		SimpleUser user = (SimpleUser) getListAdapter().getItem(position);
 		SimpleProgressDialogFragment pdf = SimpleProgressDialogFragment.newInstance();
 		pdf.show(getFragmentManager(), SimpleProgressDialogFragment.TAG);
 
 		// TODO: LiveCoding: 選択ユーザを友達リストに保存する処理の実装。
 		// 1. 選択された近隣ユーザの情報をオブジェクトに格納して、chat_friendバケットに保存する。
 		// 2. 完了したらプログレスダイアログを消去する。エラー発生時はToastを表示する。
-		cf.getKiiObject().save(new KiiObjectCallBack() {
-			@Override
-			public void onSaveCompleted(int token, KiiObject object,
-					Exception exception) {
-				DialogFragment prgDialog = (DialogFragment) getFragmentManager()
-						.findFragmentByTag(SimpleProgressDialogFragment.TAG);
-				prgDialog.dismiss();
-				if (exception != null) {
-					Toast.makeText(getActivity(), "Failed to add friend: "
-							+ exception.getMessage(), Toast.LENGTH_LONG).show();
-				}
-			}
-		});
+
 	}
 
 	@Override
@@ -189,30 +174,7 @@ class SimpleUserLoader extends AbstractAsyncTaskLoader<List<SimpleUser>> {
 		// 1. currentLocationフィールドに対するGeoDistanceクエリを作成する。(半径1Km)
 		// 2. _calculated.distance で昇順にソート
 		// 3. 自分の情報を除いて検索結果をretに詰める。 取得エラーの場合はnullを返す。
-		KiiClause geoQuery = KiiClause.geoDistance("currentLocation",
-				this.center, 1000, "distance");
-		KiiQuery query = new KiiQuery(geoQuery);
-		query.setLimit(10);
-		query.sortByAsc("_calculated.distance");
-		KiiQueryResult<KiiObject> result;
-		try {
-			result = Kii.bucket(ApplicationConst.LOCATIONBUCKET).query(query);
-			List<KiiObject> qres = result.getResult();
-			for (KiiObject obj : qres) {
-				String email = obj.getString("email");
-				if (email.equalsIgnoreCase(this.exclEmail))
-					continue;
-				String username = obj.getString("username");
-				Uri userUri = obj.getUri("userUri");
-				SimpleUser stub = new SimpleUser(username, email, userUri);
-				ret.add(stub);
-			}
-			return ret;
-		} catch (AppException e) {
-			return null;
-		} catch (IOException e) {
-			return null;
-		}
+		return ret;
 	}
 
 }
