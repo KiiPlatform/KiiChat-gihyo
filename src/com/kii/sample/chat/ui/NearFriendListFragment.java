@@ -40,7 +40,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class NearFriendListFragment extends ListFragment implements
-		LoaderCallbacks<List<UserStub>>, OnItemClickListener, OnAddFriendListener {
+		LoaderCallbacks<List<SimpleUser>>, OnItemClickListener, OnAddFriendListener {
 
 	private Handler handler;
 	@Override
@@ -65,7 +65,7 @@ public class NearFriendListFragment extends ListFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		JSONObject userJSON = new JSONObject();
-		UserStub stub = (UserStub) getListAdapter().getItem(position);
+		SimpleUser stub = (SimpleUser) getListAdapter().getItem(position);
 		try {
 			userJSON.put("username", stub.getUsername());
 			userJSON.put("email", stub.getEmail());
@@ -80,7 +80,7 @@ public class NearFriendListFragment extends ListFragment implements
 
 	@Override
 	public void onFriendAdded(int position) {
-		UserStub stub = (UserStub) getListAdapter().getItem(position);
+		SimpleUser stub = (SimpleUser) getListAdapter().getItem(position);
 		// Save object in chat friend.
 		ChatFriend cf = new ChatFriend(new ChatUser(stub.getUri(),
 				stub.getUsername(), stub.getEmail()));
@@ -102,17 +102,17 @@ public class NearFriendListFragment extends ListFragment implements
 	}
 
 	@Override
-	public Loader<List<UserStub>> onCreateLoader(int id, Bundle args) {
+	public Loader<List<SimpleUser>> onCreateLoader(int id, Bundle args) {
 		String exclEmail = args.getString("exclEmail");
 		double lat = args.getDouble("latitude");
 		double lon = args.getDouble("longitude");
 		GeoPoint center = new GeoPoint(lat, lon);
-		return new UserStubLoader(getActivity(), exclEmail, center);
+		return new SimpleUserLoader(getActivity(), exclEmail, center);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<List<UserStub>> loader,
-			final List<UserStub> data) {
+	public void onLoadFinished(Loader<List<SimpleUser>> loader,
+			final List<SimpleUser> data) {
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
@@ -128,20 +128,19 @@ public class NearFriendListFragment extends ListFragment implements
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<UserStub>> loader) {
+	public void onLoaderReset(Loader<List<SimpleUser>> loader) {
 		// Nothing to do.
 	}
 
 }
 
-// TODO: remove this mock.
-class UserStub implements IUser {
+class SimpleUser implements IUser {
 
 	private String username;
 	private String email;
 	private Uri userUri;
 
-	public UserStub(String username, String email, Uri userUri) {
+	public SimpleUser(String username, String email, Uri userUri) {
 		this.username = username;
 		this.email = email;
 		this.userUri = userUri;
@@ -164,20 +163,19 @@ class UserStub implements IUser {
 
 }
 
-// TODO: remove this mock.
-class UserStubLoader extends AbstractAsyncTaskLoader<List<UserStub>> {
+class SimpleUserLoader extends AbstractAsyncTaskLoader<List<SimpleUser>> {
 
 	private String exclEmail;
 	private GeoPoint center;
-	public UserStubLoader(Context context, String exclEmail, GeoPoint center) {
+	public SimpleUserLoader(Context context, String exclEmail, GeoPoint center) {
 		super(context);
 		this.exclEmail = exclEmail;
 		this.center = center;
 	}
 
 	@Override
-	public List<UserStub> loadInBackground() {
-		ArrayList<UserStub> ret = new ArrayList<UserStub>();
+	public List<SimpleUser> loadInBackground() {
+		ArrayList<SimpleUser> ret = new ArrayList<SimpleUser>();
 		KiiClause geoQuery = KiiClause.geoDistance("currentLocation",
 				this.center, 1000, "distance");
 		KiiQuery query = new KiiQuery(geoQuery);
@@ -193,7 +191,7 @@ class UserStubLoader extends AbstractAsyncTaskLoader<List<UserStub>> {
 					continue;
 				String username = obj.getString("username");
 				Uri userUri = obj.getUri("userUri");
-				UserStub stub = new UserStub(username, email, userUri);
+				SimpleUser stub = new SimpleUser(username, email, userUri);
 				ret.add(stub);
 			}
 			return ret;
