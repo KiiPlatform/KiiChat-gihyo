@@ -12,10 +12,10 @@ import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatUser;
-import com.kii.sample.chat.ui.util.GCMUtils;
-import com.kii.sample.chat.ui.util.Logger;
-import com.kii.sample.chat.ui.util.ProgressDialogFragment;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 import com.kii.sample.chat.ui.util.ToastUtils;
+import com.kii.sample.chat.util.GCMUtils;
+import com.kii.sample.chat.util.Logger;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -119,7 +119,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		}
 		@Override
 		protected void onPreExecute() {
-			ProgressDialogFragment.show(getFragmentManager(), "Signup", "Processing...");
+			SimpleProgressDialogFragment.show(getFragmentManager(), "Signup", "Processing...");
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -159,7 +159,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		}
 		@Override
 		protected void onPostExecute(Boolean result) {
-			ProgressDialogFragment.hide(getFragmentManager());
+			SimpleProgressDialogFragment.hide(getFragmentManager());
 			if (result) {
 				// サインアップ処理が正常に行われた場合は、コールバックメソッドで呼び出し元に通知する
 				OnSignupListener listener = onSignupListener.get();

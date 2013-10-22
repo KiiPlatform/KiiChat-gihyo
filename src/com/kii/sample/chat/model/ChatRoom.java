@@ -13,7 +13,7 @@ import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.query.KiiQuery;
-import com.kii.sample.chat.ui.util.Logger;
+import com.kii.sample.chat.util.Logger;
 
 /**
  * チャットルームを表します。

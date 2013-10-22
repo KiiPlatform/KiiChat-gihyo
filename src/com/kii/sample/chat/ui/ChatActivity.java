@@ -9,8 +9,8 @@ import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.adapter.MessageListAdapter;
-import com.kii.sample.chat.ui.util.Logger;
-import com.kii.sample.chat.ui.util.ProgressDialogFragment;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
+import com.kii.sample.chat.util.Logger;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -135,7 +135,7 @@ public class ChatActivity extends FragmentActivity {
 		@Override
 		protected void onPreExecute() {
 			if (this.showProgress) {
-				ProgressDialogFragment.show(getSupportFragmentManager(), "Chat", "Loading...");
+				SimpleProgressDialogFragment.show(getSupportFragmentManager(), "Chat", "Loading...");
 			}
 		}
 		@Override
@@ -167,7 +167,7 @@ public class ChatActivity extends FragmentActivity {
 				// TODO:ERROR
 			}
 			if (this.showProgress) {
-				ProgressDialogFragment.hide(getSupportFragmentManager());
+				SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 			} else {
 				vibrator.vibrate(500);
 			}

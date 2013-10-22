@@ -7,7 +7,7 @@ import android.content.Context;
 
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiUser;
-import com.kii.sample.chat.ui.util.Logger;
+import com.kii.sample.chat.util.Logger;
 
 /**
  * サインイン中のユーザが所属する{@link KiiGroup}を取得するローダーです。

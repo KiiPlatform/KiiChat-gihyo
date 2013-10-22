@@ -9,7 +9,7 @@ import com.kii.sample.chat.model.ChatUser;
 import com.kii.sample.chat.ui.ConfirmAddFriendDialogFragment.OnAddFriendListener;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
 import com.kii.sample.chat.ui.loader.UserListLoader;
-import com.kii.sample.chat.ui.util.ProgressDialogFragment;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 import com.kii.sample.chat.ui.util.ToastUtils;
 
 import android.os.AsyncTask;
@@ -125,7 +125,7 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 		
 		@Override
 		protected void onPreExecute() {
-			ProgressDialogFragment.show(getSupportFragmentManager(), "Adding Friend", "Processing...");
+			SimpleProgressDialogFragment.show(getSupportFragmentManager(), "Adding Friend", "Processing...");
 		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -140,7 +140,7 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 		}
 		@Override
 		protected void onPostExecute(Boolean result) {
-			ProgressDialogFragment.hide(getSupportFragmentManager());
+			SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 			if (result) {
 				setResult(RESULT_OK);
 			} else {

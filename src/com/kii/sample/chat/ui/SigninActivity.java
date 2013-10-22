@@ -6,9 +6,9 @@ import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.SignupDialogFragment.OnSignupListener;
-import com.kii.sample.chat.ui.util.GCMUtils;
-import com.kii.sample.chat.ui.util.Logger;
-import com.kii.sample.chat.ui.util.ProgressDialogFragment;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
+import com.kii.sample.chat.util.GCMUtils;
+import com.kii.sample.chat.util.Logger;
 
 import android.content.Context;
 import android.content.Intent;
@@ -78,7 +78,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 					Toast.makeText(SigninActivity.this, "Please input email address and password", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				ProgressDialogFragment.show(getSupportFragmentManager(), "Login", "Processing...");
+				SimpleProgressDialogFragment.show(getSupportFragmentManager(), "Login", "Processing...");
 				// ノンブロッキングAPIでサインイン処理を実行する
 				KiiUser.logIn(new KiiUserCallBack() {
 					@Override
@@ -87,7 +87,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 							// サインイン失敗時はToastを表示してサインイン画面に留まる
 							Logger.e("Unable to login.", e);
 							Toast.makeText(SigninActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
-							ProgressDialogFragment.hide(getSupportFragmentManager());
+							SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 							return;
 						}
 						if (checkRemember.isChecked()) {
@@ -110,7 +110,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 							}
 							@Override
 							protected void onPostExecute(Boolean result) {
-								ProgressDialogFragment.hide(getSupportFragmentManager());
+								SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 								if (result) {
 									moveToChatMain();
 								} else {

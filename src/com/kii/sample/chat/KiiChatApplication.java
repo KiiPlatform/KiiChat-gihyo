@@ -2,7 +2,7 @@ package com.kii.sample.chat;
 
 import com.kii.cloud.storage.Kii;
 import com.kii.cloud.storage.Kii.Site;
-import com.kii.sample.chat.ui.util.Logger;
+import com.kii.sample.chat.util.Logger;
 
 import android.app.Application;
 import android.content.Context;

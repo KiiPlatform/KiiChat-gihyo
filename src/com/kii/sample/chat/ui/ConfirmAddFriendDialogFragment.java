@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatUser;
-import com.kii.sample.chat.ui.util.Logger;
+import com.kii.sample.chat.util.Logger;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

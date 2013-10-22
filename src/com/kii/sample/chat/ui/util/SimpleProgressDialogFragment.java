@@ -13,7 +13,7 @@ import android.support.v4.app.FragmentManager;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class ProgressDialogFragment extends DialogFragment {
+public class SimpleProgressDialogFragment extends DialogFragment {
 	public static final int BLANK = -1;
 	private static final String FRAGMENT_TAG = "progress";
 	private static final String ARGS_TITLE = "title";
@@ -25,25 +25,25 @@ public class ProgressDialogFragment extends DialogFragment {
 		show(manager, getMessage(titleId), getMessage(messageId));
 	}
 	public static void show(FragmentManager manager, String title, String message) {
-		ProgressDialogFragment dialog = newInstance(title, message);
+		SimpleProgressDialogFragment dialog = newInstance(title, message);
 		dialog.show(manager, FRAGMENT_TAG);
 	}
 	public static void update(FragmentManager manager, int messageId) {
 		update(manager, getMessage(messageId));
 	}
 	public static void update(FragmentManager manager, String message) {
-		ProgressDialogFragment dialog = (ProgressDialogFragment) manager.findFragmentByTag(ProgressDialogFragment.FRAGMENT_TAG);
+		SimpleProgressDialogFragment dialog = (SimpleProgressDialogFragment) manager.findFragmentByTag(SimpleProgressDialogFragment.FRAGMENT_TAG);
 		dialog.setMessage(message);
 	}
 	public static void hide(FragmentManager manager) {
-		ProgressDialogFragment dialog = (ProgressDialogFragment) manager.findFragmentByTag(ProgressDialogFragment.FRAGMENT_TAG);
+		SimpleProgressDialogFragment dialog = (SimpleProgressDialogFragment) manager.findFragmentByTag(SimpleProgressDialogFragment.FRAGMENT_TAG);
 		if (dialog == null) {
 			return;
 		}
 		dialog.dismiss();
 	}
-	private static ProgressDialogFragment newInstance(String title, String message) {
-		ProgressDialogFragment fragment = new ProgressDialogFragment();
+	private static SimpleProgressDialogFragment newInstance(String title, String message) {
+		SimpleProgressDialogFragment fragment = new SimpleProgressDialogFragment();
 		
 		Bundle args = new Bundle();
 		args.putString(ARGS_TITLE, title);

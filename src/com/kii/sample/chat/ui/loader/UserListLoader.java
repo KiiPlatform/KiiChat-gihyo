@@ -8,7 +8,7 @@ import android.text.TextUtils;
 
 import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.model.ChatUser;
-import com.kii.sample.chat.ui.util.Logger;
+import com.kii.sample.chat.util.Logger;
 
 /**
  * {@link ChatUser}をchat_usersバケツから取得するローダーです。

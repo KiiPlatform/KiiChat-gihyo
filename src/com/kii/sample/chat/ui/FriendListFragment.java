@@ -17,9 +17,9 @@ import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.ui.ConfirmStartChatDialogFragment.OnStartChatListener;
 import com.kii.sample.chat.ui.adapter.UserListAdapter;
 import com.kii.sample.chat.ui.loader.FriendListLoader;
-import com.kii.sample.chat.ui.util.Logger;
-import com.kii.sample.chat.ui.util.ProgressDialogFragment;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 import com.kii.sample.chat.ui.util.ToastUtils;
+import com.kii.sample.chat.util.Logger;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -141,7 +141,7 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 		}
 		@Override
 		protected void onPreExecute() {
-			ProgressDialogFragment.show(getFragmentManager(), "Start Chat", "Processing...");
+			SimpleProgressDialogFragment.show(getFragmentManager(), "Start Chat", "Processing...");
 		}
 		@Override
 		protected KiiGroup doInBackground(Void... params) {
@@ -178,7 +178,7 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 			}
 		}
 		protected void onPostExecute(KiiGroup kiiGroup) {
-			ProgressDialogFragment.hide(getFragmentManager());
+			SimpleProgressDialogFragment.hide(getFragmentManager());
 			if (kiiGroup == null) {
 				ToastUtils.showShort(getActivity(), "Unable to start chat");
 				return;

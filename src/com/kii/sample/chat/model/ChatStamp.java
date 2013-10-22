@@ -110,16 +110,19 @@ public class ChatStamp extends ChatMessage {
 	/**
 	 * キャッシュファイルを取得します。
 	 * 
-	 * @param imageId
+	 * @param uri
 	 * @return
 	 */
-	private File getCacheFile(String imageId) {
+	private File getCacheFile(String uri) {
 		final File cacheDir = new File(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || !isExternalStorageRemovable() ?
 				getExternalCacheDir(KiiChatApplication.getContext()).getPath() : KiiChatApplication.getContext().getCacheDir().getPath());
 		if (cacheDir.exists()) {
 			cacheDir.mkdirs();
 		}
-		return new File(cacheDir + File.separator + imageId);
+		return new File(cacheDir + File.separator + this.escapeUri(uri));
+	}
+	private String escapeUri(String uri) {
+		return uri.replace("://", "_").replace("/", "_");
 	}
 	private static boolean isExternalStorageRemovable() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {

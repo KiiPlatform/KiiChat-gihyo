@@ -14,8 +14,8 @@ import com.kii.cloud.storage.ReceivedMessage;
 import com.kii.cloud.storage.exception.GroupOperationException;
 import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
-import com.kii.sample.chat.ui.util.Logger;
 import com.kii.sample.chat.ui.util.ToastUtils;
+import com.kii.sample.chat.util.Logger;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

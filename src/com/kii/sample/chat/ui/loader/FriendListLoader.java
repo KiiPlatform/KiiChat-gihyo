@@ -9,7 +9,7 @@ import com.kii.cloud.storage.KiiBucket;
 import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.query.KiiQuery;
 import com.kii.sample.chat.model.ChatFriend;
-import com.kii.sample.chat.ui.util.Logger;
+import com.kii.sample.chat.util.Logger;
 
 /**
  * {@link ChatFriend}をchat_friendsバケツから取得するローダーです。

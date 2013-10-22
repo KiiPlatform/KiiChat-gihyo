@@ -1,4 +1,4 @@
-package com.kii.sample.chat.ui.util;
+package com.kii.sample.chat.util;
 
 import java.io.IOException;
 

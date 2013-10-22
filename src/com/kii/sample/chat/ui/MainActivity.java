@@ -4,7 +4,7 @@ import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.callback.KiiUserCallBack;
 import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.model.ChatRoom;
-import com.kii.sample.chat.ui.util.ProgressDialogFragment;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +25,7 @@ public class MainActivity extends FragmentActivity {
 		String token = PreferencesManager.getStoredAccessToken();
 		if (!TextUtils.isEmpty(token)) {
 			// 保存したTokenでログインを実行する
-			ProgressDialogFragment.show(getSupportFragmentManager(), "Login", "Processing...");
+			SimpleProgressDialogFragment.show(getSupportFragmentManager(), "Login", "Processing...");
 			KiiUser.loginWithToken(new KiiUserCallBack() {
 				@Override
 				public void onLoginCompleted(int token, KiiUser user, Exception e) {
@@ -42,7 +42,7 @@ public class MainActivity extends FragmentActivity {
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
 					}
-					ProgressDialogFragment.hide(getSupportFragmentManager());
+					SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 				}
 			},token);
 		} else {
