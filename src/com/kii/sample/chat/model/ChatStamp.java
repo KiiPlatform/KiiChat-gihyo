@@ -3,92 +3,130 @@ package com.kii.sample.chat.model;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import android.content.Context;
-import android.os.Build;
-import android.os.Environment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 
-import com.kii.cloud.storage.KiiGroup;
+import com.kii.cloud.storage.Kii;
+import com.kii.cloud.storage.KiiBucket;
 import com.kii.cloud.storage.KiiObject;
+import com.kii.cloud.storage.query.KiiQuery;
 import com.kii.cloud.storage.resumabletransfer.KiiDownloader;
 import com.kii.cloud.storage.resumabletransfer.KiiUploader;
 import com.kii.sample.chat.KiiChatApplication;
+import com.kii.sample.chat.util.Logger;
+import com.kii.sample.chat.util.StampCacheUtils;
 
 /**
- * 
+ * チャットのメッセージで使用できるスタンプを表します。
+ * ユーザは画像ファイルをアプロードしてスタンプとして使用できます。
+ * アプリケーションスコープのデータとしてKiiCloudに保存されるので、他のユーザによってアップロードされたスタンプは誰でも利用することが可能です。
+ * メッセージとしてのスタンプは通常のチャットメッセージと同じようにchat_roomバケットに保存されます。
+ * その際、'$STAMP:{画像のKiiObjectのURI}'という形式のテキストとして保存します。
+ * KiiChatアプリケーションは '$STAMP:' から始まるメッセージを受信した場合、それがスタンプであると判断し画像を表示します。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class ChatStamp extends ChatMessage {
+public class ChatStamp extends KiiObjectWrapper {
 	
-	static final String PREFIX_STAMP = "$STAMP:";
+	private static final String BUCKET_NAME = "chat_stamps";
 	
-	private File imageFile;
-	private String imageId;
+	public static KiiBucket getBucket() {
+		return Kii.bucket(BUCKET_NAME);
+	}
 	
-//	public ChatStamp(KiiGroup kiiGroup) {
-//		super(kiiGroup);
-//	}
-	public ChatStamp(KiiObject message) {
-		super(message);
-	}
-	public ChatStamp(KiiGroup kiiGroup, File imageFile) {
-		super(kiiGroup);
-		this.imageFile = imageFile;
-	}
-	public ChatStamp(KiiGroup kiiGroup, String imageId) {
-		super(kiiGroup);
-		this.imageId = imageId;
-	}
-	@Override
-	public boolean isStamp() {
-		return true;
-	}
-	public void save() throws Exception {
-		// FIXME:save後にIDが設定されるかどうか？
-		this.kiiObject.save();
-		if (this.imageFile != null) {
-			KiiUploader uploader = this.kiiObject.uploader(KiiChatApplication.getContext(), this.imageFile);
-			uploader.transfer(null);
-			// アップロードしたスタンプをキャッシュディレクトリにコピーする
-			FileChannel source = null; 
-			FileChannel dest = null;
-			try {
-				source = new FileInputStream(this.imageFile).getChannel();
-				dest = new FileInputStream(getCacheFile(this.kiiObject.toUri().toString())).getChannel();
-				dest.transferFrom(source, 0, source.size());
-			} finally {
-				IOUtils.closeQuietly(source);
-				IOUtils.closeQuietly(dest);
+	/**
+	 * ユーザにアップロードされた全てのスタンプを取得します。
+	 * スタンプ本体の画像イメージは取得されません。
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<ChatStamp> list() {
+		List<ChatStamp> stamps = new ArrayList<ChatStamp>();
+		try {
+			KiiQuery query = new KiiQuery();
+			query.sortByAsc(FIELD_CREATED);
+			List<KiiObject> objects = getBucket().query(query).getResult();
+			for (KiiObject object : objects) {
+				stamps.add(new ChatStamp(object));
 			}
+			return stamps;
+		} catch (Exception e) {
+			Logger.e("Unable to list stamps", e);
+			return stamps;
 		}
 	}
+	
+	private File imageFile;
+	private String uri;
+	
+	public ChatStamp(File imageFile) {
+		super(getBucket().object());
+		this.imageFile = imageFile;
+	}
+	public ChatStamp(KiiObject kiiObject) {
+		super(kiiObject);
+		this.uri = kiiObject.toUri().toString();
+	}
+	public ChatStamp(ChatMessage message) {
+		super(KiiObject.createByUri(Uri.parse(message.getStampUri())));
+		this.uri = message.getStampUri();
+	}
 	/**
-	 * スタンプのイメージをバイト配列で取得します。
-	 * このメソッドはKiiCloudにアクセスする可能性があるのでメインスレッドでは実行しないでください。
+	 * @throws Exception
+	 */
+	public void save() throws Exception {
+		this.kiiObject.save();
+		if (this.imageFile != null) {
+			// FIXME:save後にIDが設定されるかどうか？
+			this.uri = this.kiiObject.toUri().toString();
+			KiiUploader uploader = this.kiiObject.uploader(KiiChatApplication.getContext(), this.imageFile);
+			uploader.transfer(null);
+			// アップロードしたファイルを、KiiObjectのURIに応じた名前にリネームする
+			File cacheFile = StampCacheUtils.getCacheFile(this.kiiObject.toUri().toString());
+			this.imageFile.renameTo(cacheFile);
+		}
+	}
+	public String getUri() {
+		return this.uri;
+	}
+	/**
+	 * スタンプの画像を取得します。
+	 * ディスクに画像がキャッシュされている場合は、KiiCloudにアクセスすることなく画像を返します。
+	 * 画像がキャッシュにない場合、KiiCloudとの通信が発生するので、メインスレッドでは実行しないでください。
 	 * 
 	 * @return
 	 */
-	public byte[] getImage() {
+	public Bitmap getImage() {
 		try {
+			byte[] image = null;
 			if (this.imageFile != null) {
-				return readImageFromLocal(this.imageFile);
-			} else if (this.imageId != null) {
+				image = readImageFromLocal(this.imageFile);
+			} else if (this.uri != null) {
 				// イメージがキャッシュされていれば、キャッシュから読み込む
-				File cacheFile = getCacheFile(this.imageId);
+				File cacheFile = StampCacheUtils.getCacheFile(this.uri);
 				if (cacheFile.exists()) {
-					return readImageFromLocal(cacheFile);
+					image = readImageFromLocal(cacheFile);
+				} else {
+					// キャッシュに存在しない場合は、KiiCloudからダウンロードする
+					kiiObject.refresh();
+					KiiDownloader downloader = kiiObject.downloader(KiiChatApplication.getContext(), cacheFile);
+					downloader.transfer(null);
+					image = readImageFromLocal(cacheFile);
 				}
-				// キャッシュに存在しない場合は、KiiCloudからダウンロードする
-				KiiDownloader downloader = kiiObject.downloader(KiiChatApplication.getContext(), cacheFile);
-				downloader.transfer(null);
-				return readImageFromLocal(cacheFile);
+			}
+			if (image != null) {
+				return BitmapFactory.decodeByteArray(image, 0, image.length);
 			}
 			return null;
 		} catch (Exception e) {
+			Logger.e("failed to download stamp", e);
 			return null;
 		}
 	}
@@ -106,38 +144,5 @@ public class ChatStamp extends ChatMessage {
 		} finally {
 			IOUtils.closeQuietly(fs);
 		}
-	}
-	/**
-	 * キャッシュファイルを取得します。
-	 * 
-	 * @param uri
-	 * @return
-	 */
-	private File getCacheFile(String uri) {
-		final File cacheDir = new File(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || !isExternalStorageRemovable() ?
-				getExternalCacheDir(KiiChatApplication.getContext()).getPath() : KiiChatApplication.getContext().getCacheDir().getPath());
-		if (cacheDir.exists()) {
-			cacheDir.mkdirs();
-		}
-		return new File(cacheDir + File.separator + this.escapeUri(uri));
-	}
-	private String escapeUri(String uri) {
-		return uri.replace("://", "_").replace("/", "_");
-	}
-	private static boolean isExternalStorageRemovable() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-			return Environment.isExternalStorageRemovable();
-		}
-		return true;
-	}
-	private static File getExternalCacheDir(Context context) {
-		if (hasExternalCacheDir()) {
-			return context.getExternalCacheDir();
-		}
-		final String cacheDir = "/Android/data/" + context.getPackageName() + "/cache/";
-		return new File(Environment.getExternalStorageDirectory().getPath() + cacheDir);
-	}
-	private static boolean hasExternalCacheDir() {
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
 	}
 }

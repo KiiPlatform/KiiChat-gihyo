@@ -17,10 +17,10 @@ import com.kii.sample.chat.util.Logger;
 
 /**
  * チャットルームを表します。
- * チャットルームはKiiObjectとして保存されるのではなく、KiiGroupとchat_roomという名前で作成されるバケツで表現されます。
+ * チャットルームはKiiObjectとして保存されるのではなく、KiiGroupとchat_roomという名前で作成されるバケットで表現されます。
  * ユーザがチャットを開始すると、自分とチャット友達が属するKiiGroupが作成されます。
- * さらにそのグループスコープのバケツとしてchat_roomが作成され、そこにメッセージを保存します。
- * チャットメンバーはこのchat_roomバケツを監視しているため、誰かがchat_roomバケツにメッセージを保存すると、チャットメンバーに通知されます。
+ * さらにそのグループスコープのバケットとしてchat_roomが作成され、そこにメッセージを保存します。
+ * チャットメンバーはこのchat_roomバケットを監視しているため、誰かがchat_roomバケットにメッセージを保存すると、チャットメンバーに通知されます。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -33,9 +33,9 @@ public class ChatRoom {
 		return kiiGroup.bucket(BUCKET_NAME);
 	}
 	/**
-	 * ログイン中のユーザが所属するグループのchat_roomバケツを全て購読していることを確認します。
-	 * 購読していないバケツがある場合は、購読します。
-	 * chat_roomバケツの購読処理は通常、他のユーザがチャットを開始したタイミングでPush通知を介して行われますが
+	 * ログイン中のユーザが所属するグループのchat_roomバケットを全て購読していることを確認します。
+	 * 購読していないバケットがある場合は、購読します。
+	 * chat_roomバケットの購読処理は通常、他のユーザがチャットを開始したタイミングでPush通知を介して行われますが
 	 * Push通知を受けた時点でユーザがログインしていないと、購読処理が行われないため、ログイン時にこのメソッドを呼ぶ必要があります。
 	 * 毎回、購読状況をサーバに確認するのは非効率なので、実際は購読状況をローカルにキャッシュするのが望ましいです。
 	 * 
@@ -49,7 +49,7 @@ public class ChatRoom {
 					// ユーザが所属しているグループの一覧を取得
 					List<KiiGroup> groups = kiiUser.memberOfGroups();
 					for (KiiGroup group : groups) {
-						// 全てのグループでchat_roomバケツを購読済みであることを確認
+						// 全てのグループでchat_roomバケットを購読済みであることを確認
 						KiiBucket chatBucket = ChatRoom.getBucket(group);
 						boolean isSubscribed = kiiUser.pushSubscription().isSubscribed(chatBucket);
 						if (!isSubscribed) {

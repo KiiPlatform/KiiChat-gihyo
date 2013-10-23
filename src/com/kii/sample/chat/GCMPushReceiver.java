@@ -77,7 +77,7 @@ public class GCMPushReceiver extends BroadcastReceiver {
 					Logger.i("received PUSH_TO_USER");
 					ToastUtils.showShort(context, "received new chat");
 					// 他のユーザが自分とChatを開始した場合
-					// 対象のChat用バケツを購読してメッセージをプッシュ通知してもらう状態にする
+					// 対象のChat用バケットを購読してメッセージをプッシュ通知してもらう状態にする
 					new Thread(new Runnable() {
 						@Override
 						public void run() {

@@ -18,8 +18,9 @@
 	<string name="button_signup">Sign Up</string>
 	<string name="button_cancel">Cancel</string>
 	<string name="button_add">Add</string>
+	<string name="button_add_stamp">Add Stamp</string>
 	<string name="button_chat">Chat</string>
-		<string name="button_send">Send</string>
+	<string name="button_send">Send</string>
 	<string name="check_remember">Remember Me</string>
 	<string name="menu_new_chat">New Chat</string>
 	<string name="menu_signout">Sign Out</string>

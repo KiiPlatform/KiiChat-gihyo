@@ -135,7 +135,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 				kiiUser.setDisplayname(username);
 				kiiUser.register(password);
 				Logger.i("registered user uri=" + kiiUser.toUri().toString());
-				// 登録したKiiUserをChatUserとしてAppスコープのバケツに保存しておく（検索用）
+				// 登録したKiiUserをChatUserとしてAppスコープのバケットに保存しておく（検索用）
 				ChatUser user = new ChatUser(kiiUser.toUri().toString(), username, email);
 				user.getKiiObject().save();
 				// GCMの設定

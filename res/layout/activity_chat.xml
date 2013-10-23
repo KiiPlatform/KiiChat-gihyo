@@ -24,6 +24,14 @@
 			android:descendantFocusability="afterDescendants"
 			android:layout_alignParentBottom="true"
 			android:layout_weight="0">
+			<ImageButton
+				android:id="@+id/button_select_emoticon"
+				android:src="@drawable/emoticon"
+				android:contentDescription="@string/image_blank"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="bottom"
+				android:gravity="bottom"/>
 			<EditText
 				android:id="@+id/edit_message"
 				android:layout_width="0dip"
@@ -31,7 +39,6 @@
 				android:layout_weight="1"
 				android:paddingLeft="5dp"
 				android:paddingRight="5dp"
-				android:layout_marginLeft="10dp"
 				android:freezesText="true"
 				android:inputType="textMultiLine" />
 			<ImageButton
@@ -42,7 +49,7 @@
 				android:layout_width="wrap_content"
 				android:layout_gravity="bottom"
 				android:gravity="bottom"
-				android:layout_marginRight="10dp"/>
+				android:layout_marginRight="5dp"/>
 		</LinearLayout>
 	</LinearLayout>
 	

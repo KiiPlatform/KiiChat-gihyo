@@ -1,7 +1,10 @@
 package com.kii.sample.chat.model;
 
+import android.text.TextUtils;
+
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiObject;
+import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.query.KiiClause;
 import com.kii.cloud.storage.query.KiiQuery;
 
@@ -18,14 +21,22 @@ public class ChatMessage extends KiiObjectWrapper {
 	private static final String FIELD_GROUP_URI = "group_uri";
 	private static final String FIELD_MESSAGE = "message";
 	private static final String FIELD_SENDER_URI = "sender_uri";
+	private static final String PREFIX_STAMP = "$STAMP:";
 	
-	public ChatMessage(KiiGroup kiiGroup) {
-		super(ChatRoom.getBucket(kiiGroup).object());
-		this.setGroupUri(kiiGroup.toUri().toString());
+	/**
+	 * 指定されたスタンプを表すChatMessageオブジェクトを作成します。
+	 * 
+	 * @param kiiGroup
+	 * @param stamp
+	 * @return
+	 */
+	public static ChatMessage createStampChatMessage(KiiGroup kiiGroup, ChatStamp stamp) {
+		ChatMessage message = new ChatMessage(kiiGroup);
+		message.setMessage(PREFIX_STAMP + stamp.getUri());
+		message.setSenderUri(KiiUser.getCurrentUser().toUri().toString());
+		return message;
 	}
-	public ChatMessage(KiiObject message) {
-		super(message);
-	}
+	
 	public static KiiQuery createQuery() {
 		return createQuery(null);
 	}
@@ -40,6 +51,13 @@ public class ChatMessage extends KiiObjectWrapper {
 		return query;
 	}
 	
+	public ChatMessage(KiiGroup kiiGroup) {
+		super(ChatRoom.getBucket(kiiGroup).object());
+		this.setGroupUri(kiiGroup.toUri().toString());
+	}
+	public ChatMessage(KiiObject message) {
+		super(message);
+	}
 	/**
 	 * このチャットルームのグループのURIを取得します。
 	 */
@@ -68,6 +86,15 @@ public class ChatMessage extends KiiObjectWrapper {
 		set(FIELD_SENDER_URI, uri);
 	}
 	public boolean isStamp() {
+		if (this.getMessage().startsWith(PREFIX_STAMP)) {
+			return true;
+		}
 		return false;
+	}
+	public String getStampUri() {
+		if (!this.isStamp() || TextUtils.isEmpty(this.getMessage())) {
+			return null;
+		}
+		return this.getMessage().replace(PREFIX_STAMP, "");
 	}
 }

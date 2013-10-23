@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_height="140px"
+	android:layout_width="wrap_content"
+	android:paddingBottom="15px"
+	android:gravity="bottom|center_horizontal">
+	<ImageView
+		android:id="@+id/row_image"
+		android:contentDescription="@string/image_blank"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+</LinearLayout>

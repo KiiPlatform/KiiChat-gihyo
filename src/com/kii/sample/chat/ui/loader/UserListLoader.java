@@ -11,7 +11,7 @@ import com.kii.sample.chat.model.ChatUser;
 import com.kii.sample.chat.util.Logger;
 
 /**
- * {@link ChatUser}をchat_usersバケツから取得するローダーです。
+ * {@link ChatUser}をchat_usersバケットから取得するローダーです。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */

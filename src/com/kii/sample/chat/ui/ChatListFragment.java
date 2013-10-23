@@ -148,7 +148,7 @@ public class ChatListFragment extends ListFragment implements LoaderCallbacks<Li
 				target.refresh();
 				kiiGroup.addUser(target);
 				kiiGroup.save();
-				// Chat用バケツを購読してメッセージをプッシュ通知してもらう状態にする
+				// Chat用バケットを購読してメッセージをプッシュ通知してもらう状態にする
 				KiiBucket chatBucket = ChatRoom.getBucket(kiiGroup);
 				KiiUser.getCurrentUser().pushSubscription().subscribeBucket(chatBucket);
 				// Chat相手にPush通知を飛ばす

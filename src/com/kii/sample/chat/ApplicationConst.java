@@ -18,7 +18,7 @@ public final class ApplicationConst {
 	 * このトピックはユーザが個別に持つメールボックスに似ています。
 	 * 他のユーザがこのトピックにメッセージを送信すると、ユーザにプッシュ通知が送信されます。
 	 * 具体的には、チャットを開始した時に、チャットが開始されたことを相手に伝える為に使用します。
-	 * この通知を受けた相手は、チャット用に作成されたグループスコープのchat_roomバケツを購読して監視するようにします。
+	 * この通知を受けた相手は、チャット用に作成されたグループスコープのchat_roomバケットを購読して監視するようにします。
 	 * 
 	 * @see http://documentation.kii.com/ja/guides/android/managing-push-notification/push-to-user/
 	 */

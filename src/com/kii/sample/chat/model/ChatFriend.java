@@ -1,8 +1,13 @@
 package com.kii.sample.chat.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.kii.cloud.storage.KiiBucket;
 import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.KiiUser;
+import com.kii.cloud.storage.query.KiiQuery;
+import com.kii.sample.chat.util.Logger;
 
 /**
  * チャット友達を表します。
@@ -21,6 +26,26 @@ public class ChatFriend extends KiiObjectWrapper implements IUser {
 	public static KiiBucket getBucket() {
 		return KiiUser.getCurrentUser().bucket(BUCKET_NAME);
 	}
+	/**
+	 * ログイン中ユーザのチャット友達を全て取得します。
+	 * 
+	 * @return
+	 */
+	public static List<ChatFriend> list() {
+		List<ChatFriend> friends = new ArrayList<ChatFriend>();
+		try {
+			KiiBucket friendsBucket = ChatFriend.getBucket();
+			List<KiiObject> results = friendsBucket.query(new KiiQuery()).getResult();
+			for (KiiObject friend : results) {
+				friends.add(new ChatFriend(friend));
+			}
+			return friends;
+		} catch (Exception e) {
+			Logger.e("Unable to list friends", e);
+			return friends;
+		}
+	}
+	
 	public ChatFriend(KiiObject friend) {
 		super(friend);
 	}
