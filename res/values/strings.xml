@@ -10,15 +10,15 @@
 	<string name="label_username">Username</string>
 	<string name="label_email">Email Address</string>
 	<string name="label_password">Password</string>    
+	<string name="label_choose_stamp">Choose a stamp</string>
 	<string name="hint_username">Your name</string>
 	<string name="hint_email">someone@example.com</string>
-	<string name="hint_password">4-50 characters</string>
+	<string name="hint_password">4&#8211;50 characters</string>
 	<string name="hint_search_user">Email or Username</string>
 	<string name="button_signin">Sign In</string>
 	<string name="button_signup">Sign Up</string>
 	<string name="button_cancel">Cancel</string>
 	<string name="button_add">Add</string>
-	<string name="button_add_stamp">Add Stamp</string>
 	<string name="button_chat">Chat</string>
 	<string name="button_send">Send</string>
 	<string name="check_remember">Remember Me</string>

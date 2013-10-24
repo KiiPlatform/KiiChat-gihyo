@@ -13,6 +13,7 @@ import com.kii.sample.chat.model.ChatStamp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -30,6 +31,7 @@ public class StampCacheUtils {
 		InputStream is = KiiChatApplication.getContext().getContentResolver().openInputStream(source);
 		FileOutputStream os = null;
 		try {
+			// 一辺がmaxSizeに収まるように画像を縮小する
 			BitmapFactory.Options imageOptions = new BitmapFactory.Options();
 			imageOptions.inJustDecodeBounds = true;
 			BitmapFactory.decodeStream(is, null, imageOptions);
@@ -42,17 +44,19 @@ public class StampCacheUtils {
 			Bitmap bitmap = null;
 			if (imageScaleWidth > 2 && imageScaleHeight > 2) {
 				imageOptions = new BitmapFactory.Options();
+				imageOptions.inPreferredConfig = Config.ARGB_8888; // 透過PNGをサポート
 				int imageScale = (int)Math.floor((imageScaleWidth > imageScaleHeight ? imageScaleHeight : imageScaleWidth));
 				for (int i = 2; i < imageScale; i *= 2) {
 					imageOptions.inSampleSize = i;
 				}
 				bitmap = BitmapFactory.decodeStream(is, null, imageOptions);
 			} else {
+				// TODO:拡大する
 				bitmap = BitmapFactory.decodeStream(is);
 			}
 			File out = getCacheFile(escapeUri(source.toString()));
 			os = new FileOutputStream(out);
-			bitmap.compress(CompressFormat.JPEG, 75, os);
+			bitmap.compress(CompressFormat.PNG, 75, os);
 			return out;
 		} finally {
 			IOUtils.closeQuietly(is);
@@ -88,7 +92,7 @@ public class StampCacheUtils {
 				FileOutputStream os = null;
 				try {
 					os = new FileOutputStream(f);
-					bitmap.compress(CompressFormat.JPEG, 75, os);
+					bitmap.compress(CompressFormat.PNG, 75, os);
 				} catch (IOException ignore) {
 					Logger.w("failed to save cache", ignore);
 				} finally {

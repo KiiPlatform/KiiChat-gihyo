@@ -2,7 +2,9 @@ package com.kii.sample.chat.ui.loader;
 
 import java.lang.ref.WeakReference;
 
+import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatStamp;
+import com.kii.sample.chat.util.Logger;
 import com.kii.sample.chat.util.StampCacheUtils;
 import com.kii.sample.chat.util.ThreadUtils;
 
@@ -104,6 +106,7 @@ public class ChatStampImageFetcher {
 			}
 			if (isCancelled()) {
 				// タスクがキャンセルされていたら何もしない
+				Logger.i("loader task is canceled.");
 				return null;
 			}
 			// ディスクまたはKiiCloudから画像を取得する
@@ -116,13 +119,13 @@ public class ChatStampImageFetcher {
 			return bitmap;
 		}
 		protected void onPostExecute(Bitmap bitmap) {
-			if (bitmap != null) {
-				ImageView imageView = this.imageViewReference.get();
-				if (imageView != null && imageView.getTag() == this && !isCancelled()) {
-					imageView.setImageDrawable(new BitmapDrawable(resources, bitmap));
+			ImageView imageView = this.imageViewReference.get();
+			if (imageView != null && imageView.getTag() == this && !isCancelled()) {
+				if (bitmap != null) {
+						imageView.setImageDrawable(new BitmapDrawable(resources, bitmap));
+				} else {
+					imageView.setImageResource(R.drawable.error);
 				}
-			} else {
-				// Not Found (ERROR)画像
 			}
 		}
 		@Override

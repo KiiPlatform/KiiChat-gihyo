@@ -26,6 +26,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 	private WeakReference<OnSelectStampListener> onSelectStampListener;
 	private TextView textEmpty;
 	private GridView gridView;
+	private ImageButton btnAddStamp;
 	private ChatStampListAdpter adapter;
 	private ChatStampImageFetcher imageFetcher;
 
@@ -86,12 +88,10 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 			}
 		});
-		this.getLoaderManager().initLoader(0, savedInstanceState, this);
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setPositiveButton(R.string.button_add_stamp, new OnClickListener() {
+		this.btnAddStamp = (ImageButton)view.findViewById(R.id.button_add_stamp);
+		this.btnAddStamp.setOnClickListener(new android.view.View.OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setType("image/*");
 				intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -101,8 +101,12 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 				 * 親ActivityのstartActivityForResultを呼んで、親ActivityのonActivityResultで結果を受け取る
 				 */
 				getActivity().startActivityForResult(intent, ChatActivity.REQUEST_GET_IMAGE_FROM_GALLERY);
+				dismiss();
 			}
 		});
+		this.getLoaderManager().initLoader(0, savedInstanceState, this);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setNegativeButton(R.string.button_cancel, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

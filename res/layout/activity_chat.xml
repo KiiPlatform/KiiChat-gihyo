@@ -25,8 +25,8 @@
 			android:layout_alignParentBottom="true"
 			android:layout_weight="0">
 			<ImageButton
-				android:id="@+id/button_select_emoticon"
-				android:src="@drawable/emoticon"
+				android:id="@+id/button_select_stamp"
+				android:src="@drawable/select_stamp"
 				android:contentDescription="@string/image_blank"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"

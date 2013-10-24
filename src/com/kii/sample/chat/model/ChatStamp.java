@@ -84,7 +84,6 @@ public class ChatStamp extends KiiObjectWrapper {
 	public void save() throws Exception {
 		this.kiiObject.save();
 		if (this.imageFile != null) {
-			// FIXME:save後にIDが設定されるかどうか？
 			this.uri = this.kiiObject.toUri().toString();
 			KiiUploader uploader = this.kiiObject.uploader(KiiChatApplication.getContext(), this.imageFile);
 			uploader.transfer(null);
@@ -115,7 +114,7 @@ public class ChatStamp extends KiiObjectWrapper {
 					image = readImageFromLocal(cacheFile);
 				} else {
 					// キャッシュに存在しない場合は、KiiCloudからダウンロードする
-					kiiObject.refresh();
+					Logger.i("downloads stamp image from KiiCloud");
 					KiiDownloader downloader = kiiObject.downloader(KiiChatApplication.getContext(), cacheFile);
 					downloader.transfer(null);
 					image = readImageFromLocal(cacheFile);
@@ -124,6 +123,7 @@ public class ChatStamp extends KiiObjectWrapper {
 			if (image != null) {
 				return BitmapFactory.decodeByteArray(image, 0, image.length);
 			}
+			Logger.w("failed to download stamp");
 			return null;
 		} catch (Exception e) {
 			Logger.e("failed to download stamp", e);

@@ -95,7 +95,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				}
 			}
 		});
-		this.btnSelectEmoticon = (ImageButton)findViewById(R.id.button_select_emoticon);
+		this.btnSelectEmoticon = (ImageButton)findViewById(R.id.button_select_stamp);
 		this.btnSelectEmoticon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -121,7 +121,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// SelectStampDialogFragmentから起動したギャラリーから制御が戻ったときに呼ばれる
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_GET_IMAGE_FROM_GALLERY) {
+		if (requestCode == REQUEST_GET_IMAGE_FROM_GALLERY && data != null) {
 			new StampUploader(data.getData()).execute();
 		}
 	}
@@ -313,7 +313,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		protected ChatStamp doInBackground(Void... params) {
 			try {
 				// 選択された画像ファイルを必要であれば縮小して、キャッシュディレクトリにコピーする。
-				File imageFile = StampCacheUtils.copyToCache(this.imageUri, 128);
+				File imageFile = StampCacheUtils.copyToCache(this.imageUri, 64);
 				ChatStamp stamp = new ChatStamp(imageFile);
 				stamp.save();
 				return stamp;

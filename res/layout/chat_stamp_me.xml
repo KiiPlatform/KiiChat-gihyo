@@ -5,6 +5,7 @@
 	<ImageView
 		android:id="@+id/row_stamp"
 		android:contentDescription="@string/image_blank"
+		android:background="@null"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginLeft="5dip"
