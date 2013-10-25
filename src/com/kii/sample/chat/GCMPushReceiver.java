@@ -14,7 +14,6 @@ import com.kii.cloud.storage.ReceivedMessage;
 import com.kii.cloud.storage.exception.GroupOperationException;
 import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
-import com.kii.sample.chat.ui.util.ToastUtils;
 import com.kii.sample.chat.util.Logger;
 
 import android.content.BroadcastReceiver;
@@ -48,7 +47,6 @@ public class GCMPushReceiver extends BroadcastReceiver {
 					return;
 				case PUSH_TO_APP:
 					Logger.i("received PUSH_TO_APP");
-					ToastUtils.showShort(context, "received message");
 					try {
 						// 参加中のChatに新規メッセージが投稿された場合
 						Logger.i("received PUSH_TO_USER");
@@ -75,7 +73,6 @@ public class GCMPushReceiver extends BroadcastReceiver {
 					break;
 				case PUSH_TO_USER:
 					Logger.i("received PUSH_TO_USER");
-					ToastUtils.showShort(context, "received new chat");
 					// 他のユーザが自分とChatを開始した場合
 					// 対象のChat用バケットを購読してメッセージをプッシュ通知してもらう状態にする
 					new Thread(new Runnable() {

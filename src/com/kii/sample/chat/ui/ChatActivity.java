@@ -313,7 +313,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		protected ChatStamp doInBackground(Void... params) {
 			try {
 				// 選択された画像ファイルを必要であれば縮小して、キャッシュディレクトリにコピーする。
-				File imageFile = StampCacheUtils.copyToCache(this.imageUri, 64);
+				File imageFile = StampCacheUtils.copyToCache(this.imageUri, 128);
 				ChatStamp stamp = new ChatStamp(imageFile);
 				stamp.save();
 				return stamp;

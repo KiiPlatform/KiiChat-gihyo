@@ -42,9 +42,9 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:cacheColorHint="#00000000"
-		android:columnWidth="128px"
-		android:verticalSpacing="6px"
-		android:horizontalSpacing="6px"
+		android:columnWidth="98dp"
+		android:verticalSpacing="2dp"
+		android:horizontalSpacing="2dp"
 		android:listSelector="@android:color/transparent"
 		android:numColumns="auto_fit"
 		android:gravity="center"/>
