@@ -102,7 +102,7 @@ public class StampCacheUtils {
 		});
 	}
 	/**
-	 * URIからファイル名にしようできない文字をエスケープします。
+	 * URIからファイル名に使用できない文字をエスケープします。
 	 * 
 	 * @param uri
 	 * @return
