@@ -19,7 +19,7 @@ import android.widget.ImageView;
 
 /**
  * ImageViewに表示するスタンプ画像をバックグラウンドで取得します。
- * StampImageLoaderがImageViewのTagに関連づけて無駄なダウロード処理を抑制します。
+ * StampImageLoaderがImageViewのTagにこのインスタンスを関連づけて無駄なダウロード処理を抑制します。
  * 画像ファイルの読み込みにも多少の時間がかかるため、メモリにもBitmapのキャッシュを保持します。
  * メモリ > ディスク > KiiCloud の順に画像ファイルを探します。
  * 

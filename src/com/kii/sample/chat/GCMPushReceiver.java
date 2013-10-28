@@ -10,6 +10,7 @@ import com.kii.cloud.storage.KiiUser;
 import com.kii.cloud.storage.PushMessageBundleHelper;
 import com.kii.cloud.storage.PushMessageBundleHelper.MessageType;
 import com.kii.cloud.storage.PushToAppMessage;
+import com.kii.cloud.storage.PushToUserMessage;
 import com.kii.cloud.storage.ReceivedMessage;
 import com.kii.cloud.storage.exception.GroupOperationException;
 import com.kii.sample.chat.model.ChatMessage;

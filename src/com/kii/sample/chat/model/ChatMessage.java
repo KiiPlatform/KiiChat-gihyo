@@ -1,7 +1,5 @@
 package com.kii.sample.chat.model;
 
-import android.text.TextUtils;
-
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.KiiUser;
@@ -40,11 +38,19 @@ public class ChatMessage extends KiiObjectWrapper {
 	public static KiiQuery createQuery() {
 		return createQuery(null);
 	}
+	/**
+	 * ChatMessageを検索するためのKiiQueryを生成します。
+	 * 
+	 * @param 
+	 * @return
+	 */
 	public static KiiQuery createQuery(Long modifiedSinceTime) {
 		KiiQuery query = null;
 		if (modifiedSinceTime != null) {
+			// 最新のメッセージのみを取得するクエリ
 			query = new KiiQuery(KiiClause.greaterThan(FIELD_CREATED, modifiedSinceTime));
 		} else {
+			// 全てのメッセージを取得するクエリ
 			query = new KiiQuery();
 		}
 		query.sortByAsc(FIELD_CREATED);
@@ -85,14 +91,24 @@ public class ChatMessage extends KiiObjectWrapper {
 	public void setSenderUri(String uri) {
 		set(FIELD_SENDER_URI, uri);
 	}
+	/**
+	 * このインスタンスがスタンプを表すChatMessageかどうかを返します。
+	 * 
+	 * @return
+	 */
 	public boolean isStamp() {
 		if (this.getMessage().startsWith(PREFIX_STAMP)) {
 			return true;
 		}
 		return false;
 	}
+	/**
+	 * このインスタンスがスタンプの場合、スタンプのKiiObjectのURIを返します。
+	 * 
+	 * @return
+	 */
 	public String getStampUri() {
-		if (!this.isStamp() || TextUtils.isEmpty(this.getMessage())) {
+		if (!this.isStamp()) {
 			return null;
 		}
 		return this.getMessage().replace(PREFIX_STAMP, "");

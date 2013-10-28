@@ -114,7 +114,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				final ChatMessage message = new ChatMessage(kiiGroup);
 				message.setMessage(editMessage.getText().toString());
 				message.setSenderUri(KiiUser.getCurrentUser().toUri().toString());
-				new SendMessageTask().execute(message);
+				new SendMessageTask(message).execute();
 			}
 		});
 	}
@@ -144,27 +144,42 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	@Override
 	public void onSelectStamp(ChatStamp stamp) {
 		// 選択されたスタンプをメッセージとしてバックグラウンドでKiiCloudに保存する
-		new SendMessageTask().execute(ChatMessage.createStampChatMessage(this.kiiGroup, stamp));
+		new SendMessageTask(ChatMessage.createStampChatMessage(this.kiiGroup, stamp)).execute();
 	}
-	private class SendMessageTask extends AsyncTask<ChatMessage, Void, Void> {
-		@Override
-		protected Void doInBackground(ChatMessage... params) {
-			try {
-				params[0].getKiiObject().save();
-			} catch (Exception e) {
-				Logger.e("failed to send messsage", e);
-			}
-			return null;
+	/**
+	 * ChatMessageをバックグラウンドでKiiCloudに保存します。
+	 */
+	private class SendMessageTask extends AsyncTask<Void, Void, Boolean> {
+		private final ChatMessage message;
+		private SendMessageTask(ChatMessage message) {
+			this.message = message;
 		}
 		@Override
-		protected void onPostExecute(Void v) {
-			editMessage.setText("");
+		protected Boolean doInBackground(Void... params) {
+			try {
+				this.message.getKiiObject().save();
+				return true;
+			} catch (Exception e) {
+				Logger.e("failed to send messsage", e);
+				return false;
+			}
+		}
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result) {
+				editMessage.setText("");
+			} else {
+				ToastUtils.showShort(ChatActivity.this, "Unable to send messsage");
+			}
 		}
 	}
 	private static class ViewHolder {
 		TextView message;
 		ImageView stamp;
 	}
+	/**
+	 * {@link ChatMessage}をリストビューに表示するためのアダプターです。
+	 */
 	private class MessageListAdapter extends AbstractArrayAdapter<ChatMessage> {
 		
 		private static final int ROW_SELF_MESSAGE = 0;
@@ -216,9 +231,11 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				holder = (ViewHolder)convertView.getTag();
 			}
 			if (chatMessage.isStamp()) {
+				// スタンプをバックグラウンドで読み込む
 				ChatStamp stamp = new ChatStamp(chatMessage);
 				imageFetcher.fetchStamp(stamp, holder.stamp);
 			} else {
+				// テキストメッセージを表示する
 				String message = chatMessage.getMessage() == null ? "" : chatMessage.getMessage();
 				holder.message.setText(message);
 			}
@@ -226,7 +243,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		}
 		@Override
 		public int getViewTypeCount() {
-			// ListViewに表示する行の種類は「自分のメッセージ」「友達のメッセージ」の２種類あるので2を返す。
+			// ListViewに表示する行の種類は「自分のメッセージ、スタンプ」「友達のメッセージ、スタンプ」の4種類あるので4を返す。
 			return 4;
 		}
 		@Override
@@ -313,6 +330,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		protected ChatStamp doInBackground(Void... params) {
 			try {
 				// 選択された画像ファイルを必要であれば縮小して、キャッシュディレクトリにコピーする。
+				// この段階では、KiiObjectのURIが決まっていないのでファイル名はキャッシュとしては無効で、キャッシュとしては利用されない。
 				File imageFile = StampCacheUtils.copyToCache(this.imageUri, 128);
 				ChatStamp stamp = new ChatStamp(imageFile);
 				stamp.save();
@@ -327,10 +345,6 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 			SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 			if (stamp != null) {
 				onSelectStamp(stamp);
-//				OnSelectStampListener listener = onSelectStampListener.get();
-//				if (listener != null && stamp != null) {
-//					listener.onSelectStamp(stamp);
-//				}
 			} else {
 				ToastUtils.showShort(ChatActivity.this, "Unable to upload stamp");
 			}

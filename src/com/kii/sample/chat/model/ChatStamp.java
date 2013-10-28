@@ -29,6 +29,7 @@ import com.kii.sample.chat.util.StampCacheUtils;
  * メッセージとしてのスタンプは通常のチャットメッセージと同じようにchat_roomバケットに保存されます。
  * その際、'$STAMP:{画像のKiiObjectのURI}'という形式のテキストとして保存します。
  * KiiChatアプリケーションは '$STAMP:' から始まるメッセージを受信した場合、それがスタンプであると判断し画像を表示します。
+ * もしユーザが'$STAMP:'から始まるテキストメッセージを送信しようとすると、うまくテキストを送信することはできません。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -50,6 +51,7 @@ public class ChatStamp extends KiiObjectWrapper {
 	public static List<ChatStamp> list() {
 		List<ChatStamp> stamps = new ArrayList<ChatStamp>();
 		try {
+			// 作成日時でソートして、クエリ結果の順序を保証する
 			KiiQuery query = new KiiQuery();
 			query.sortByAsc(FIELD_CREATED);
 			List<KiiObject> objects = getBucket().query(query).getResult();
@@ -66,19 +68,38 @@ public class ChatStamp extends KiiObjectWrapper {
 	private File imageFile;
 	private String uri;
 	
+	/**
+	 * ローカルファイルからインスタンスを生成します。
+	 * このコンストラクタは新規スタンプの追加時に作成されます。
+	 * 
+	 * @param imageFile
+	 */
 	public ChatStamp(File imageFile) {
 		super(getBucket().object());
 		this.imageFile = imageFile;
 	}
+	/**
+	 * スタンプを表すKiiObjectからインスタンスを生成します。
+	 * 
+	 * @param kiiObject
+	 */
 	public ChatStamp(KiiObject kiiObject) {
 		super(kiiObject);
 		this.uri = kiiObject.toUri().toString();
 	}
+	/**
+	 * ChatMessageからインスタンスを生成します。
+	 * 渡されるChatMessageはスタンプはスタンプを表すChatMessageである必要があります。(isStamp()がtrueのもの)
+	 * 
+	 * @param message
+	 */
 	public ChatStamp(ChatMessage message) {
 		super(KiiObject.createByUri(Uri.parse(message.getStampUri())));
 		this.uri = message.getStampUri();
 	}
 	/**
+	 * スタンプをKiiCloudに保存し、画像をアップロードします。
+	 * 
 	 * @throws Exception
 	 */
 	public void save() throws Exception {
@@ -92,6 +113,11 @@ public class ChatStamp extends KiiObjectWrapper {
 			this.imageFile.renameTo(cacheFile);
 		}
 	}
+	/**
+	 * このスタンプを表すKiiObjectのURIを取得します。
+	 * 
+	 * @return
+	 */
 	public String getUri() {
 		return this.uri;
 	}
@@ -106,6 +132,7 @@ public class ChatStamp extends KiiObjectWrapper {
 		try {
 			byte[] image = null;
 			if (this.imageFile != null) {
+				// ファイルを指定してChatStampのインスタンスが生成された場合 (新規スタンプの追加時)
 				image = readImageFromLocal(this.imageFile);
 			} else if (this.uri != null) {
 				// イメージがキャッシュされていれば、キャッシュから読み込む
@@ -115,7 +142,7 @@ public class ChatStamp extends KiiObjectWrapper {
 				} else {
 					// キャッシュに存在しない場合は、KiiCloudからダウンロードする
 					Logger.i("downloads stamp image from KiiCloud");
-					KiiDownloader downloader = kiiObject.downloader(KiiChatApplication.getContext(), cacheFile);
+					KiiDownloader downloader = this.kiiObject.downloader(KiiChatApplication.getContext(), cacheFile);
 					downloader.transfer(null);
 					image = readImageFromLocal(cacheFile);
 				}
