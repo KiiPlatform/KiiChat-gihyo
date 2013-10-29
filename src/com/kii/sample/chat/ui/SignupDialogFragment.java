@@ -2,25 +2,9 @@ package com.kii.sample.chat.ui;
 
 import java.lang.ref.WeakReference;
 
-import com.kii.cloud.storage.KiiACL;
-import com.kii.cloud.storage.KiiACL.TopicAction;
-import com.kii.cloud.storage.KiiACLEntry;
-import com.kii.cloud.storage.KiiAnyAuthenticatedUser;
-import com.kii.cloud.storage.KiiPushSubscription;
-import com.kii.cloud.storage.KiiTopic;
-import com.kii.cloud.storage.KiiUser;
-import com.kii.sample.chat.ApplicationConst;
-import com.kii.sample.chat.R;
-import com.kii.sample.chat.model.ChatUser;
-import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
-import com.kii.sample.chat.ui.util.ToastUtils;
-import com.kii.sample.chat.util.GCMUtils;
-import com.kii.sample.chat.util.Logger;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
@@ -31,6 +15,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.kii.cloud.storage.KiiUser;
+import com.kii.sample.chat.R;
+import com.kii.sample.chat.ui.task.ChatUserInitializeTask;
+import com.kii.sample.chat.ui.task.ChatUserInitializeTask.OnInitializeListener;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
+import com.kii.sample.chat.ui.util.ToastUtils;
+import com.kii.sample.chat.util.Logger;
+
 /**
  * サインアップ画面のフラグメントです。
  * 
@@ -38,23 +30,19 @@ import android.widget.EditText;
  */
 public class SignupDialogFragment extends DialogFragment implements OnClickListener {
 	
-	public interface OnSignupListener {
-		public void onSignupCompleted();
-	}
-	
-	public static SignupDialogFragment newInstance(OnSignupListener onSignupListener) {
+	public static SignupDialogFragment newInstance(OnInitializeListener onSignupListener) {
 		SignupDialogFragment dialog = new SignupDialogFragment();
 		dialog.setOnSignupListener(onSignupListener);
 		return dialog;
 	}
 	
-	private WeakReference<OnSignupListener> onSignupListener;
+	private WeakReference<OnInitializeListener> onSignupListener;
 	private EditText editName;
 	private EditText editEmail;
 	private EditText editPassword;
 	
-	private void setOnSignupListener(OnSignupListener onSignupListener) {
-		this.onSignupListener = new WeakReference<OnSignupListener>(onSignupListener);
+	private void setOnSignupListener(OnInitializeListener onSignupListener) {
+		this.onSignupListener = new WeakReference<OnInitializeListener>(onSignupListener);
 	}
 	
 	@Override
@@ -103,16 +91,18 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		}
 		new SignupTask(username, email, password).execute();
 	}
+
 	/**
 	 * バックグラウンドでSignupの処理を実行します。
 	 */
-	private class SignupTask extends AsyncTask<Void, Void, Boolean> {
+	private class SignupTask extends ChatUserInitializeTask {
 		
 		private final String username;
 		private final String email;
 		private final String password;
 		
 		private SignupTask(String username, String email, String password) {
+			super(username, email);
 			this.username = username;
 			this.email = email;
 			this.password = password;
@@ -124,34 +114,14 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
-				// TODO:サインアップ処理は以下の5つの処理からなるが、途中で失敗した場合、リトライやロールバックの処理が必要
-				// 1.KiiUerのregister処理
-				// 2.Pushのinstall
-				// 3.User Topicの作成
-				// 4.User TopicへのACLの設定
-				// 5.Topicの購読
+				// サインアップ処理
 				KiiUser.Builder builder = KiiUser.builderWithEmail(email);
 				KiiUser kiiUser = builder.build();
 				kiiUser.setDisplayname(username);
 				kiiUser.register(password);
 				Logger.i("registered user uri=" + kiiUser.toUri().toString());
-				// 登録したKiiUserをChatUserとしてAppスコープのバケットに保存しておく（検索用）
-				ChatUser user = new ChatUser(kiiUser.toUri().toString(), username, email);
-				user.getKiiObject().save();
-				// GCMの設定
-				String registrationId = GCMUtils.register();
-				KiiUser.pushInstallation().install(registrationId);
-				// サーバからプッシュ通知を受信する為に、自分専用のトピックを作成する
-				// このトピックは他の全てのユーザに書き込み権限を与え
-				// 他のユーザが自分をチャットメンバー追加したことを通知する為に使用する
-				KiiTopic topic = KiiUser.topic(ApplicationConst.TOPIC_INVITE_NOTIFICATION);
-				topic.save();
-				KiiACL acl = topic.acl();
-				acl.putACLEntry(new KiiACLEntry(KiiAnyAuthenticatedUser.create(), TopicAction.SEND_MESSAGE_TO_TOPIC, true));
-				acl.save();
-				KiiPushSubscription subscription = kiiUser.pushSubscription();
-				subscription.subscribe(topic);
-				return true;
+				// サインアップ後の初期化処理を実行
+				return super.doInBackground(params);
 			} catch (Exception e) {
 				Logger.e("failed to sign up", e);
 				return false;
@@ -162,9 +132,9 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 			SimpleProgressDialogFragment.hide(getFragmentManager());
 			if (result) {
 				// サインアップ処理が正常に行われた場合は、コールバックメソッドで呼び出し元に通知する
-				OnSignupListener listener = onSignupListener.get();
+				OnInitializeListener listener = onSignupListener.get();
 				if (listener != null) {
-					listener.onSignupCompleted();
+					listener.onInitializeCompleted();
 				}
 			} else {
 				ToastUtils.showShort(getActivity(), "Unable to sign up");

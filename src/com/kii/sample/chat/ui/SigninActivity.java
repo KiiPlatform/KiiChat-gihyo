@@ -5,7 +5,7 @@ import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatRoom;
-import com.kii.sample.chat.ui.SignupDialogFragment.OnSignupListener;
+import com.kii.sample.chat.ui.task.ChatUserInitializeTask.OnInitializeListener;
 import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 import com.kii.sample.chat.util.GCMUtils;
 import com.kii.sample.chat.util.Logger;
@@ -33,7 +33,7 @@ import android.widget.Toast;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class SigninActivity extends FragmentActivity implements OnSignupListener{
+public class SigninActivity extends FragmentActivity implements OnInitializeListener{
 	
 	private TextView textNewAccount;
 	private EditText editEmail;
@@ -132,7 +132,7 @@ public class SigninActivity extends FragmentActivity implements OnSignupListener
 		});
 	}
 	@Override
-	public void onSignupCompleted() {
+	public void onInitializeCompleted() {
 		moveToChatMain();
 	}
 	private void moveToChatMain() {
