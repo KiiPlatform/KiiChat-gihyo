@@ -56,6 +56,9 @@ public class ChatUserInitializeTask extends AsyncTask<Void, Void, Boolean> {
 			acl.save();
 			KiiPushSubscription subscription = kiiUser.pushSubscription();
 			subscription.subscribe(topic);
+			// 初期化が完了していることを示すフラグをユーザーのカスタムフィールドに追加
+			kiiUser.set("initialized", true);
+			kiiUser.update();
 			return true;
 		} catch (Exception e) {
 			Logger.e("Failed to initialize", e);
