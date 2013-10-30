@@ -14,6 +14,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.kii.cloud.storage.Kii;
+import com.kii.cloud.storage.callback.KiiSocialCallBack;
+import com.kii.cloud.storage.social.KiiFacebookConnect;
+import com.kii.cloud.storage.social.KiiSocialConnect.SocialNetwork;
+import com.kii.sample.chat.ApplicationConst;
+import com.kii.sample.chat.PreferencesManager;
+import com.kii.sample.chat.ui.task.ChatUserInitializeTask;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
+import com.kii.sample.chat.ui.util.ToastUtils;
+import com.kii.sample.chat.util.Logger;
+
 /**
  * サインイン画面のアクティビティです。
  * 
@@ -22,6 +33,7 @@ import android.widget.TextView;
 public class SigninActivity extends FragmentActivity implements OnInitializeListener{
 	
 	private TextView textNewAccount;
+	private Button btnFbSignin;
 	private Button btnSignin;
 	private CheckBox checkRemember;
 	
@@ -32,8 +44,36 @@ public class SigninActivity extends FragmentActivity implements OnInitializeList
 		
 		this.textNewAccount = (TextView)findViewById(R.id.text_new_account);
 		this.checkRemember = (CheckBox)findViewById(R.id.check_remember);
+		this.btnFbSignin = (Button)findViewById(R.id.button_facebook);
 		this.btnSignin = (Button)findViewById(R.id.button_signin);
 		
+		this.btnFbSignin.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Facebookの認証画面を表示する
+				KiiFacebookConnect connect = (KiiFacebookConnect) Kii.socialConnect(SocialNetwork.FACEBOOK);
+				connect.initialize(ApplicationConst.FACEBOOK_APP_ID, null, null);
+				Bundle options = new Bundle();
+				String[] permission = new String[] { "email" };
+				options.putStringArray(KiiFacebookConnect.FACEBOOK_PERMISSIONS, permission);
+				connect.logIn(SigninActivity.this, options, new KiiSocialCallBack() {
+					public void onLoginCompleted(SocialNetwork network, KiiUser user, Exception exception) {
+						if (exception == null) {
+							if (checkRemember.isChecked()) {
+								// ログイン状態を保持する場合は、SharedPreferencesにAccessTokenを保存する
+								Logger.i(user.getAccessToken());
+								PreferencesManager.setStoredAccessToken(user.getAccessToken());
+							}
+							// ログイン後処理を行う
+							new PostSigninTask(user.getDisplayname(), user.getEmail()).execute();
+						} else {
+							Logger.e("failed to sign up", exception);
+							ToastUtils.showShort(SigninActivity.this, "Unable to sign up");
+						}
+					}
+				});
+			}
+		});
 		this.btnSignin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -51,6 +91,35 @@ public class SigninActivity extends FragmentActivity implements OnInitializeList
 			}
 		});
 	}
+	
+	private class PostSigninTask extends ChatUserInitializeTask {
+		
+		private PostSigninTask(String username, String email) {
+			super(username, email);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			SimpleProgressDialogFragment.show(getSupportFragmentManager(), "Signin", "Processing...");
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			SimpleProgressDialogFragment.hide(getSupportFragmentManager());
+			if (result) {
+				// サインアップ処理が正常に行われた場合はチャット画面に遷移する
+				moveToChatMain();
+			} else {
+				ToastUtils.showShort(SigninActivity.this, "Unable to sign in");
+			}
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Kii.socialConnect(SocialNetwork.FACEBOOK).respondAuthOnActivityResult(requestCode, resultCode, data);
+	}
+	
 	@Override
 	public void onInitializeCompleted() {
 		moveToChatMain();
