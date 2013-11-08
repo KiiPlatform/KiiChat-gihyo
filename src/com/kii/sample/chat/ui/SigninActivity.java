@@ -78,7 +78,7 @@ public class SigninActivity extends FragmentActivity implements OnInitializeList
 			@Override
 			public void onClick(View v) {
 				// サインイン画面を表示する
-				SigninDialogFragment signinFragment = SigninDialogFragment.newInstance(SigninActivity.this);
+				SigninDialogFragment signinFragment = SigninDialogFragment.newInstance(SigninActivity.this, checkRemember.isChecked());
 				signinFragment.show(getSupportFragmentManager(), SigninDialogFragment.TAG);
 			}
 		});

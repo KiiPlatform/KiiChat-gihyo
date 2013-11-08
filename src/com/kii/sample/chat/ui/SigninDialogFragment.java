@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.kii.cloud.storage.KiiUser;
@@ -37,15 +36,20 @@ public class SigninDialogFragment extends DialogFragment implements OnClickListe
 	public static final String TAG = "SigninDialogFragment";
 	
 	public static SigninDialogFragment newInstance(OnInitializeListener onSignupListener) {
+		return newInstance(onSignupListener, false);
+	}
+	
+	public static SigninDialogFragment newInstance(OnInitializeListener onSignupListener, Boolean remember) {
 		SigninDialogFragment dialog = new SigninDialogFragment();
 		dialog.setOnSignupListener(onSignupListener);
+		dialog.checkRemember = remember;
 		return dialog;
 	}
 	
 	private WeakReference<OnInitializeListener> onSignupListener;
 	private EditText editEmail;
 	private EditText editPassword;
-	private CheckBox checkRemember;
+	private Boolean checkRemember = false;
 	
 	private void setOnSignupListener(OnInitializeListener onSignupListener) {
 		this.onSignupListener = new WeakReference<OnInitializeListener>(onSignupListener);
@@ -67,7 +71,6 @@ public class SigninDialogFragment extends DialogFragment implements OnClickListe
 		// android:hintで指定した文字列のフォントを制御する為にxmlでtextPasswordの指定をしないでコードから設定する
 		this.editPassword.setTransformationMethod(new PasswordTransformationMethod());
 		this.editPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-		this.checkRemember = (CheckBox) view.findViewById(R.id.check_email_signin_remember);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Signin with your email account");
@@ -100,7 +103,7 @@ public class SigninDialogFragment extends DialogFragment implements OnClickListe
 					SimpleProgressDialogFragment.hide(getFragmentManager());
 					return;
 				}
-				if (checkRemember.isChecked()) {
+				if (checkRemember) {
 					// ログイン状態を保持する場合は、SharedPreferencesにAccessTokenを保存する
 					Logger.i(user.getAccessToken());
 					PreferencesManager.setStoredAccessToken(user.getAccessToken());
