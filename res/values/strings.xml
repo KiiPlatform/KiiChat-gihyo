@@ -15,6 +15,8 @@
 	<string name="hint_email">someone@example.com</string>
 	<string name="hint_password">4&#8211;50 characters</string>
 	<string name="hint_search_user">Email or Username</string>
+	<string name="button_email">Sign In with your email</string>
+	<string name="button_facebook">Sign In with Facebook</string>
 	<string name="button_signin">Sign In</string>
 	<string name="button_signup">Sign Up</string>
 	<string name="button_cancel">Cancel</string>

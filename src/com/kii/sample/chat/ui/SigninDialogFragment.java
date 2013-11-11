@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.kii.cloud.storage.KiiUser;
+import com.kii.cloud.storage.callback.KiiUserCallBack;
+import com.kii.sample.chat.PreferencesManager;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.ui.task.ChatUserInitializeTask;
 import com.kii.sample.chat.ui.task.ChatUserInitializeTask.OnInitializeListener;
@@ -25,47 +27,54 @@ import com.kii.sample.chat.ui.util.ToastUtils;
 import com.kii.sample.chat.util.Logger;
 
 /**
- * サインアップ画面のフラグメントです。
+ * サインイン画面のフラグメントです。
  * 
- * @author noriyoshi.fukuzaki@kii.com
+ * @author ryuji.ochi@kii.com
  */
-public class SignupDialogFragment extends DialogFragment implements OnClickListener {
+public class SigninDialogFragment extends DialogFragment implements OnClickListener {
 	
-	public static SignupDialogFragment newInstance(OnInitializeListener onSignupListener) {
-		SignupDialogFragment dialog = new SignupDialogFragment();
+	public static final String TAG = "SigninDialogFragment";
+	
+	public static SigninDialogFragment newInstance(OnInitializeListener onSignupListener) {
+		return newInstance(onSignupListener, false);
+	}
+	
+	public static SigninDialogFragment newInstance(OnInitializeListener onSignupListener, Boolean remember) {
+		SigninDialogFragment dialog = new SigninDialogFragment();
 		dialog.setOnSignupListener(onSignupListener);
+		dialog.checkRemember = remember;
 		return dialog;
 	}
 	
 	private WeakReference<OnInitializeListener> onSignupListener;
-	private EditText editName;
 	private EditText editEmail;
 	private EditText editPassword;
+	private Boolean checkRemember = false;
 	
 	private void setOnSignupListener(OnInitializeListener onSignupListener) {
 		this.onSignupListener = new WeakReference<OnInitializeListener>(onSignupListener);
 	}
 	
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {  
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		setRetainInstance(true);
 	}
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View view = inflater.inflate(R.layout.fragment_signup, null, false);
+		View view = inflater.inflate(R.layout.fragment_signin, null, false);
 		
-		this.editName = (EditText)view.findViewById(R.id.edit_name);
-		this.editEmail = (EditText)view.findViewById(R.id.edit_email);
-		this.editPassword = (EditText)view.findViewById(R.id.edit_password);
+		this.editEmail = (EditText) view.findViewById(R.id.edit_email);
+		this.editPassword = (EditText) view.findViewById(R.id.edit_password);
 		// android:hintで指定した文字列のフォントを制御する為にxmlでtextPasswordの指定をしないでコードから設定する
 		this.editPassword.setTransformationMethod(new PasswordTransformationMethod());
 		this.editPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle("Create new account");
-		builder.setPositiveButton(R.string.button_signup, null);
+		builder.setTitle("Signin with your email account");
+		builder.setPositiveButton(R.string.button_signin, null);
 		builder.setNegativeButton(R.string.button_cancel, null);
 		builder.setView(view);
 		AlertDialog dialog = builder.show();
@@ -76,70 +85,54 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 	
 	@Override
 	public void onClick(View v) {
-		final String username = editName.getText().toString();
 		final String email = editEmail.getText().toString();
 		final String password = editPassword.getText().toString();
-		if (TextUtils.isEmpty(username)) {
-			ToastUtils.showShort(getActivity(), "Please input username");
+		if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+			ToastUtils.showShort(getActivity(), "Please input email address and password");
 			return;
 		}
-		if (TextUtils.isEmpty(email)) {
-			ToastUtils.showShort(getActivity(), "Please input email");
-			return;
-		}
-		if (TextUtils.isEmpty(password)) {
-			ToastUtils.showShort(getActivity(), "Please input password");
-			return;
-		}
-		new SignupTask(username, email, password).execute();
-	}
-
-	/**
-	 * バックグラウンドでSignupの処理を実行します。
-	 */
-	private class SignupTask extends ChatUserInitializeTask {
 		
-		private final String username;
-		private final String email;
-		private final String password;
-		
-		private SignupTask(String username, String email, String password) {
-			super(username, email);
-			this.username = username;
-			this.email = email;
-			this.password = password;
-		}
-		@Override
-		protected void onPreExecute() {
-			SimpleProgressDialogFragment.show(getFragmentManager(), "Signup", "Processing...");
-		}
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			try {
-				// サインアップ処理
-				KiiUser.Builder builder = KiiUser.builderWithEmail(email);
-				KiiUser kiiUser = builder.build();
-				kiiUser.setDisplayname(username);
-				kiiUser.register(password);
-				Logger.i("registered user uri=" + kiiUser.toUri().toString());
-				// サインアップ後の初期化処理を実行
-				return super.doInBackground(params);
-			} catch (Exception e) {
-				Logger.e("failed to sign up", e);
-				return false;
+		SimpleProgressDialogFragment.show(getFragmentManager(), "Signin", "Processing...");
+		KiiUser.logIn(new KiiUserCallBack() {
+			@Override
+			public void onLoginCompleted(int token, KiiUser user, Exception e) {
+				if (e != null) {
+					// サインイン失敗時はToastを表示してサインイン画面に留まる
+					Logger.e("Unable to login.", e);
+					ToastUtils.showShort(getActivity(), "Unable to login");
+					SimpleProgressDialogFragment.hide(getFragmentManager());
+					return;
+				}
+				if (checkRemember) {
+					// ログイン状態を保持する場合は、SharedPreferencesにAccessTokenを保存する
+					Logger.i(user.getAccessToken());
+					PreferencesManager.setStoredAccessToken(user.getAccessToken());
+				}
+				new PostSigninTask(user.getDisplayname(), user.getEmail()).execute();
 			}
+		}, email, password);
+	}
+	
+	/**
+	 * バックグラウンドでSignin後の処理を実行します。
+	 */
+	private class PostSigninTask extends ChatUserInitializeTask {
+		
+		private PostSigninTask(String username, String email) {
+			super(username, email);
 		}
+		
 		@Override
 		protected void onPostExecute(Boolean result) {
 			SimpleProgressDialogFragment.hide(getFragmentManager());
 			if (result) {
-				// サインアップ処理が正常に行われた場合は、コールバックメソッドで呼び出し元に通知する
+				// サインイン処理が正常に行われた場合は、コールバックメソッドで呼び出し元に通知する
 				OnInitializeListener listener = onSignupListener.get();
 				if (listener != null) {
 					listener.onInitializeCompleted();
 				}
 			} else {
-				ToastUtils.showShort(getActivity(), "Unable to sign up");
+				ToastUtils.showShort(getActivity(), "Unable to sign in");
 			}
 			dismiss();
 		}
