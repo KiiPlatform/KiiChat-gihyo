@@ -64,5 +64,7 @@
 				<category android:name="com.kii.sample.chat" />
 			</intent-filter>
 		</receiver>
+		<!-- 以下はKii AnalyticsがイベントデータをKiiCloudにアップロードする為のサービスです。 -->
+		<service android:name = "com.kii.cloud.analytics.EventUploadService" />
 	</application>
 </manifest>

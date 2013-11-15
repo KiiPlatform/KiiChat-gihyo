@@ -1,7 +1,7 @@
 package com.kii.sample.chat;
 
+import com.kii.cloud.analytics.KiiAnalytics;
 import com.kii.cloud.storage.Kii;
-import com.kii.cloud.storage.Kii.Site;
 import com.kii.sample.chat.util.Logger;
 
 import android.app.Application;
@@ -22,9 +22,10 @@ public class KiiChatApplication extends Application {
 		super.onCreate();
 		context = this;
 		// アプリケーション起動時にKiiSDKを初期化します。
-		// TODO:Activity.onCreateで毎回呼ぶようにしたほうがいいかも。
 		Logger.i("■■■ initialize KII SDK ■■■");
-		Kii.initialize(ApplicationConst.APP_ID, ApplicationConst.APP_KEY, Site.JP);
+		Kii.initialize(ApplicationConst.APP_ID, ApplicationConst.APP_KEY, Kii.Site.JP);
+		Logger.i("■■■ initialize KII Analytics SDK ■■■");
+		KiiAnalytics.initialize(context, ApplicationConst.APP_ID, ApplicationConst.APP_KEY, KiiAnalytics.Site.JP);
 	}
 	public static Context getContext(){
 		return context;
