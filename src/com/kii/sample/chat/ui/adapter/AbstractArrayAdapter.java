@@ -24,7 +24,7 @@ public abstract class AbstractArrayAdapter<T> extends ArrayAdapter<T> {
 	public AbstractArrayAdapter(Context context, int resourceId, List<T> objects) {
 		super(context, resourceId, objects);
 	}
-	protected void addAll(List<? extends T> dataList) {
+	public void addAll(List<? extends T> dataList) {
 		if (dataList != null && dataList.size() > 0) {
 			for (T data : dataList) {
 				add(data);
