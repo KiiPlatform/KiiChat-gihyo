@@ -298,6 +298,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				}
 				return messages;
 			} catch (Exception e) {
+				Logger.e("failed to get message", e);
 				return null;
 			}
 		}
@@ -307,13 +308,14 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				adapter.addAll(messages);
 				adapter.notifyDataSetChanged();
 			} else {
-				// TODO:ERROR
+				ToastUtils.showShort(ChatActivity.this, "Unable to get message");
 			}
 			if (this.showProgress) {
 				SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 			} else {
 				vibrator.vibrate(500);
 			}
+			// ListViewを最新のメッセージの位置までスクロールする
 			listView.setSelection(listView.getCount());
 		}
 	}

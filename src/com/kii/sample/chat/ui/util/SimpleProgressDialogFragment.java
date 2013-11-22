@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 	
 /**
  * 読み込み中のダイアログを表示するためのフラグメントです。
@@ -26,7 +27,9 @@ public class SimpleProgressDialogFragment extends DialogFragment {
 	}
 	public static void show(FragmentManager manager, String title, String message) {
 		SimpleProgressDialogFragment dialog = newInstance(title, message);
-		dialog.show(manager, FRAGMENT_TAG);
+		FragmentTransaction ft = manager.beginTransaction();
+		ft.add(dialog, FRAGMENT_TAG);
+		ft.commitAllowingStateLoss();
 	}
 	public static void update(FragmentManager manager, int messageId) {
 		update(manager, getMessage(messageId));
