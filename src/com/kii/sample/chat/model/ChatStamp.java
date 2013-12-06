@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -12,12 +13,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import com.kii.cloud.analytics.KiiAnalytics;
+import com.kii.cloud.analytics.KiiAnalyticsException;
+import com.kii.cloud.analytics.KiiEvent;
+import com.kii.cloud.analytics.aggregationresult.DateRange;
+import com.kii.cloud.analytics.aggregationresult.GroupedResult;
+import com.kii.cloud.analytics.aggregationresult.GroupedSnapShot;
+import com.kii.cloud.analytics.aggregationresult.ResultQuery;
+import com.kii.cloud.analytics.aggregationresult.SimpleDate;
 import com.kii.cloud.storage.Kii;
 import com.kii.cloud.storage.KiiBucket;
 import com.kii.cloud.storage.KiiObject;
 import com.kii.cloud.storage.query.KiiQuery;
 import com.kii.cloud.storage.resumabletransfer.KiiDownloader;
 import com.kii.cloud.storage.resumabletransfer.KiiUploader;
+import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.KiiChatApplication;
 import com.kii.sample.chat.util.Logger;
 import com.kii.sample.chat.util.StampCacheUtils;
@@ -42,13 +52,13 @@ public class ChatStamp extends KiiObjectWrapper {
 	}
 	
 	/**
-	 * ユーザにアップロードされた全てのスタンプを取得します。
+	 * ユーザにアップロードされた全てのスタンプを新着順に取得します。
 	 * スタンプ本体の画像イメージは取得されません。
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<ChatStamp> list() {
+	public static List<ChatStamp> listOrderByNewArrival() {
 		List<ChatStamp> stamps = new ArrayList<ChatStamp>();
 		try {
 			// 作成日時でソートして、クエリ結果の順序を保証する
@@ -62,6 +72,56 @@ public class ChatStamp extends KiiObjectWrapper {
 		} catch (Exception e) {
 			Logger.e("Unable to list stamps", e);
 			return stamps;
+		}
+	}
+	/**
+	 * スタンプを人気順でソートして取得します。
+	 * 
+	 * @return
+	 */
+	public static List<ChatStamp> listOrderByPopular() {
+		List<ChatStamp> stamps = listOrderByNewArrival();
+		if (stamps.isEmpty()) {
+			return stamps;
+		}
+		try {
+			// 直近1ヶ月のスタンプの利用データを取得
+			Calendar cal = Calendar.getInstance();
+			SimpleDate end = new SimpleDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DATE));
+			cal.add(Calendar.MONTH, -1);
+			SimpleDate start = new SimpleDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DATE));
+			DateRange dateRange = new DateRange(start, end);
+			ResultQuery query = ResultQuery.builderWithDateRange(dateRange).build();
+			GroupedResult result = KiiAnalytics.getResult(ApplicationConst.AGGREGATION_RULE_ID, query);
+			List<GroupedSnapShot> snapshots = result.getSnapShots();
+			Logger.i("----- Analytics result ------");
+			for (int i = 0; i < snapshots.size(); i++) {
+				Logger.i(snapshots.get(i).getName());
+				Logger.i(snapshots.get(i).getData().toString());
+				Logger.i("-----------------------------");
+			}
+			// TODO:
+			// TODO:Analytics resultを元にstampsをソートする
+			// TODO:
+		} catch (KiiAnalyticsException ignore) {
+			Logger.w("failed to get analytics result", ignore);
+		}
+		return stamps;
+	}
+	/**
+	 * スタンプの利用状況を表すイベントデータを送信します。
+	 * 
+	 * @param message
+	 */
+	public static void sendUsageEvent(ChatMessage message) {
+		if (message.isStamp()) {
+			try {
+				KiiEvent event = KiiAnalytics.event("stamp_usage");
+				event.set("stamp_uri", message.getStampUri());
+				event.push();
+			} catch (IOException ignore) {
+				Logger.w("failed to send event");
+			}
 		}
 	}
 	

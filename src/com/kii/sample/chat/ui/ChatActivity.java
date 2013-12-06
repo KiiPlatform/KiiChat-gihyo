@@ -158,6 +158,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		protected Boolean doInBackground(Void... params) {
 			try {
 				this.message.getKiiObject().save();
+				ChatStamp.sendUsageEvent(this.message);
 				return true;
 			} catch (Exception e) {
 				Logger.e("failed to send messsage", e);
