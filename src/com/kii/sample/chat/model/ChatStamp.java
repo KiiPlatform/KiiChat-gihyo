@@ -51,6 +51,8 @@ import com.kii.sample.chat.util.StampCacheUtils;
 public class ChatStamp extends KiiObjectWrapper {
 	
 	private static final String BUCKET_NAME = "chat_stamps";
+	private static final String EVENT_TYPE = "stamp_usage";
+	private static final String EVENT_KEY_STAMP_URI = "stamp_uri";
 	
 	public static KiiBucket getBucket() {
 		return Kii.bucket(BUCKET_NAME);
@@ -97,8 +99,8 @@ public class ChatStamp extends KiiObjectWrapper {
 			SimpleDate start = new SimpleDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
 			DateRange dateRange = new DateRange(start, end);
 			ResultQuery query = ResultQuery
-					.builderWithGroupingKey("stamp_uri")
-					.withDateRange(dateRange)
+					.builderWithGroupingKey(EVENT_KEY_STAMP_URI)	// スタンプのURI毎にグルーピング
+					.withDateRange(dateRange)				// 直近1ヶ月のデータのみ取得
 					.build();
 			GroupedResult result = KiiAnalytics.getResult(ApplicationConst.AGGREGATION_RULE_ID, query);
 			List<GroupedSnapShot> snapshots = result.getSnapShots();
@@ -106,7 +108,12 @@ public class ChatStamp extends KiiObjectWrapper {
 			final Map<String, Long> stampUsageMap = new HashMap<String, Long>();
 			for (int i = 0; i < snapshots.size(); i++) {
 				try {
-					stampUsageMap.put(snapshots.get(i).getName(), snapshots.get(i).getData().getLong(0));
+					// Analyticsの結果は日別(pointInterval)に分割されて配列として取得されるので、合計値を計算する
+					long usage = 0;
+					for (int j = 0; j < snapshots.get(i).getData().length(); j++) {
+						usage += snapshots.get(i).getData().getLong(j);
+					}
+					stampUsageMap.put(snapshots.get(i).getName(), usage);
 				} catch (JSONException e) {
 					stampUsageMap.put(snapshots.get(i).getName(), 0L);
 				}
@@ -141,8 +148,8 @@ public class ChatStamp extends KiiObjectWrapper {
 	public static void sendUsageEvent(ChatMessage message) {
 		if (message.isStamp()) {
 			try {
-				KiiEvent event = KiiAnalytics.event("stamp_usage");
-				event.set("stamp_uri", message.getStampUri());
+				KiiEvent event = KiiAnalytics.event(EVENT_TYPE);
+				event.set(EVENT_KEY_STAMP_URI, message.getStampUri());
 				event.push();
 			} catch (IOException ignore) {
 				Logger.w("failed to send event");
