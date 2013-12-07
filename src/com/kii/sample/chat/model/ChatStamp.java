@@ -58,12 +58,12 @@ public class ChatStamp extends KiiObjectWrapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<ChatStamp> listOrderByNewArrival() {
+	public static List<ChatStamp> listOrderByNewly() {
 		List<ChatStamp> stamps = new ArrayList<ChatStamp>();
 		try {
 			// 作成日時でソートして、クエリ結果の順序を保証する
 			KiiQuery query = new KiiQuery();
-			query.sortByAsc(FIELD_CREATED);
+			query.sortByDesc(FIELD_CREATED);
 			List<KiiObject> objects = getBucket().query(query).getResult();
 			for (KiiObject object : objects) {
 				stamps.add(new ChatStamp(object));
@@ -79,8 +79,8 @@ public class ChatStamp extends KiiObjectWrapper {
 	 * 
 	 * @return
 	 */
-	public static List<ChatStamp> listOrderByPopular() {
-		List<ChatStamp> stamps = listOrderByNewArrival();
+	public static List<ChatStamp> listOrderByPopularity() {
+		List<ChatStamp> stamps = listOrderByNewly();
 		if (stamps.isEmpty()) {
 			return stamps;
 		}

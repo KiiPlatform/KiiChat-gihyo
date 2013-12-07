@@ -18,7 +18,7 @@ public class ChatStampListLoader extends AbstractAsyncTaskLoader<List<ChatStamp>
 	}
 	@Override
 	public List<ChatStamp> loadInBackground() {
-		return ChatStamp.listOrderByNewArrival();
+		return ChatStamp.listOrderByNewly();
 	}
 
 }
