@@ -5,9 +5,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -87,22 +92,42 @@ public class ChatStamp extends KiiObjectWrapper {
 		try {
 			// 直近1ヶ月のスタンプの利用データを取得
 			Calendar cal = Calendar.getInstance();
-			SimpleDate end = new SimpleDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DATE));
+			SimpleDate end = new SimpleDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
 			cal.add(Calendar.MONTH, -1);
-			SimpleDate start = new SimpleDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DATE));
+			SimpleDate start = new SimpleDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
 			DateRange dateRange = new DateRange(start, end);
-			ResultQuery query = ResultQuery.builderWithDateRange(dateRange).build();
+			ResultQuery query = ResultQuery
+					.builderWithGroupingKey("stamp_uri")
+					.withDateRange(dateRange)
+					.build();
 			GroupedResult result = KiiAnalytics.getResult(ApplicationConst.AGGREGATION_RULE_ID, query);
 			List<GroupedSnapShot> snapshots = result.getSnapShots();
-			Logger.i("----- Analytics result ------");
+			// Analyticsの結果をMapに格納する、key=スタンプのURI, value=スタンプが使用された回数
+			final Map<String, Long> stampUsageMap = new HashMap<String, Long>();
 			for (int i = 0; i < snapshots.size(); i++) {
-				Logger.i(snapshots.get(i).getName());
-				Logger.i(snapshots.get(i).getData().toString());
-				Logger.i("-----------------------------");
+				try {
+					stampUsageMap.put(snapshots.get(i).getName(), snapshots.get(i).getData().getLong(0));
+				} catch (JSONException e) {
+					stampUsageMap.put(snapshots.get(i).getName(), 0L);
+				}
 			}
-			// TODO:
-			// TODO:Analytics resultを元にstampsをソートする
-			// TODO:
+			// スタンプの使用回数でソートする
+			Collections.sort(stamps, new Comparator<ChatStamp>() {
+				@Override
+				public int compare(ChatStamp lhs, ChatStamp rhs) {
+					// 比較対象のスタンプの使用回数を比較する
+					long lhsUsage = stampUsageMap.get(lhs.getUri()) == null ? 0L : stampUsageMap.get(lhs.getUri());
+					long rhsUsage = stampUsageMap.get(rhs.getUri()) == null ? 0L : stampUsageMap.get(rhs.getUri());
+					// 使用回数が多い順（降順）にソートしたいので、通常のComparatorの定義とは逆の戻り値を返す
+					if (lhsUsage > rhsUsage) {
+						return -1;
+					} else if (lhsUsage < rhsUsage) {
+						return 1;
+					} else {
+						return 0;
+					}
+				}
+			});
 		} catch (KiiAnalyticsException ignore) {
 			Logger.w("failed to get analytics result", ignore);
 		}
