@@ -29,4 +29,6 @@
 	<string name="menu_add_friend">Add Friend</string>
 	<string name="menu_search_user">Search User</string>
 	<string name="menu_reload">Reload</string>
+	<string name="popup_menu_sort_by_newly">Sort by Newly</string>
+	<string name="popup_menu_sort_by_popularity">Sort by Popularity</string>
 </resources>

@@ -19,7 +19,9 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -50,6 +52,7 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 	private TextView textEmpty;
 	private GridView gridView;
 	private ImageButton btnAddStamp;
+	private ImageButton btnSortStamp;
 	private ChatStampListAdpter adapter;
 	private ChatStampImageFetcher imageFetcher;
 
@@ -102,6 +105,21 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 				 */
 				getActivity().startActivityForResult(intent, ChatActivity.REQUEST_GET_IMAGE_FROM_GALLERY);
 				dismiss();
+			}
+		});
+		this.btnSortStamp = (ImageButton)view.findViewById(R.id.button_sort_stamp);
+		this.btnSortStamp.setOnClickListener(new android.view.View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				PopupMenu popup = new PopupMenu(getActivity(), btnSortStamp);
+				popup.getMenuInflater().inflate(R.menu.sort_popup_menu, popup.getMenu());
+				popup.show();
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+					public boolean onMenuItemClick(MenuItem item) {
+						// TODO:
+						return true;
+					}
+				});
 			}
 		});
 		this.getLoaderManager().initLoader(0, savedInstanceState, this);
