@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -82,15 +81,31 @@ public class ChatStamp extends KiiObjectWrapper {
 		}
 	}
 	/**
-	 * スタンプを人気順でソートして取得します。
+	 * 新着順でソートする為のComparatorを取得します。
 	 * 
 	 * @return
 	 */
-	public static List<ChatStamp> listOrderByPopularity() {
-		List<ChatStamp> stamps = listOrderByNewly();
-		if (stamps.isEmpty()) {
-			return stamps;
-		}
+	public static Comparator<ChatStamp> getNewlyComparator() {
+		return new Comparator<ChatStamp>() {
+			@Override
+			public int compare(ChatStamp lhs, ChatStamp rhs) {
+				if (lhs.getCreatedTime() > rhs.getCreatedTime()) {
+					return -1;
+				} else if (lhs.getCreatedTime() > rhs.getCreatedTime()) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+		};
+	}
+	/**
+	 * 人気順でソートする為のComparatorを取得します。
+	 * Analyticsの結果を元に人気順を判定するため、KiiCloudとの通信が発生します。メインスレッドでは実行しないでください。
+	 * 
+	 * @return
+	 */
+	public static Comparator<ChatStamp> getPopularityComparator() {
 		try {
 			// 直近1ヶ月のスタンプの利用データを取得
 			Calendar cal = Calendar.getInstance();
@@ -100,7 +115,7 @@ public class ChatStamp extends KiiObjectWrapper {
 			DateRange dateRange = new DateRange(start, end);
 			ResultQuery query = ResultQuery
 					.builderWithGroupingKey(EVENT_KEY_STAMP_URI)	// スタンプのURI毎にグルーピング
-					.withDateRange(dateRange)				// 直近1ヶ月のデータのみ取得
+					.withDateRange(dateRange)						// 直近1ヶ月のデータのみ取得
 					.build();
 			GroupedResult result = KiiAnalytics.getResult(ApplicationConst.AGGREGATION_RULE_ID, query);
 			List<GroupedSnapShot> snapshots = result.getSnapShots();
@@ -119,7 +134,7 @@ public class ChatStamp extends KiiObjectWrapper {
 				}
 			}
 			// スタンプの使用回数でソートする
-			Collections.sort(stamps, new Comparator<ChatStamp>() {
+			return new Comparator<ChatStamp>() {
 				@Override
 				public int compare(ChatStamp lhs, ChatStamp rhs) {
 					// 比較対象のスタンプの使用回数を比較する
@@ -134,11 +149,12 @@ public class ChatStamp extends KiiObjectWrapper {
 						return 0;
 					}
 				}
-			});
+			};
 		} catch (KiiAnalyticsException ignore) {
+			// Analytics結果の取得に失敗した場合は、デフォルトの新着順のComparatorを返す
 			Logger.w("failed to get analytics result", ignore);
+			return getNewlyComparator();
 		}
-		return stamps;
 	}
 	/**
 	 * スタンプの利用状況を表すイベントデータを送信します。

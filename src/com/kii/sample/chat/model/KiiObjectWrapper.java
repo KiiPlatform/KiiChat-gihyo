@@ -46,6 +46,12 @@ public abstract class KiiObjectWrapper {
 	public KiiObject getKiiObject() {
 		return this.kiiObject;
 	}
+	public long getCreatedTime() {
+		return this.kiiObject.getCreatedTime();
+	}
+	public long getModifedTime() {
+		return this.kiiObject.getModifedTime();
+	}
 	@Override
 	public String toString() {
 		return this.kiiObject.toString();

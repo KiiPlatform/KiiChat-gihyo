@@ -1,6 +1,7 @@
 package com.kii.sample.chat.ui;
 
 import java.lang.ref.WeakReference;
+import java.util.Comparator;
 import java.util.List;
 
 import com.kii.sample.chat.R;
@@ -8,6 +9,7 @@ import com.kii.sample.chat.model.ChatStamp;
 import com.kii.sample.chat.ui.adapter.AbstractArrayAdapter;
 import com.kii.sample.chat.ui.loader.ChatStampImageFetcher;
 import com.kii.sample.chat.ui.loader.ChatStampListLoader;
+import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -55,6 +58,7 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 	private ImageButton btnSortStamp;
 	private ChatStampListAdpter adapter;
 	private ChatStampImageFetcher imageFetcher;
+	private int selectedPopupMenuItem = R.id.menu_sort_by_newly;
 
 	public void setOnSelectStampListener(OnSelectStampListener onSelectStampListener) {
 		this.onSelectStampListener = new WeakReference<SelectStampDialogFragment.OnSelectStampListener>(onSelectStampListener);
@@ -113,10 +117,38 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 			public void onClick(View v) {
 				PopupMenu popup = new PopupMenu(getActivity(), btnSortStamp);
 				popup.getMenuInflater().inflate(R.menu.sort_popup_menu, popup.getMenu());
+				if (selectedPopupMenuItem == R.id.menu_sort_by_popularity) {
+					popup.getMenu().getItem(1).setChecked(true);
+				} else {
+					popup.getMenu().getItem(0).setChecked(true);
+				}
 				popup.show();
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-					public boolean onMenuItemClick(MenuItem item) {
-						// TODO:
+					public boolean onMenuItemClick(final MenuItem item) {
+						selectedPopupMenuItem = item.getItemId();
+						// 選択された方法でGridViewをソートする。
+						new AsyncTask<Void, Void, Comparator<ChatStamp>>() {
+							@Override
+							protected void onPreExecute() {
+								String title = (item.getItemId() == R.id.menu_sort_by_popularity) ? "Sort by popularity" : "Sort by newly";
+								SimpleProgressDialogFragment.show(getFragmentManager(), title, "Sorting...");
+							}
+							@Override
+							protected Comparator<ChatStamp> doInBackground(Void... params) {
+								if (item.getItemId() == R.id.menu_sort_by_popularity) {
+									// 人気順にソート
+									return ChatStamp.getPopularityComparator();
+								}
+								// 新着順にソート
+								return ChatStamp.getNewlyComparator();
+							}
+							@Override
+							protected void onPostExecute(Comparator<ChatStamp> comparator) {
+								SimpleProgressDialogFragment.hide(getFragmentManager());
+								adapter.sort(comparator);
+								adapter.notifyDataSetChanged();
+							}
+						}.execute();
 						return true;
 					}
 				});
@@ -144,6 +176,8 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 			this.gridView.setVisibility(View.GONE);
 			this.textEmpty.setVisibility(View.VISIBLE);
 		} else {
+			this.gridView.setVisibility(View.VISIBLE);
+			this.textEmpty.setVisibility(View.GONE);
 			this.adapter.setData(data);
 			this.gridView.setAdapter(this.adapter);
 		}
