@@ -14,10 +14,10 @@ Eclipseにプロジェクトをインポートしてビルドする場合、Andr
 
 #Screen Shots
 
-<img src="screenshots/01.png" style="margin-right:2px">
-<img src="screenshots/02.png" style="margin-right:2px">  
-<img src="screenshots/03.png" style="margin-right:2px">
-<img src="screenshots/04.png" style="margin-right:2px">
+<div style="float: left; margin-right:10px"><img src="screenshots/01.png"></div>
+<div style="margin-right:10px"><img src="screenshots/02.png"></div>  
+<div style="float: left; margin-right:10px"><img src="screenshots/03.png"></div>
+<div style="margin-right:10px"><img src="screenshots/04.png"></div>
 
 
 
