@@ -11,3 +11,13 @@ Eclipseにプロジェクトをインポートしてビルドする場合、Andr
     {SDK-DIR}/extras/google/google_play_services/libproject/google-play-services_lib
 
 
+
+#Screen Shots
+
+![my image](screenshots/01.png)
+![my image](screenshots/02.png)
+![my image](screenshots/03.png)
+![my image](screenshots/04.png)
+
+
+
