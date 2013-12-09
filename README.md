@@ -14,10 +14,10 @@ Eclipseにプロジェクトをインポートしてビルドする場合、Andr
 
 #Screen Shots
 
-![my image](screenshots/01.png)
-![my image](screenshots/02.png)
-![my image](screenshots/03.png)
-![my image](screenshots/04.png)
+<img src="screenshots/01.png" style="margin-right:2px">
+<img src="screenshots/02.png" style="margin-right:2px">  
+<img src="screenshots/03.png" style="margin-right:2px">
+<img src="screenshots/04.png" style="margin-right:2px">
 
 
 
