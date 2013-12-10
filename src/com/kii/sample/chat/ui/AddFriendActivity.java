@@ -20,7 +20,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -114,9 +113,6 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 		ChatUser chatUser = (ChatUser)this.listView.getItemAtPosition(position);
 		new AddingFriendTask(chatUser).execute();
 	}
-	/**
-	 * 
-	 */
 	private class AddingFriendTask extends AsyncTask<Void, Void, Boolean> {
 		private final ChatUser chatUser;
 		

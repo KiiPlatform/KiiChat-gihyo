@@ -96,6 +96,13 @@ public class GCMPushReceiver extends BroadcastReceiver {
 			}
 		}
 	}
+	/**
+	 * ログイン中のユーザが指定されたグループに所属しているか判定します。
+	 * 
+	 * @param kiiGroup
+	 * @return
+	 * @throws GroupOperationException
+	 */
 	private boolean isMember(KiiGroup kiiGroup) throws GroupOperationException {
 		if (KiiUser.getCurrentUser() != null) {
 			kiiGroup.refresh();
@@ -108,6 +115,13 @@ public class GCMPushReceiver extends BroadcastReceiver {
 		}
 		return false;
 	}
+	/**
+	 * プッシュ通知を受信したことをBroadcast Intentを使ってActivityに通知します。
+	 * 
+	 * @param context
+	 * @param action
+	 * @param message
+	 */
 	private void sendBroadcast(Context context, String action, String message) {
 		Intent intent = new Intent(action);
 		intent.putExtra(ApplicationConst.EXTRA_MESSAGE, message);

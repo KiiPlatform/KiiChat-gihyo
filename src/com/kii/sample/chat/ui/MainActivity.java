@@ -13,6 +13,7 @@ import android.text.TextUtils;
 
 /**
  * アプリケーション起動時に呼ばれるアクティビティです。
+ * このアクティビティはUIを持ちません。
  * 必要に応じて自動的にサインイン処理を行います。
  * 
  * @author noriyoshi.fukuzaki@kii.com

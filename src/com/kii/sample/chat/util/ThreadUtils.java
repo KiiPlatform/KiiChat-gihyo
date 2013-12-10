@@ -6,6 +6,11 @@ import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 
+/**
+ * Threadに関連した処理を行うユーティリティクラスです。
+ * 
+ * @author noriyoshi.fukuzaki@kii.com
+ */
 public class ThreadUtils {
 	public static void sleep(int time) {
 		try {

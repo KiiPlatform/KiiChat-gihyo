@@ -18,7 +18,6 @@ public class PreferencesManager {
 	public static void setStoredAccessToken(String token) {
 		setString(Key.ACCESS_TOKEN, token);
 	}
-	
 	public static String getStoredAccessToken() {
 		return getSharedPreferences().getString(Key.ACCESS_TOKEN, null);
 	}
@@ -30,27 +29,4 @@ public class PreferencesManager {
 		editor.putString(key, value);
 		editor.commit();
 	}
-//	private static void setInt(String key, int value) {
-//		Editor editor = getSharedPreferences().edit();
-//		editor.putInt(key, value);
-//		editor.commit();
-//	}
-//	private static void setLong(String key, long value) {
-//		Editor editor = getSharedPreferences().edit();
-//		editor.putLong(key, value);
-//		editor.commit();
-//	}
-//	private static void setBoolean(String key, boolean value) {
-//		Editor editor = getSharedPreferences().edit();
-//		editor.putBoolean(key, value);
-//		editor.commit();
-//	}
-//	private static void setFloat(String key, float value) {
-//		Editor editor = getSharedPreferences().edit();
-//		editor.putFloat(key, value);
-//		editor.commit();
-//	}
-//	private static void setObject(String key, Object value) {
-//		setString(key, value.toString());
-//	}
 }

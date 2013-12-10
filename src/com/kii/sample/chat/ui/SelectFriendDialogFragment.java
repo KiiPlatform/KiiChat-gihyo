@@ -92,6 +92,7 @@ public class SelectFriendDialogFragment extends DialogFragment implements Loader
 	}
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// 選択されたチャット友達をリスナー経由で通知する
 		ChatFriend friend = (ChatFriend)parent.getItemAtPosition(position);
 		OnSelectFriendListener listener = this.onSelectFriendListener.get();
 		if (listener != null) {

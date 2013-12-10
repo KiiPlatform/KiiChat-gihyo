@@ -111,6 +111,7 @@ public class ChatListFragment extends ListFragment implements LoaderCallbacks<Li
 	}
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// チャットが選択された場合、チャット画面に移動する
 		KiiGroup kiiGroup = (KiiGroup)parent.getItemAtPosition(position);
 		Intent intent = new Intent(getActivity(), ChatActivity.class);
 		intent.putExtra(ChatActivity.INTENT_GROUP_URI, kiiGroup.toUri().toString());

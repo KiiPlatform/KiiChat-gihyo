@@ -18,8 +18,10 @@ import com.kii.sample.chat.util.Logger;
 
 /**
  * バックグラウンドでユーザーサインアップ・ログイン後の初期化処理を実行します。
+ * 
+ * @author ryuji.ochi@kii.com
  */
-public class ChatUserInitializeTask extends AsyncTask<Void, Void, Boolean> {
+public abstract class ChatUserInitializeTask extends AsyncTask<Void, Void, Boolean> {
 	
 	private static final String INITIALIZED_USER_KEY = "initialized";
 	

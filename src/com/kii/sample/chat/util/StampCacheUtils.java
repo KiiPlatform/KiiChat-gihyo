@@ -19,6 +19,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
+/**
+ * スタンプの画像を管理するユーティリティクラスです。
+ * 
+ * @author noriyoshi.fukuzaki@kii.com
+ */
 public class StampCacheUtils {
 	/**
 	 * 画像をスタンプ用に縮小して、キャッシュディレクトリに保存します。

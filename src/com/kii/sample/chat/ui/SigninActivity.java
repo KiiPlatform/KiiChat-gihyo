@@ -107,7 +107,7 @@ public class SigninActivity extends FragmentActivity implements OnInitializeList
 		protected void onPostExecute(Boolean result) {
 			SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 			if (result) {
-				// サインアップ処理が正常に行われた場合はチャット画面に遷移する
+				// サインアップ処理が正常に行われた場合はメイン画面に遷移する
 				moveToChatMain();
 			} else {
 				ToastUtils.showShort(SigninActivity.this, "Unable to sign in");

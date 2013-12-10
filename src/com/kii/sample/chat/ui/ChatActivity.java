@@ -158,6 +158,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		protected Boolean doInBackground(Void... params) {
 			try {
 				this.message.getKiiObject().save();
+				// スタンプの利用状況をイベントデータとして送信する
 				ChatStamp.sendUsageEvent(this.message);
 				return true;
 			} catch (Exception e) {
@@ -268,9 +269,6 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 			}
 		}
 	}
-	/**
-	 * 
-	 */
 	private class GetMessageTask extends AsyncTask<Void, Void, List<ChatMessage>> {
 		private final boolean showProgress;
 		private GetMessageTask(boolean showProgress) {

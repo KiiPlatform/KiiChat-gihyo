@@ -79,6 +79,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 		final String username = editName.getText().toString();
 		final String email = editEmail.getText().toString();
 		final String password = editPassword.getText().toString();
+		// 入力チェックを行う
 		if (TextUtils.isEmpty(username)) {
 			ToastUtils.showShort(getActivity(), "Please input username");
 			return;
@@ -91,6 +92,7 @@ public class SignupDialogFragment extends DialogFragment implements OnClickListe
 			ToastUtils.showShort(getActivity(), "Please input password");
 			return;
 		}
+		// バックグラウンドでサインアップ処理を実行する
 		new SignupTask(username, email, password).execute();
 	}
 

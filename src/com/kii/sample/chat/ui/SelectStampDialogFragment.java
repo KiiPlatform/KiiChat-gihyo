@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
+ * スタンプを選択するためのダイアログフラグメントです。
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
@@ -187,6 +188,7 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 	}
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// 選択されたスタンプをリスナー経由で通知する
 		ChatStamp stamp = (ChatStamp)parent.getItemAtPosition(position);
 		OnSelectStampListener listener = onSelectStampListener.get();
 		if (listener != null && stamp != null) {
@@ -198,6 +200,9 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 	private static class ViewHolder {
 		ImageView stampImage;
 	}
+	/**
+	 * {@link ChatStamp}をグリッドビューに表示するためのアダプターです。
+	 */
 	private class ChatStampListAdpter extends AbstractArrayAdapter<ChatStamp> {
 		
 		private final LayoutInflater inflater;
