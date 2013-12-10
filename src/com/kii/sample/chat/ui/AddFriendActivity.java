@@ -20,6 +20,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -71,7 +72,7 @@ public class AddFriendActivity extends ActionBarActivity implements LoaderCallba
 				textEmpty.setVisibility(View.GONE);
 				progressBar.setVisibility(View.VISIBLE);
 				Bundle bundle = new Bundle();
-				bundle.putString(ARGS_KEYWORD, query);
+				bundle.putString(ARGS_KEYWORD, query.trim());
 				getSupportLoaderManager().restartLoader(0, bundle, AddFriendActivity.this);
 				return false;
 			}
