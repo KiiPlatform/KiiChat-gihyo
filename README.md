@@ -22,6 +22,11 @@ Eclipseにプロジェクトをインポートしてビルドする場合、Andr
     {SDK-DIR}/extras/android/support/v7/appcompat
     {SDK-DIR}/extras/google/google_play_services/libproject/google-play-services_lib
 
+また、プッシュ通知を実装するために、GCM (Google Cloud Messaging)を使用していますが、この機能を使用するためにGoogleのアカウントが必要になります。  
+エミュレータを使って動作確認する場合は、ターゲットを以下のようにGoogle APIsに設定してください。  
+
+<img src="screenshots/05.png">
+
 
 #サポート
 
