@@ -115,6 +115,8 @@ public class ChatListFragment extends ListFragment implements LoaderCallbacks<Li
 		KiiGroup kiiGroup = (KiiGroup)parent.getItemAtPosition(position);
 		Intent intent = new Intent(getActivity(), ChatActivity.class);
 		intent.putExtra(ChatActivity.INTENT_GROUP_URI, kiiGroup.toUri().toString());
+		intent.putExtra(ChatActivity.INTENT_EXPERIMENT,
+		        getArguments().getParcelable(ChatActivity.INTENT_EXPERIMENT));
 		startActivity(intent);
 	}
 	@Override

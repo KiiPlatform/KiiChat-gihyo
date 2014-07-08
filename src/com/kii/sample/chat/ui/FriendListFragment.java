@@ -184,6 +184,8 @@ public class FriendListFragment extends ListFragment implements LoaderCallbacks<
 				return;
 			}
 			Intent intent = new Intent(getActivity(), ChatActivity.class);
+	        intent.putExtra(ChatActivity.INTENT_EXPERIMENT,
+	                getArguments().getParcelable(ChatActivity.INTENT_EXPERIMENT));
 			intent.putExtra(ChatActivity.INTENT_GROUP_URI, kiiGroup.toUri().toString());
 			startActivity(intent);
 		}

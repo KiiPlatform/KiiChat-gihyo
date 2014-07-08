@@ -48,6 +48,7 @@ import android.widget.TextView;
 public class ChatActivity extends FragmentActivity implements OnSelectStampListener {
 	
 	public static final String INTENT_GROUP_URI = "group_uri";
+	public static final String INTENT_EXPERIMENT = "experiment";
 	public static int REQUEST_GET_IMAGE_FROM_GALLERY = 1;
 	
 	private Vibrator vibrator;

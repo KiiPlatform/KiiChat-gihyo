@@ -16,6 +16,8 @@ public final class ApplicationConst {
 	public static final String FACEBOOK_APP_ID = "699038683441923";
 	// TODO:AGGREGATION_RULE_IDは開発者ポータルでAggregation Ruleを作成した際に発行された値に書き換えてください。
 	public static final String AGGREGATION_RULE_ID = "87";
+    // TODO: STAMP_BUTTON_ABTEST_IDは開発者ポータルでA/Bテストを作成した際に発行された値に書き換えてください。
+	public static final String ABTEST_ID = "61e337a0-074b-11e4-9433-22000a848afd";
 	
 	/**
 	 * 全てのチャットユーザが自分用に保持しているTOPICの名前です。

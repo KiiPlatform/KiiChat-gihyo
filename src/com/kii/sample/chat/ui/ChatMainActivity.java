@@ -3,6 +3,7 @@ package com.kii.sample.chat.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.kii.cloud.abtesting.KiiExperiment;
 import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.R;
 
@@ -35,6 +36,9 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 		USER,
 		CHAT;
 	}
+
+    // A/Bテストの情報	
+	private KiiExperiment experiment;
 	private TabHost tabHost;
 	private TabInfo currentTabInfo;
 	private Map<String, TabInfo> tabInfoMap = new HashMap<String, ChatMainActivity.TabInfo>();
@@ -48,8 +52,10 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        this.experiment = getIntent().getParcelableExtra(ChatActivity.INTENT_EXPERIMENT);
 		this.setupTabs();
 	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -84,6 +90,7 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 		TabInfo newTab = this.tabInfoMap.get(Tab.USER.name());
 		this.currentTabInfo = newTab;
 		newTab.fragment = FriendListFragment.newInstance();
+		setExperimentForFragmentArgs(newTab.fragment);
 		getSupportFragmentManager()
 			.beginTransaction()
 			.add(R.id.tab_real_content, newTab.fragment, Tab.USER.name())
@@ -146,6 +153,7 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 				} else if (Tab.CHAT == Tab.valueOf(tabId)) {
 					newTab.fragment = ChatListFragment.newInstance();
 				}
+				setExperimentForFragmentArgs(newTab.fragment);
 				ft.add(R.id.tab_real_content, newTab.fragment, tabId);
 			} else {
 				ft.attach(newTab.fragment);
@@ -153,5 +161,11 @@ public class ChatMainActivity extends FragmentActivity implements OnTabChangeLis
 			this.currentTabInfo = newTab;
 			ft.commit();
 		}
+	}
+	
+	private void setExperimentForFragmentArgs(Fragment fragment) {
+        Bundle args = new Bundle();
+        args.putParcelable(ChatActivity.INTENT_EXPERIMENT, experiment);
+        fragment.setArguments(args);
 	}
 }

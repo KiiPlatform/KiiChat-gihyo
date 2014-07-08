@@ -1,5 +1,6 @@
 package com.kii.sample.chat.ui;
 
+import com.kii.cloud.abtesting.KiiExperiment;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatRoom;
@@ -20,6 +21,7 @@ import com.kii.cloud.storage.social.KiiFacebookConnect;
 import com.kii.cloud.storage.social.KiiSocialConnect.SocialNetwork;
 import com.kii.sample.chat.ApplicationConst;
 import com.kii.sample.chat.PreferencesManager;
+import com.kii.sample.chat.ui.task.ABTestInfoFetchTask;
 import com.kii.sample.chat.ui.task.ChatUserInitializeTask;
 import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
 import com.kii.sample.chat.ui.util.ToastUtils;
@@ -108,7 +110,7 @@ public class SigninActivity extends FragmentActivity implements OnInitializeList
 			SimpleProgressDialogFragment.hide(getSupportFragmentManager());
 			if (result) {
 				// サインアップ処理が正常に行われた場合はメイン画面に遷移する
-				moveToChatMain();
+			    new PreMoveToChatMainTask().execute();
 			} else {
 				ToastUtils.showShort(SigninActivity.this, "Unable to sign in");
 			}
@@ -120,13 +122,32 @@ public class SigninActivity extends FragmentActivity implements OnInitializeList
 		Kii.socialConnect(SocialNetwork.FACEBOOK).respondAuthOnActivityResult(requestCode, resultCode, data);
 	}
 	
+	/**
+	 * Chatのメイン画面に遷移する前にA/Bテストの情報取得を行います。
+	 * @author tatsuro.fujii@kii.com
+	 *
+	 */
+	private class PreMoveToChatMainTask extends ABTestInfoFetchTask {
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onPostExecute(KiiExperiment result) {
+            moveToChatMain(result);
+        }
+    }
+	
 	@Override
 	public void onInitializeCompleted() {
-		moveToChatMain();
+	    new PreMoveToChatMainTask().execute();
 	}
-	private void moveToChatMain() {
-		ChatRoom.ensureSubscribedBucket(KiiUser.getCurrentUser());
-		Intent intent = new Intent(SigninActivity.this, ChatMainActivity.class);
-		startActivity(intent);
-	}
+	
+    private void moveToChatMain(final KiiExperiment experiment) {
+        ChatRoom.ensureSubscribedBucket(KiiUser.getCurrentUser());
+        Intent intent = new Intent(SigninActivity.this, ChatMainActivity.class);
+        intent.putExtra(ChatActivity.INTENT_EXPERIMENT, experiment);
+        startActivity(intent);
+    }	
 }
