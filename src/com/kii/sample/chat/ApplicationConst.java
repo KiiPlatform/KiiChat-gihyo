@@ -14,7 +14,7 @@ public final class ApplicationConst {
 	public static final String SENDER_ID = "1012419078893";
 	// TODO:FACEBOOK_APP_IDはFacebookDevelopersでアプリケーションを作成した際に発行された値に書き換えてください。
 	public static final String FACEBOOK_APP_ID = "699038683441923";
-	// TODO:AGGREGATION_RULE_IDはデベロッパーポータルでAggregation Ruleを作成した時に発行されたIDに書き換えてください。
+	// TODO:AGGREGATION_RULE_IDは開発者ポータルでAggregation Ruleを作成した際に発行された値に書き換えてください。
 	public static final String AGGREGATION_RULE_ID = "87";
 	
 	/**
