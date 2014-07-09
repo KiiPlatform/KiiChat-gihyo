@@ -3,6 +3,8 @@ package com.kii.sample.chat.ui;
 import java.io.File;
 import java.util.List;
 
+import com.kii.cloud.abtesting.KiiExperiment;
+import com.kii.cloud.abtesting.Variation;
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.ApplicationConst;
@@ -22,6 +24,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -60,6 +63,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	private ImageButton btnSend;
 	private KiiGroup kiiGroup;
 	private Long lastGotTime;
+	private KiiExperiment experiment;
 	
 	private final BroadcastReceiver handleMessageReceiver = new BroadcastReceiver() {
 		@Override
@@ -96,7 +100,33 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				}
 			}
 		});
-		this.btnSelectEmoticon = (ImageButton)findViewById(R.id.button_select_stamp);
+
+        this.btnSelectEmoticon = (ImageButton)findViewById(R.id.button_select_stamp);
+
+        // A/Bテストのパターン適用
+        this.experiment = getIntent().getParcelableExtra(ChatActivity.INTENT_EXPERIMENT);
+        if (experiment != null) {
+
+            /*
+             * 以下の場合、現実装(パターンA)をそのまま使用する。
+             * - 何らかのエラーが発生した場合
+             * - stamp_button_color="default"の場合
+             */
+            try {
+                Variation variation = this.experiment.getAppliedVariation();
+                Logger.d(String.format("Applied Pattern: %s", variation.getName()));
+                String color = variation.getVariableSet()
+                        .getString(ApplicationConst.ABTEST_STAMP_BUTTON_COLOR);
+                if (!ApplicationConst.ABTEST_DEFAULT.equals(color)) {
+                    this.btnSelectEmoticon.setBackgroundColor(Color.parseColor(color));
+                }
+            } catch (Exception ignore) {
+                Logger.d("A/B test pattern can't be applied. Thus, current implementation is used.");
+            }
+        } else {
+            Logger.d("A/B test pattern can't be applied. Thus, current implementation is used.");
+        }
+
 		this.btnSelectEmoticon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

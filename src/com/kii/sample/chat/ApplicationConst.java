@@ -41,7 +41,23 @@ public final class ApplicationConst {
 	 * BroadcastReceiverが受信したPush通知をActivityに送る時に使用するキーです。
 	 */
 	public static final String EXTRA_MESSAGE = "com.kii.sample.chat.EXTRA_MESSAGE";
-	
+
+	/**
+	 * A/Bテストのイベント名です。イベントインスタンスを作成する際に使用します。
+	 */
+    public static final String ABTEST_VIEWED_EVENT_NAME = "stamp_button_viewedEvent";
+	public static final String ABTEST_CLICKED_EVENT_NAME = "stamp_button_clickedEvent";
+
+	/**
+	 * A/Bテストの変数名です。この変数はスタンプ一覧ボタンの色を値として持ちます。
+	 */
+	public static final String ABTEST_STAMP_BUTTON_COLOR = "stamp_button_color";
+
+	/**
+	 * この値がA/Bテストの変数にセットされていた場合、A/Bテスト実行前の実装をデフォルトとして適用します。
+	 */
+	public static final String ABTEST_DEFAULT = "default";
+
 	private ApplicationConst() {
 	}
 }
