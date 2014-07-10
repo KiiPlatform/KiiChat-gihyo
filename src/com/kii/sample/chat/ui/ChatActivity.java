@@ -1,13 +1,16 @@
 package com.kii.sample.chat.ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import com.kii.cloud.abtesting.KiiExperiment;
 import com.kii.cloud.abtesting.Variation;
+import com.kii.cloud.analytics.KiiEvent;
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.ApplicationConst;
+import com.kii.sample.chat.KiiChatApplication;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
@@ -130,6 +133,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		this.btnSelectEmoticon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+			    new SendABTestEventTask(ApplicationConst.ABTEST_CLICKED_EVENT_NAME).execute();
 				SelectStampDialogFragment dialog = SelectStampDialogFragment.newInstance(ChatActivity.this);
 				dialog.show(getSupportFragmentManager(), "selectStampDialogFragment");
 			}
@@ -162,6 +166,9 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		registerReceiver(this.handleMessageReceiver, new IntentFilter(ApplicationConst.ACTION_MESSAGE_RECEIVED));
 		String uri = getIntent().getStringExtra(INTENT_GROUP_URI);
 		this.kiiGroup = KiiGroup.createByUri(Uri.parse(uri));
+		// スタンプ一覧ボタン(を含む画面)を表示する度にイベントを送信する。
+		this.experiment = getIntent().getParcelableExtra(INTENT_EXPERIMENT);
+	    new SendABTestEventTask(ApplicationConst.ABTEST_VIEWED_EVENT_NAME).execute();
 		updateMessage(true);
 	}
 	@Override
@@ -381,5 +388,53 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				ToastUtils.showShort(ChatActivity.this, "Unable to upload stamp");
 			}
 		}
+	}
+	
+	/**
+	 * A/Bテスト関係のイベントをバックグラウンドで送信します。
+	 * @author tatsuro.fujii@kii.com
+	 *
+	 */
+	private class SendABTestEventTask extends AsyncTask<Void, Void, Boolean> {
+
+	    private String eventName;
+	    private KiiEvent event;
+
+	    private SendABTestEventTask(String eventName) {
+	        this.eventName = eventName;
+	        try {
+	            if (experiment != null) {
+	                Variation variation = experiment.getAppliedVariation();
+	                event = variation.eventForConversion(KiiChatApplication.getContext(), eventName);
+	            }
+            } catch (Exception ignore) {
+                // eventがセットされない(null)であることを失敗とみなす。
+            }
+	    }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            if (event == null) {
+                return false;
+            }
+            try {
+                event.push();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            // 成功失敗によらず、ログ出力のみで結果をユーザに通知はしない。
+            if (result) {
+                Logger.d(String.format("A/B test event(%s) is sent successfully.", eventName));
+            } else {
+                Logger.d(String.format("A/B test event(%s) isn't sent.", eventName));
+            }
+        }
+
 	}
 }
