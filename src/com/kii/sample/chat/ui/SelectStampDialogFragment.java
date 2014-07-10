@@ -46,13 +46,20 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 		public void onSelectStamp(ChatStamp stamp);
 	}
 	
-	public static SelectStampDialogFragment newInstance(OnSelectStampListener onSelectStampListener) {
+	public interface OnCancelStampDialogListner {
+	    public void onCancelStampDialog();
+	}
+
+	public static SelectStampDialogFragment newInstance(
+	        OnSelectStampListener onSelectStampListener, OnCancelStampDialogListner onCancelDialogListner) {
 		SelectStampDialogFragment dialog = new SelectStampDialogFragment();
 		dialog.setOnSelectStampListener(onSelectStampListener);
+		dialog.setOnCancelDialogListener(onCancelDialogListner);
 		return dialog;
 	}
 	
 	private WeakReference<OnSelectStampListener> onSelectStampListener;
+	private WeakReference<OnCancelStampDialogListner> onCancelDialogListner;
 	private TextView textEmpty;
 	private GridView gridView;
 	private ImageButton btnAddStamp;
@@ -65,6 +72,10 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 		this.onSelectStampListener = new WeakReference<SelectStampDialogFragment.OnSelectStampListener>(onSelectStampListener);
 	}
 	
+	public void setOnCancelDialogListener(OnCancelStampDialogListner onCancelDialogListner) {
+	    this.onCancelDialogListner = new WeakReference<SelectStampDialogFragment.OnCancelStampDialogListner>(onCancelDialogListner);
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -161,7 +172,11 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 		builder.setNegativeButton(R.string.button_cancel, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				dismiss();
+		        OnCancelStampDialogListner listener = onCancelDialogListner.get();
+		        if (listener != null) {
+		            listener.onCancelStampDialog();
+		        }
+			    dismiss();
 			}
 		});
 		builder.setView(view);

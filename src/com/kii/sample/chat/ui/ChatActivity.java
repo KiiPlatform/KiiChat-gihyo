@@ -15,6 +15,7 @@ import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.model.ChatStamp;
+import com.kii.sample.chat.ui.SelectStampDialogFragment.OnCancelStampDialogListner;
 import com.kii.sample.chat.ui.SelectStampDialogFragment.OnSelectStampListener;
 import com.kii.sample.chat.ui.adapter.AbstractArrayAdapter;
 import com.kii.sample.chat.ui.loader.ChatStampImageFetcher;
@@ -51,7 +52,7 @@ import android.widget.TextView;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class ChatActivity extends FragmentActivity implements OnSelectStampListener {
+public class ChatActivity extends FragmentActivity implements OnSelectStampListener, OnCancelStampDialogListner {
 	
 	public static final String INTENT_GROUP_URI = "group_uri";
 	public static final String INTENT_EXPERIMENT = "experiment";
@@ -134,7 +135,8 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 			@Override
 			public void onClick(View v) {
 			    new SendABTestEventTask(ApplicationConst.ABTEST_CLICKED_EVENT_NAME).execute();
-				SelectStampDialogFragment dialog = SelectStampDialogFragment.newInstance(ChatActivity.this);
+				SelectStampDialogFragment dialog = SelectStampDialogFragment.newInstance(
+				        ChatActivity.this, ChatActivity.this);
 				dialog.show(getSupportFragmentManager(), "selectStampDialogFragment");
 			}
 		});
@@ -183,8 +185,18 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	public void onSelectStamp(ChatStamp stamp) {
 		// 選択されたスタンプをメッセージとしてバックグラウンドでKiiCloudに保存する
 		new SendMessageTask(ChatMessage.createStampChatMessage(this.kiiGroup, stamp)).execute();
+		// スタンプ選択後は、再度スタンプ一覧ボタンがクリック可能になるためviewedEventを送信する
+		new SendABTestEventTask(ApplicationConst.ABTEST_VIEWED_EVENT_NAME).execute();
 	}
-	/**
+
+	@Override
+    public void onCancelStampDialog() {
+	    // スタンプ選択画面キャンセル後は、再度スタンプ一覧ボタンがクリック可能になるためviewedEventを送信する
+        new SendABTestEventTask(ApplicationConst.ABTEST_VIEWED_EVENT_NAME).execute();
+    }
+
+
+    /**
 	 * ChatMessageをバックグラウンドでKiiCloudに保存します。
 	 */
 	private class SendMessageTask extends AsyncTask<Void, Void, Boolean> {
