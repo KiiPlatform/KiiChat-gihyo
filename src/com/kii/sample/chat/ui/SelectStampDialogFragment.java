@@ -23,6 +23,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.PopupMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -120,6 +121,10 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 				 * 親ActivityのstartActivityForResultを呼んで、親ActivityのonActivityResultで結果を受け取る
 				 */
 				getActivity().startActivityForResult(intent, ChatActivity.REQUEST_GET_IMAGE_FROM_GALLERY);
+				/**
+				 *  ギャラリーを経由する場合、最終的に親ActivityのOnResume()が呼ばれるため
+				 *  Fragment側からの通知は不要
+				 */
 				dismiss();
 			}
 		});
@@ -178,6 +183,20 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 		        }
 			    dismiss();
 			}
+		});
+		builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    OnCancelStampDialogListner listener = onCancelDialogListner.get();
+                    if (listener != null) {
+                        listener.onCancelStampDialog();
+                    }
+                    // キーイベントは握りつぶさないため、戻るボタンで選択画面が閉じる挙動は保持される
+                    return false;
+                }
+                return false;
+            }
 		});
 		builder.setView(view);
 		return builder.create();
