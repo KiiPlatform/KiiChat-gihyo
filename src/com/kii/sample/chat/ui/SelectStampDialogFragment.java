@@ -192,9 +192,8 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
                     if (listener != null) {
                         listener.onCancelStampDialog();
                     }
-                    // キーイベントは握りつぶさないため、戻るボタンで選択画面が閉じる挙動は保持される
-                    return false;
                 }
+                // キーイベントは握りつぶさないため、戻るボタンで選択画面が閉じる挙動は保持される
                 return false;
             }
 		});
