@@ -134,7 +134,6 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		this.btnSelectEmoticon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			    new SendABTestEventTask(ApplicationConst.ABTEST_CLICKED_EVENT_NAME).execute();
 				SelectStampDialogFragment dialog = SelectStampDialogFragment.newInstance(
 				        ChatActivity.this, ChatActivity.this);
 				dialog.show(getSupportFragmentManager(), "selectStampDialogFragment");
@@ -183,6 +182,8 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	}
 	@Override
 	public void onSelectStamp(ChatStamp stamp) {
+        // スタンプ機能を利用した(スタンプ投稿/新規スタンプ追加)時、clickedEventを送信する
+        new SendABTestEventTask(ApplicationConst.ABTEST_CLICKED_EVENT_NAME).execute();
 		// 選択されたスタンプをメッセージとしてバックグラウンドでKiiCloudに保存する
 		new SendMessageTask(ChatMessage.createStampChatMessage(this.kiiGroup, stamp)).execute();
 	}
