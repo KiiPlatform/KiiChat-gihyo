@@ -15,8 +15,8 @@ import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.model.ChatStamp;
-import com.kii.sample.chat.ui.SelectStampDialogFragment.OnCancelStampDialogListner;
 import com.kii.sample.chat.ui.SelectStampDialogFragment.OnSelectStampListener;
+import com.kii.sample.chat.ui.SelectStampDialogFragment.OnViewStampListButtonListner;
 import com.kii.sample.chat.ui.adapter.AbstractArrayAdapter;
 import com.kii.sample.chat.ui.loader.ChatStampImageFetcher;
 import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
@@ -52,7 +52,7 @@ import android.widget.TextView;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class ChatActivity extends FragmentActivity implements OnSelectStampListener, OnCancelStampDialogListner {
+public class ChatActivity extends FragmentActivity implements OnSelectStampListener, OnViewStampListButtonListner {
 	
 	public static final String INTENT_GROUP_URI = "group_uri";
 	public static final String INTENT_EXPERIMENT = "experiment";
@@ -168,9 +168,9 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		registerReceiver(this.handleMessageReceiver, new IntentFilter(ApplicationConst.ACTION_MESSAGE_RECEIVED));
 		String uri = getIntent().getStringExtra(INTENT_GROUP_URI);
 		this.kiiGroup = KiiGroup.createByUri(Uri.parse(uri));
-		// スタンプ一覧ボタン(を含む画面)を表示する度にイベントを送信する。
 		this.experiment = getIntent().getParcelableExtra(INTENT_EXPERIMENT);
-	    new SendABTestEventTask(ApplicationConst.ABTEST_VIEWED_EVENT_NAME).execute();
+        // スタンプ一覧ボタンが表示されて且つクリック可能である時、viewedEventを送信する		
+		onViewStampListButton();
 		updateMessage(true);
 	}
 	@Override
@@ -185,13 +185,11 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	public void onSelectStamp(ChatStamp stamp) {
 		// 選択されたスタンプをメッセージとしてバックグラウンドでKiiCloudに保存する
 		new SendMessageTask(ChatMessage.createStampChatMessage(this.kiiGroup, stamp)).execute();
-		// スタンプ選択後は、再度スタンプ一覧ボタンがクリック可能になるためviewedEventを送信する
-		new SendABTestEventTask(ApplicationConst.ABTEST_VIEWED_EVENT_NAME).execute();
 	}
 
 	@Override
-    public void onCancelStampDialog() {
-	    // スタンプ選択画面キャンセル後は、再度スタンプ一覧ボタンがクリック可能になるためviewedEventを送信する
+    public void onViewStampListButton() {
+	    // スタンプ一覧ボタンが表示されて且つクリック可能である時、viewedEventを送信する
         new SendABTestEventTask(ApplicationConst.ABTEST_VIEWED_EVENT_NAME).execute();
     }
 
