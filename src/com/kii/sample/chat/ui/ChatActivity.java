@@ -182,8 +182,8 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	}
 	@Override
 	public void onSelectStamp(ChatStamp stamp) {
-        // スタンプ機能を利用した(スタンプ投稿/新規スタンプ追加)時、clickedEventを送信する
-        new SendABTestEventTask(ApplicationConst.ABTEST_CLICKED_EVENT_NAME).execute();
+        // スタンプ機能を利用した(スタンプ投稿/新規スタンプ追加)時、postedEventを送信する
+        new SendABTestEventTask(ApplicationConst.ABTEST_STAMP_POSTED_EVENT).execute();
 		// 選択されたスタンプをメッセージとしてバックグラウンドでKiiCloudに保存する
 		new SendMessageTask(ChatMessage.createStampChatMessage(this.kiiGroup, stamp)).execute();
 	}
@@ -191,7 +191,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	@Override
     public void onViewStampListButton() {
 	    // スタンプ一覧ボタンが表示されて且つクリック可能である時、viewedEventを送信する
-        new SendABTestEventTask(ApplicationConst.ABTEST_VIEWED_EVENT_NAME).execute();
+        new SendABTestEventTask(ApplicationConst.ABTEST_STAMP_BUTTON_VIEWED_EVENT).execute();
     }
 
 

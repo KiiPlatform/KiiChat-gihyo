@@ -17,7 +17,7 @@ public final class ApplicationConst {
 	// TODO:AGGREGATION_RULE_IDは開発者ポータルでAggregation Ruleを作成した際に発行された値に書き換えてください。
 	public static final String AGGREGATION_RULE_ID = "87";
     // TODO: STAMP_BUTTON_ABTEST_IDは開発者ポータルでA/Bテストを作成した際に発行された値に書き換えてください。
-	public static final String ABTEST_ID = "61e337a0-074b-11e4-9433-22000a848afd";
+	public static final String ABTEST_ID = "b5388890-098c-11e4-8ad5-12314307e197";
 	
 	/**
 	 * 全てのチャットユーザが自分用に保持しているTOPICの名前です。
@@ -45,8 +45,8 @@ public final class ApplicationConst {
 	/**
 	 * A/Bテストのイベント名です。イベントインスタンスを作成する際に使用します。
 	 */
-    public static final String ABTEST_VIEWED_EVENT_NAME = "stamp_button_viewedEvent";
-	public static final String ABTEST_CLICKED_EVENT_NAME = "stamp_button_clickedEvent";
+    public static final String ABTEST_STAMP_BUTTON_VIEWED_EVENT = "stamp_button_viewedEvent";
+	public static final String ABTEST_STAMP_POSTED_EVENT = "stamp_postedEvent";
 
 	/**
 	 * A/Bテストの変数名です。この変数はスタンプ一覧ボタンの色を値として持ちます。
