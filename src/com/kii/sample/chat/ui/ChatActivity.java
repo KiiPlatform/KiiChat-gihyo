@@ -1,16 +1,22 @@
 package com.kii.sample.chat.ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import com.kii.cloud.abtesting.KiiExperiment;
+import com.kii.cloud.abtesting.Variation;
+import com.kii.cloud.analytics.KiiEvent;
 import com.kii.cloud.storage.KiiGroup;
 import com.kii.cloud.storage.KiiUser;
 import com.kii.sample.chat.ApplicationConst;
+import com.kii.sample.chat.KiiChatApplication;
 import com.kii.sample.chat.R;
 import com.kii.sample.chat.model.ChatMessage;
 import com.kii.sample.chat.model.ChatRoom;
 import com.kii.sample.chat.model.ChatStamp;
 import com.kii.sample.chat.ui.SelectStampDialogFragment.OnSelectStampListener;
+import com.kii.sample.chat.ui.SelectStampDialogFragment.OnViewStampListButtonListner;
 import com.kii.sample.chat.ui.adapter.AbstractArrayAdapter;
 import com.kii.sample.chat.ui.loader.ChatStampImageFetcher;
 import com.kii.sample.chat.ui.util.SimpleProgressDialogFragment;
@@ -22,6 +28,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,9 +52,10 @@ import android.widget.TextView;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class ChatActivity extends FragmentActivity implements OnSelectStampListener {
+public class ChatActivity extends FragmentActivity implements OnSelectStampListener, OnViewStampListButtonListner {
 	
 	public static final String INTENT_GROUP_URI = "group_uri";
+	public static final String INTENT_EXPERIMENT = "experiment";
 	public static int REQUEST_GET_IMAGE_FROM_GALLERY = 1;
 	
 	private Vibrator vibrator;
@@ -59,6 +67,7 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	private ImageButton btnSend;
 	private KiiGroup kiiGroup;
 	private Long lastGotTime;
+	private KiiExperiment experiment;
 	
 	private final BroadcastReceiver handleMessageReceiver = new BroadcastReceiver() {
 		@Override
@@ -95,11 +104,38 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				}
 			}
 		});
-		this.btnSelectEmoticon = (ImageButton)findViewById(R.id.button_select_stamp);
+
+        this.btnSelectEmoticon = (ImageButton)findViewById(R.id.button_select_stamp);
+
+        // A/Bテストのパターン適用
+        this.experiment = getIntent().getParcelableExtra(ChatActivity.INTENT_EXPERIMENT);
+        if (experiment != null) {
+
+            /*
+             * 以下の場合、現実装(パターンA)をそのまま使用する。
+             * - 何らかのエラーが発生した場合
+             * - stamp_button_color="default"の場合
+             */
+            try {
+                Variation variation = this.experiment.getAppliedVariation();
+                Logger.d(String.format("Applied Pattern: %s", variation.getName()));
+                String color = variation.getVariableSet()
+                        .getString(ApplicationConst.ABTEST_STAMP_BUTTON_COLOR);
+                if (!ApplicationConst.ABTEST_DEFAULT.equals(color)) {
+                    this.btnSelectEmoticon.setBackgroundColor(Color.parseColor(color));
+                }
+            } catch (Exception ignore) {
+                Logger.d("A/B test pattern can't be applied. Thus, current implementation is used.");
+            }
+        } else {
+            Logger.d("A/B test pattern can't be applied. Thus, current implementation is used.");
+        }
+
 		this.btnSelectEmoticon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SelectStampDialogFragment dialog = SelectStampDialogFragment.newInstance(ChatActivity.this);
+				SelectStampDialogFragment dialog = SelectStampDialogFragment.newInstance(
+				        ChatActivity.this, ChatActivity.this);
 				dialog.show(getSupportFragmentManager(), "selectStampDialogFragment");
 			}
 		});
@@ -131,6 +167,9 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 		registerReceiver(this.handleMessageReceiver, new IntentFilter(ApplicationConst.ACTION_MESSAGE_RECEIVED));
 		String uri = getIntent().getStringExtra(INTENT_GROUP_URI);
 		this.kiiGroup = KiiGroup.createByUri(Uri.parse(uri));
+		this.experiment = getIntent().getParcelableExtra(INTENT_EXPERIMENT);
+        // スタンプ一覧ボタンが表示されて且つクリック可能である時、viewedEventを送信する		
+		onViewStampListButton();
 		updateMessage(true);
 	}
 	@Override
@@ -143,10 +182,20 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 	}
 	@Override
 	public void onSelectStamp(ChatStamp stamp) {
+        // スタンプ機能を利用した(スタンプ投稿/新規スタンプ追加)時、postedEventを送信する
+        new SendABTestEventTask(ApplicationConst.ABTEST_STAMP_POSTED_EVENT).execute();
 		// 選択されたスタンプをメッセージとしてバックグラウンドでKiiCloudに保存する
 		new SendMessageTask(ChatMessage.createStampChatMessage(this.kiiGroup, stamp)).execute();
 	}
-	/**
+
+	@Override
+    public void onViewStampListButton() {
+	    // スタンプ一覧ボタンが表示されて且つクリック可能である時、viewedEventを送信する
+        new SendABTestEventTask(ApplicationConst.ABTEST_STAMP_BUTTON_VIEWED_EVENT).execute();
+    }
+
+
+    /**
 	 * ChatMessageをバックグラウンドでKiiCloudに保存します。
 	 */
 	private class SendMessageTask extends AsyncTask<Void, Void, Boolean> {
@@ -350,5 +399,53 @@ public class ChatActivity extends FragmentActivity implements OnSelectStampListe
 				ToastUtils.showShort(ChatActivity.this, "Unable to upload stamp");
 			}
 		}
+	}
+	
+	/**
+	 * A/Bテスト関係のイベントをバックグラウンドで送信します。
+	 * @author tatsuro.fujii@kii.com
+	 *
+	 */
+	private class SendABTestEventTask extends AsyncTask<Void, Void, Boolean> {
+
+	    private String eventName;
+	    private KiiEvent event;
+
+	    private SendABTestEventTask(String eventName) {
+	        this.eventName = eventName;
+	        try {
+	            if (experiment != null) {
+	                Variation variation = experiment.getAppliedVariation();
+	                event = variation.eventForConversion(KiiChatApplication.getContext(), eventName);
+	            }
+            } catch (Exception ignore) {
+                // eventがセットされない(null)であることを失敗とみなす。
+            }
+	    }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            if (event == null) {
+                return false;
+            }
+            try {
+                event.push();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            // 成功失敗によらず、ログ出力のみで結果をユーザに通知はしない。
+            if (result) {
+                Logger.d(String.format("A/B test event(%s) is sent successfully.", eventName));
+            } else {
+                Logger.d(String.format("A/B test event(%s) isn't sent.", eventName));
+            }
+        }
+
 	}
 }

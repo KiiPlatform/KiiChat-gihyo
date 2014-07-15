@@ -14,8 +14,10 @@ public final class ApplicationConst {
 	public static final String SENDER_ID = "1012419078893";
 	// TODO:FACEBOOK_APP_IDはFacebookDevelopersでアプリケーションを作成した際に発行された値に書き換えてください。
 	public static final String FACEBOOK_APP_ID = "699038683441923";
-	// TODO:AGGREGATION_RULE_IDはデベロッパーポータルでAggregation Ruleを作成した時に発行されたIDに書き換えてください。
+	// TODO:AGGREGATION_RULE_IDは開発者ポータルでAggregation Ruleを作成した際に発行された値に書き換えてください。
 	public static final String AGGREGATION_RULE_ID = "87";
+    // TODO: STAMP_BUTTON_ABTEST_IDは開発者ポータルでA/Bテストを作成した際に発行された値に書き換えてください。
+	public static final String ABTEST_ID = "b5388890-098c-11e4-8ad5-12314307e197";
 	
 	/**
 	 * 全てのチャットユーザが自分用に保持しているTOPICの名前です。
@@ -39,7 +41,23 @@ public final class ApplicationConst {
 	 * BroadcastReceiverが受信したPush通知をActivityに送る時に使用するキーです。
 	 */
 	public static final String EXTRA_MESSAGE = "com.kii.sample.chat.EXTRA_MESSAGE";
-	
+
+	/**
+	 * A/Bテストのイベント名です。イベントインスタンスを作成する際に使用します。
+	 */
+    public static final String ABTEST_STAMP_BUTTON_VIEWED_EVENT = "stamp_button_viewedEvent";
+	public static final String ABTEST_STAMP_POSTED_EVENT = "stamp_postedEvent";
+
+	/**
+	 * A/Bテストの変数名です。この変数はスタンプ一覧ボタンの色を値として持ちます。
+	 */
+	public static final String ABTEST_STAMP_BUTTON_COLOR = "stamp_button_color";
+
+	/**
+	 * この値がA/Bテストの変数にセットされていた場合、A/Bテスト実行前の実装をデフォルトとして適用します。
+	 */
+	public static final String ABTEST_DEFAULT = "default";
+
 	private ApplicationConst() {
 	}
 }

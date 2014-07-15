@@ -23,6 +23,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.PopupMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,13 +47,26 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 		public void onSelectStamp(ChatStamp stamp);
 	}
 	
-	public static SelectStampDialogFragment newInstance(OnSelectStampListener onSelectStampListener) {
+	/**
+	 * スタンプ一覧ボタンが表示され使用可能な状態であることを通知するためのリスナー
+	 * @author tatsuro.fujii@kii.com
+	 *
+	 */
+	public interface OnViewStampListButtonListner {
+	    public void onViewStampListButton();
+	}
+
+	public static SelectStampDialogFragment newInstance(
+	        OnSelectStampListener onSelectStampListener, 
+	        OnViewStampListButtonListner onViewStampListButtonListner) {
 		SelectStampDialogFragment dialog = new SelectStampDialogFragment();
 		dialog.setOnSelectStampListener(onSelectStampListener);
+		dialog.setOnViewStampListButtonListener(onViewStampListButtonListner);
 		return dialog;
 	}
 	
 	private WeakReference<OnSelectStampListener> onSelectStampListener;
+	private WeakReference<OnViewStampListButtonListner> onViewDialogListner;
 	private TextView textEmpty;
 	private GridView gridView;
 	private ImageButton btnAddStamp;
@@ -65,6 +79,10 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 		this.onSelectStampListener = new WeakReference<SelectStampDialogFragment.OnSelectStampListener>(onSelectStampListener);
 	}
 	
+	public void setOnViewStampListButtonListener(OnViewStampListButtonListner onCancelDialogListner) {
+	    this.onViewDialogListner = new WeakReference<SelectStampDialogFragment.OnViewStampListButtonListner>(onCancelDialogListner);
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,6 +127,10 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 				 * 親ActivityのstartActivityForResultを呼んで、親ActivityのonActivityResultで結果を受け取る
 				 */
 				getActivity().startActivityForResult(intent, ChatActivity.REQUEST_GET_IMAGE_FROM_GALLERY);
+				/**
+				 *  ギャラリーを経由する場合、最終的に親ActivityのOnResume()が呼ばれるため
+				 *  Fragment側からの通知は不要
+				 */
 				dismiss();
 			}
 		});
@@ -161,8 +183,25 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 		builder.setNegativeButton(R.string.button_cancel, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				dismiss();
+		        OnViewStampListButtonListner listener = onViewDialogListner.get();
+		        if (listener != null) {
+		            listener.onViewStampListButton();
+		        }
+			    dismiss();
 			}
+		});
+		builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    OnViewStampListButtonListner listener = onViewDialogListner.get();
+                    if (listener != null) {
+                        listener.onViewStampListButton();
+                    }
+                }
+                // キーイベントは握りつぶさないため、戻るボタンで選択画面が閉じる挙動は保持される
+                return false;
+            }
 		});
 		builder.setView(view);
 		return builder.create();
@@ -190,9 +229,14 @@ public class SelectStampDialogFragment extends DialogFragment implements LoaderC
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		// 選択されたスタンプをリスナー経由で通知する
 		ChatStamp stamp = (ChatStamp)parent.getItemAtPosition(position);
-		OnSelectStampListener listener = onSelectStampListener.get();
-		if (listener != null && stamp != null) {
-			listener.onSelectStamp(stamp);
+		OnSelectStampListener selectListener = onSelectStampListener.get();
+		if (selectListener != null && stamp != null) {
+			selectListener.onSelectStamp(stamp);
+		}
+		// スタンプ送信の成否によらずスタンプ一覧ボタンは使用可能になるため、その結果を待つ必要はない
+		OnViewStampListButtonListner viewListener = onViewDialogListner.get();
+		if (viewListener != null) {
+		    viewListener.onViewStampListButton();
 		}
 		dismiss();
 	}
