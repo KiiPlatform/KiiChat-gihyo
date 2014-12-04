@@ -8,7 +8,7 @@ import com.kii.sample.chat.ui.task.ChatUserInitializeTask.OnInitializeListener;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,7 +32,7 @@ import com.kii.sample.chat.util.Logger;
  * 
  * @author noriyoshi.fukuzaki@kii.com
  */
-public class SigninActivity extends FragmentActivity implements OnInitializeListener{
+public class SigninActivity extends ActionBarActivity implements OnInitializeListener{
 	
 	private TextView textNewAccount;
 	private Button btnFbSignin;

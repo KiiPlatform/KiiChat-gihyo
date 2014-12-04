@@ -20,17 +20,19 @@ Eclipseにプロジェクトをインポートしてビルドする場合、Andr
 以下のプロジェクトをEclipseのワークスペースにインポートしてください。
 
     {SDK-DIR}/extras/android/support/v7/appcompat
-    {SDK-DIR}/extras/google/google_play_services_froyo/libproject/google-play-services_lib
+    {SDK-DIR}/extras/google/google_play_services/libproject/google-play-services_lib
 
+インポートしたらそれぞれのプロジェクトに含まれている `project.properties` を開いて `target` を `android-21` に変更してください。  
+また Android SDK Manager を使って `API Level 21` のSDKをインストールしてください。
 また、プッシュ通知を実装するために、GCM (Google Cloud Messaging)を使用していますが、この機能を使用するためにGoogleのアカウントが必要になります。  
 エミュレータを使って動作確認する場合は、ターゲットを以下のようにGoogle APIsに設定してください。  
 エミュレータ起動後に「設定->アカウント」からGoogleアカウントの設定を行ってください。  
 
 依存しているライブラリのリビジョンは以下の通りです。  
 
-- android-support-v4.jar (rev. 19.1)
-- android-support-v7-appcompat.jar (rev. 19.1)
-- google-play-services.jar (for froyo rev. 16)
+- android-support-v4.jar (rev. 21.0.2)
+- android-support-v7-appcompat.jar (rev. 21.0.2)
+- google-play-services.jar (rev. 21)
 
 
 <img src="screenshots/05.png">
