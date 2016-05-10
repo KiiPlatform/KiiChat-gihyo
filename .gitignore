@@ -3,3 +3,12 @@ bin
 .settings
 local.properties
 lint.xml
+
+# Android Studio
+local.properties
+*.iml
+.idea/*
+.gradle/*
+build/*
+app/build/*
+
