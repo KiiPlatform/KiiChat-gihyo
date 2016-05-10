@@ -43,6 +43,17 @@ Eclipseにプロジェクトをインポートしてビルドする場合、Andr
 本ソースコードおよび、KiiCloudについてのご質問は[コミュニティサイト](http://community-jp.kii.com/)にてお願い致します。
 
 
+#リソース
+###アプリアイコン
+[Free 3D Social Icons](https://www.iconfinder.com/icons/54521/about_balloon_baloon_bubble_chat_comment_comments_forum_help_hint_knob_mandarin_mandarine_orange_pin_snap_speech_tack_talk_tangerine_icon) - [By Aha-Soft](http://www.aha-soft.com/)  
+[Creative Commons (Attribution-Share Alike 3.0 Unported)](http://creativecommons.org/licenses/by-sa/3.0/)  
+
+###その他のアイコン
+https://github.com/Templarian/MaterialDesign  
+  
+###チャットの吹き出し画像
+http://www.codeproject.com/Tips/897826/Designing-Android-Chat-Bubble-Chat-UI  
+
 #スクリーンショット
 
 <table border="0">
