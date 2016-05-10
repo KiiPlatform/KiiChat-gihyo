@@ -16,27 +16,10 @@ MBaaSを利用することにより、このようなアプリケーションを
 
 #開発環境
 
-Eclipseにプロジェクトをインポートしてビルドする場合、Android Support Library v7とGoogle Play Serviceが必要です。  
-以下のプロジェクトをEclipseのワークスペースにインポートしてください。
-
-    {SDK-DIR}/extras/android/support/v7/appcompat
-    {SDK-DIR}/extras/google/google_play_services/libproject/google-play-services_lib
-
-インポートしたらそれぞれのプロジェクトに含まれている `project.properties` を開いて `target` を `android-21` に変更してください。  
-また Android SDK Manager を使って `API Level 21` のSDKをインストールしてください。
-また、プッシュ通知を実装するために、GCM (Google Cloud Messaging)を使用していますが、この機能を使用するためにGoogleのアカウントが必要になります。  
-エミュレータを使って動作確認する場合は、ターゲットを以下のようにGoogle APIsに設定してください。  
-エミュレータ起動後に「設定->アカウント」からGoogleアカウントの設定を行ってください。  
-
-依存しているライブラリのリビジョンは以下の通りです。  
-
-- android-support-v4.jar (rev. 21.0.2)
-- android-support-v7-appcompat.jar (rev. 21.0.2)
-- google-play-services.jar (rev. 21)
-
-
-<img src="screenshots/05.png">
-
+[【gihyo.jp】MBaaS徹底入門 -- Kii Cloudでスマホアプリ開発](http://gihyo.jp/dev/serial/01/mbaas)の連載時、Androidアプリの開発にはEclipseを使用するのが一般的でしたので、記事もEclipseを使った説明になっています。  
+現在では[AndroidStudio](http://developer.android.com/intl/ja/sdk/index.html)を使って開発をするのがデファクト・スタンダードになっているため、プロジェクトはAndroidStudio形式になっています。古いEclipseのプロジェクトを参照したい場合は、[LatestEclipseProject](https://github.com/KiiPlatform/KiiChat-gihyo/releases/tag/LatestEclipseProject)をチェックアウトしてください。  
+プッシュ通知を実装するために、GCM (Google Cloud Messaging)を使用していますが、この機能を使用するためにGoogleのアカウントが必要になります。  
+エミュレータを使って動作確認する場合は、ターゲットを以下のようにGoogle APIsに設定してください。エミュレータ起動後に「設定->アカウント」からGoogleアカウントの設定を行ってください。  
 
 #サポート
 
@@ -44,6 +27,7 @@ Eclipseにプロジェクトをインポートしてビルドする場合、Andr
 
 
 #リソース
+サンプルアプリでは以下のリソースを使用しています。各ライセンスについてはリンク先を参照してください。
 ###アプリアイコン
 [Free 3D Social Icons](https://www.iconfinder.com/icons/54521/about_balloon_baloon_bubble_chat_comment_comments_forum_help_hint_knob_mandarin_mandarine_orange_pin_snap_speech_tack_talk_tangerine_icon) - [By Aha-Soft](http://www.aha-soft.com/)  
 [Creative Commons (Attribution-Share Alike 3.0 Unported)](http://creativecommons.org/licenses/by-sa/3.0/)  
